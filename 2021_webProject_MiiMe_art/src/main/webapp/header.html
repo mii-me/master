@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="https://kit.fontawesome.com/5814a32c0e.js" crossorigin="anonymous"></script>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+<style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap');
+
+	/* 헤더 구분선 */
+	.navbar{
+		border-bottom: 1px solid #BDBDBD;
+	}
+	
+	/* 마우스올리면 메뉴 펼쳐짐 */
+	.dropdown:hover>.dropdown-menu{
+		display: block;
+	}
+	
+	/* 메뉴 폰트 설정 */
+	.main_menu{
+		font-size: 20px;
+		font-weight: bold;
+/* 		color: #343a40!important; */ 
+	}
+	
+	/* 전체페이지 폰트 설정: 추후 변경 가능 */
+	/* 메뉴바가 body를 가리지 않도록 padding 설정 */
+	body{
+		font-family: 'Noto Sans KR', sans-serif;
+		padding-top: 81px;
+	}
+</style>
+
+<script type="text/javascript">
+	$(function(){
+	
+		// 메뉴바 로그인세션 가져오기
+		let memNoL = sessionStorage.getItem("memNo");
+		let memIsArtistL = sessionStorage.getItem("memIsArtist");
+		console.log("회원번호: "+memNoL);
+		console.log("회원유형: "+memIsArtistL);
+
+
+		// 사용자가 로그인하지 않은 상태면 "Login"을 보여주고, 로그인한 상태면 "Logout"을 보여줌.
+		if(!memNoL){ // 사용자가 로그인하지 않았다면
+			$("#login").append(`<a class="nav-link" href="login.html" id="login"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+			
+		}else{ // 사용자가 로그인했다면
+		    $("#login").append(`<a class="nav-link" id="logout" style="cursor: pointer"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
+		}
+		
+		
+		// 로그아웃 기능
+		$("#logout").click(function(){
+			//세션 삭제
+			sessionStorage.clear();
+			
+			//새로고침
+			location.reload();
+		});
+		
+		
+		// 마이페이지 진입
+		$("#myPage").click(function(){
+			if(!memNoL){
+				alert("로그인 후 이용하실 수 있습니다.");
+				location.href = "login.html";
+				
+			} else if(memNoL != "null"){
+				location.href = "mypage.html";
+			}
+		});
+		
+		
+		// 판매하기 진입
+		$("#artSell").click(function(){
+			if(memIsArtistL != 'S'){
+				alert("작가회원만 이용하실 수 있습니다.");
+				
+			} else if(memIsArtistL = 'B'){
+				location.href = "artSell.html";
+			}
+		});
+		
+				
+	});
+</script>
+
+</head>
+<body>
+<!-- header, menu bar [by 정소윤] -->
+
+	<nav class="navbar navbar-expand-sm bg-light navbar-light fixed-top">
+		<div class="container">
+
+			<!-- main logo -->
+			<a class="navbar-brand" href="main.html">
+				<img src="img/miime_logo.png" alt="MiiMe" style="width:120px; margin-left: 30px;">
+			</a>
+			
+			<!-- main menu -->
+			<ul class="navbar-nav justify-content-center">
+				<li class="nav-item ml-2">
+					<a class="nav-link" href="artList.html">
+						<span class="main_menu">작품보기</span>
+					</a>
+				</li>
+				<li class="nav-item ml-2">
+					<a class="nav-link" href="hotDeal.html">
+						<span class="main_menu">오늘의핫딜</span>
+					</a>
+				</li>
+				<li class="nav-item ml-2">
+					<a class="nav-link" href="artistList.html">
+						<span class="main_menu">작가소개</span>
+					</a>
+				</li>
+				<li class="nav-item ml-2 dropdown">
+					<a class="nav-link dropdown" href="#" id="navbardrop" data-toggle="dropdown"><span class="main_menu">이용후기</span></a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="detailSearchReview.html">
+								<span id="">후기검색</span>
+							</a>
+							<a class="dropdown-item" href="detailRealTimeReview.html">
+								<span id="">실시간후기</span>
+							</a>
+							<a class="dropdown-item" href="detailThemeReview.html">
+								<span id="">테마별후기</span>
+							</a>
+							<a class="dropdown-item" href="artistList.html">
+								<span id="">태그별후기</span>
+							</a>
+						</div>
+				</li>
+				<li style="margin-left: 70px;"></li>
+				<!-- user menu -->
+				<li class="nav-item" id="login"><!-- sessionStorage 이용, -->
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" style="cursor: pointer;" id="myPage"><i class="fas fa-user"></i> MyPage</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" style="cursor: pointer;" id="artSell"><i class="fas fa-store"></i> 판매하기</a>
+				</li>
+			
+			</ul>
+		</div>
+	</nav>
+</body>
+</html>

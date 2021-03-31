@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <!-- properties 경로 -->
+  <properties resource="com/art/db/db.properties"/> 
+  
+  <!-- DB의 컬럼명을 Camel Case로 바꿔줌 -->
+  <settings>
+	<setting name="mapUnderscoreToCamelCase" value="true"/>
+  </settings>
+  
+  <typeAliases>
+  
+  	<!-- 정소윤 -->
+  	<typeAlias type="com.art.vo.MemberVo" alias="memberVo"/>
+  	<typeAlias type="com.art.vo.ArtistInfoVo" alias="artistInfoVo"/>
+   	<typeAlias type="com.art.vo.ArtistCommentVo" alias="artistCommentVo"/>
+   	
+   	<!-- 김현규 -->
+  	<typeAlias type="com.art.vo.PaymentVo" alias="paymentVo"/>
+  	<typeAlias type="com.art.vo.AuctionVo" alias="auctionVo"/>
+  	
+  	<!-- 최은혜 -->
+	<typeAlias type="com.art.vo.ArtInfoVo" alias="artinfoVo"/>  	  	
+   	
+   	<!-- 서현익 -->
+   	<typeAlias type="com.art.vo.DeliveryVo" alias="deliveryVo"/>
+  	<typeAlias type="com.art.vo.ClientComplainVo" alias="complainVo"/>
+  	<typeAlias type="com.art.vo.ChangeInfoVo" alias="changeVo"/>
+  	<typeAlias type="com.art.vo.PurchaseListVo" alias="purchaseVo"/>
+  	<typeAlias type="com.art.vo.WishListVo" alias="wishVo"/>
+
+	<!-- 남혜진 -->
+    
+    
+    <!-- 신지영 -->  	
+  	
+  	
+  </typeAliases>
+  
+  
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  
+  
+  <mappers>
+  	<!-- 정소윤 -->
+    <mapper resource="com/art/db/MemberMapper.xml"/>
+    <mapper resource="com/art/db/ArtistInfoMapper.xml"/>
+    
+    <!-- 김현규 -->
+    <mapper resource="com/art/db/PaymentMapper.xml"/>
+    <mapper resource="com/art/db/AuctionMapper.xml"/>
+    
+    <!-- 최은혜 -->
+    <mapper resource="com/art/db/ArtInfoMapper.xml"/>
+    
+    <!-- 서현익 -->
+    <mapper resource="com/art/db/DeliveryMapper.xml"/>
+    <mapper resource="com/art/db/DeliveryMapper.xml"/>
+    <mapper resource="com/art/db/ClientComplainMapper.xml"/>
+    <mapper resource="com/art/db/ChangeInfoMapper.xml"/>
+    <mapper resource="com/art/db/PurchaseListMapper.xml"/>
+    <mapper resource="com/art/db/WishListMapper.xml"/>
+    
+    <!-- 남혜진 -->
+    
+    
+    <!-- 신지영 -->
+    
+    
+  </mappers>
+  
+</configuration>
