@@ -33,10 +33,10 @@
   	<typeAlias type="com.art.vo.WishListVo" alias="wishVo"/>
 
 	<!-- 남혜진 -->
-    
+    <!-- artInfoVo, memberInfoVo 병합 -->
     
     <!-- 신지영 -->  	
-  	
+  	<typeAlias type="com.art.vo.ReviewVo" alias="reviewVo" />
   	
   </typeAliases>
   
@@ -55,6 +55,7 @@
   
   
   <mappers>
+  
   	<!-- 정소윤 -->
     <mapper resource="com/art/db/MemberMapper.xml"/>
     <mapper resource="com/art/db/ArtistInfoMapper.xml"/>
@@ -75,10 +76,10 @@
     <mapper resource="com/art/db/WishListMapper.xml"/>
     
     <!-- 남혜진 -->
-    
+    <mapper resource="com/art/db/ArtSellMapper.xml"/>
     
     <!-- 신지영 -->
-    
+    <mapper resource="com/art/db/ReviewMapper.xml" />
     
   </mappers>
   

@@ -19,6 +19,7 @@ import com.art.vo.DeliveryVo;
 import com.art.vo.MemberVo;
 import com.art.vo.PaymentVo;
 import com.art.vo.PurchaseListVo;
+import com.art.vo.ReviewVo;
 import com.art.vo.WishListVo;
 
 public class DBManager {
@@ -38,7 +39,7 @@ private static SqlSessionFactory factory;
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< [by 정소윤] Start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
-	// ========================= 페이징처리를 위한 총 개수 반환 메소드 =========================
+	// ========================= 작가소개 페이징처리를 위한 총 개수 반환 메소드 =========================
 	
 	// 작가목록 개수
 	public static int getTotalArtist(String keyword, String consonant, String sort) {
@@ -74,7 +75,7 @@ private static SqlSessionFactory factory;
 		return count;
 	}
 	
-	// ========================= 페이징처리를 위한 총 개수 반환 메소드 END =========================
+	// ========================= 작가소개 페이징처리를 위한 총 개수 반환 메소드 END =========================
 	
 	
 	
@@ -758,8 +759,192 @@ private static SqlSessionFactory factory;
 	
 	
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< [by 남혜진] Start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	
-	
+		
+		/**
+		 * 남혜진_작품정보 art_info_tb 에 insert 하는 일
+		 * @param vo 테이블에 담을 작품정보
+		 * @return insert 성공여부
+		 */
+		public static int insertArtInfo(ArtInfoVo vo) {
+			SqlSession session = factory.openSession();
+			int re = session.insert("artSell.insertArtInfo", vo);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		/**
+		 * 남혜진_특정 회원의 작품정보 art_info_tb 에서 
+		 * 그 회원의 art_sell_check_tb 에 레코드가 존재하는
+		 * 값만 조회하는 일 
+		 * @param end 
+		 * @param start 
+		 * 
+		 * @param memNo 회원번호
+		 * @return 회원번호에 맞는 회원의 판매대기중인 작품의 정보
+		 */
+		public static List<ArtInfoVo> findSellCheckList(int memNo) {
+			SqlSession session = factory.openSession();
+			List<ArtInfoVo> list = null;
+			list = session.selectList("artSell.findSellCheckList", memNo);
+			session.close();
+			return list;
+		}
+		/* 페이징 처리 다시 하기
+		public static List<ArtInfoVo> findSellCheckList(int memNo, int start, int end) {
+			SqlSession session = factory.openSession();
+			List<ArtInfoVo> list = null;
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+			map.put("start", start);
+			map.put("end", end);
+			list = session.selectList("artSell.findSellCheckList", map);
+			session.close();
+			return list;
+		}
+		*/
+		
+		/**
+		 * 남혜진_로그인기능 예비구현
+		 * @param memId
+		 * @param memPwd
+		 * @return
+		 */
+/*		public static MemberVo findMember(String memId, String memPwd) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("memId", memId); 
+			map.put("memPwd", memPwd);
+			SqlSession session = factory.openSession();
+			MemberVo m = session.selectOne("artSell.memberInfo", map);
+			session.close();
+			return m;
+		} /*
+		
+		/**
+		 * 남혜진_작품정보 수정
+		 * @param a 수정할 작품 정보가 담긴 vo
+		 * @return
+		 */
+		public static int updateArtInfo(ArtInfoVo a) {
+			SqlSession session = factory.openSession();
+			int re = session.update("artSell.updateArtInfo", a);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		/**
+		 * 남혜진_작품판매하기 : ART_SELL_TB 에 레코드 추가
+		 * @param artNo 작품번호
+		 * @param memNo 세션유지하여 받아온 회원번호
+		 * @return 성공여부
+		 */
+		public static int insertArtSell(int artNo, int memNo) {
+			SqlSession session = factory.openSession();
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+			map.put("artNo", artNo);
+			map.put("memNo", memNo);
+			int re = session.insert("artSell.insertArtSell", map);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		/**
+		 * 남혜진_작품판매하기 : ART_SELL_CHECK_TB 에서 레코드 삭제 
+		 * @param artNo 작품번호
+		 * @return 성공여부
+		 */
+		public static int deleteArtSellCheck(int artNo) {
+			SqlSession session = factory.openSession();
+			int re = session.delete("artSell.deleteArtSellCheck", artNo);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		/**
+		 * 남혜진_작품정보 삭제 : ART_INFO_TB 에서 레코드 삭제
+		 * @param artNo 작품번호
+		 * @return 성공여부
+		 */
+		public static int deleteArtInfo(int artNo) {
+			SqlSession session = factory.openSession();
+			int re = session.delete("artSell.deleteArtInfo", artNo);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		/**
+		 * 남혜진_판매중인 작품 목록 보기 : ART_SELL_TB 에서 해당 회원의 레코드 중,
+		 * ART_SELL 컬럼의 값이 'sale'인 작품
+		 * @param memNo 세션유지된 회원번호
+		 * @return 작품정보가 담긴 List
+		 */
+		public static List<ArtInfoVo> findArtSell(int memNo) {
+			SqlSession session = factory.openSession();
+			List<ArtInfoVo> list = session.selectList("artSell.findArtSellList", memNo);
+			session.close();
+			return list;
+		}
+
+		//바로 아래의 method와 합쳐져서 실행된다
+		/**
+		 * 남혜진_판매중인 작품 판매 취소하기 : ART_SELL_TB 에 담긴 레코드 삭제
+		 * @param artNo 작품번호
+		 * @return 성공여부
+		 */
+		public static int cancleArtSell(int artNo) {
+			SqlSession session = factory.openSession();
+			int re = session.delete("artSell.deleteArtSell", artNo);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		/**
+		 * 남혜진_판매중인 작품 판매 취소하기 : ART_SELL_CHECK_TB 에 다시 레코드가 삽입된다
+		 * @param artNo 작품번호
+		 * @param memNo 세션유지된 회원번호
+		 * @return 성공여부
+		 */
+		public static int insertArtSellCheck(int artNo, int memNo) {
+			SqlSession session = factory.openSession();
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+			map.put("artNo", artNo);
+			map.put("memNo", memNo);
+			System.out.println("DBManager insertArtSellCheck의 memNo: " + memNo);
+			int re = session.insert("artSell.insertArtSellCheck", map);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		/**
+		 * 남혜진_작가 회원의 포인트 현황 조회
+		 * @param memNo 세션유지된 회원번호
+		 * @return 해당 회원의 포인트 잔액을 정수로 반환
+		 */
+		public static int findArtistPoint(int memNo) {
+			SqlSession session = factory.openSession();
+			int point = session.selectOne("artSell.findArtistPoint", memNo);
+			//int point = p.getPayPoint();
+			//System.out.println("5 dbM point: " + point);
+			session.close();
+			return point;
+		}
+		
+		/**
+		 * 남혜진_작가이름 조회
+		 * @param memNo 세션유지된 회원번호
+		 * @return 회원번호를 통해 MEMBER_TB에 접근, 작가이름정보를 문자열로 반환한다
+		 */
+		public static String findArtistName(int memNo) {
+			SqlSession session = factory.openSession();
+			String artistName = session.selectOne("artSell.findArtistName", memNo);
+			session.close();
+			return artistName;
+		}
 	
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 남혜진] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	
@@ -771,7 +956,110 @@ private static SqlSessionFactory factory;
 	
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< [by 신지영] Start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
-	
+		public static int getTotalRecord(String keyword, String searchField) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("keyword", keyword);
+			map.put("searchField", searchField);
+			SqlSession session = factory.openSession();
+			int count = session.selectOne("review.totalRecord", map);
+			session.close();
+			return count;
+		}
+
+		public static List<ReviewVo> findAll(String keyword, String searchField, String orderField) {
+
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("keyword", keyword);
+			map.put("searchField", searchField);
+			map.put("orderField", orderField);
+
+			SqlSession session = factory.openSession();
+			List<ReviewVo> list = session.selectList("review.findAll", map);
+			session.close();
+			return list;
+		}
+
+		public static List<ReviewVo> findSearchAll( String keyword, String searchField,String orderField) {
+
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("keyword", keyword);
+			map.put("searchField", searchField);
+			map.put("orderField", orderField);
+
+			SqlSession session = factory.openSession();
+			List<ReviewVo> list = session.selectList("review.findSearchAll", map);
+			session.close();
+			return list;
+		}
+
+		public static List<ReviewVo> findThemeAll( String keyword, String orderField) {
+
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("keyword", keyword);
+			map.put("orderField", orderField);
+
+			SqlSession session = factory.openSession();
+			List<ReviewVo> list = session.selectList("review.findThemeAll", map);
+			session.close();
+			return list;
+		}
+
+		public static List<ReviewVo> findTagAll(String keyword, String orderField) {
+
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("keyword", keyword);
+			map.put("orderField", orderField);
+
+			SqlSession session = factory.openSession();
+			List<ReviewVo> list = session.selectList("review.findTagAll", map);
+			session.close();
+			return list;
+		}
+
+		public static List<ReviewVo> findRealTimeAll() {
+
+			SqlSession session = factory.openSession();
+			List<ReviewVo> list = session.selectList("review.findRealTimeAll");
+			session.close();
+
+			return list;
+		}
+
+		public static List<ReviewVo> findRealTimeMost3LikeAll() {
+
+			SqlSession session = factory.openSession();
+			List<ReviewVo> list = session.selectList("review.findRealTimeMost3LikeAll");
+			session.close();
+			return list;
+		}
+
+		public static int insert(ReviewVo r) {
+			SqlSession session = factory.openSession();
+			int re = session.insert("review.insert", r);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		public static int insertLikeReview(int reviewNo) {
+			SqlSession session = factory.openSession();
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("reviewNo", reviewNo);
+			int re = session.update("review.insertLike", map);
+			session.commit();
+			session.close();
+			return re;
+		}
+
+		public static int deleteLikeReview(int reviewNo) {
+			SqlSession session = factory.openSession();
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("reviewNo", reviewNo);
+			int re = session.update("review.deleteLike", map);
+			session.commit();
+			session.close();
+			return re;
+		}	
 	
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 신지영] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	
