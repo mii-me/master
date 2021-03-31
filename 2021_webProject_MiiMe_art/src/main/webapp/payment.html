@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>결제창</title>
+<style type="text/css">
+div.delivery{
+	border: 1px solid #333;
+	background-color: #ddd;
+}
+
+.div_pay{
+	margin: 20px;
+}
+
+#amount{
+	border: 1px solid #333;
+}
+
+table{
+	border: 1px solid #333;
+	background-color: #ddd;
+}
+
+.payment{
+	border: 1px solid #333;
+	background-color: #FCE8AA;
+}
+
+.detailAddr{
+	width: 300px;
+}
+
+h3{
+	color: #d52;
+}
+
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+
+
+	let url = location.href;	//url 요청
+	let getArtNo = parseInt(url.charAt(url.length-1));	//쿼리스트링에서 작품번호만 잘라오기
+	//여러개 받아온다면 다르게 구성해야한다
+
+$(function(){
+	$.getScript("/loginCheck.js",function(){
+	
+
+	let payAmount; //결제금액
+
+	let getMemNo;	//로그인한 회원번호
+	getMemNo = memNo;
+
+
+	//작품 불러오기
+	function loadArts(){
+		let arr;	//AuctionVo 값 불러올 변수 선언
+		$("#arts_list").empty();
+	
+		//serializearray 써서 paymentVo를 불러온다.
+		//불러올 정보: 회원명, 휴대전화, 주소, 작품이미지, 작품명, 즉시구매가,낙찰가(입찰가),총액
+		
+		$.ajax({url:"/findInfo.do",
+			type:"get",
+			data:{artNo:getArtNo},
+			success:function(data){
+			//arr = eval("("+data+")");
+			arr = eval(data);
+			$.each(arr, function(index, pay){
+				let tr = $("<tr></tr>");
+				
+				//art_info_tb 값 불러오기
+				let img = $("<td></td>").html($("<img>").attr("src","./art_pic/"+pay.artPic).css("width","200px","height","200px"));
+				let artNo = $("<td></td>").html(pay.artNo);
+				let artName = $("<td></td>").html(pay.artName);
+				let aucBuy = $("<td></td>").html(pay.aucBuy);
+				let aucBid = $("<td></td>").html(pay.aucBid);
+				
+				
+				
+				//결제금액 결정
+				//입찰 금액은 시작가보다 높아야한다.
+				//입찰가가 즉시구매가보다 높으면 즉시구매가로 결제 진행
+				//입찰가가 즉시구매가보다 낮으며 입찰 시간이 종료되면 입찰가로 결제 진행
+				if(pay.aucBuy<=pay.aucBid){
+					payAmount = $("<td></td>").html(pay.aucBuy);
+				}else{
+					payAmount = $("<td></td>").html(pay.aucBid);
+				}
+				
+				$(tr).append(img,artName,aucBuy,aucBid);
+				$("#arts_list").append(tr);
+				$("#amount").append(payAmount);
+			
+			
+				//결제하기 누를 시
+				//결제 테이블에 정보를 보낸다 (작품번호와 결제수단, 가격,등록시간(sysdate)만 보내면된다.)
+				$("#btnInsert").click(function(){
+					
+					 $("#memNo").val(getMemNo); //로그인한 회원번호를 세션에서 가져온다.
+					 $(".artNo").val(getArtNo);		//보고있는 작품번호를 쿼리스트링으로 가져온다.
+					 
+					let getAmount = Number($("#amount").text());	//최종 결제금액을 불러온다.
+					 $(".payAmount").val(getAmount); //결제금액을 넘겨주기위해 hidden으로 추가 생성
+					 
+					let data = $("#f").serializeArray();	//회원번호,작품번호,결제금액,결제수단의 값을 불러온다.
+					
+					//입력한 정보가 있을 경우		
+					if(!($("#memName").val()=="" || $("#memTel").val()=="" || $("#memAddr").val() == "")){
+					
+						//payment_tb, artist_point_tb에 각각 결제정보를 넣어준다. 
+						$.ajax({url:"/insertPayment.do",
+							type:"post",
+							data:data,
+							success:function(m){
+								if(m != -1){
+									alert("결제 성공!");
+								}else{
+									alert("결제 실패(에러 확인)");								
+								}
+							}
+						});
+						
+						//artist_point_tb에 구매자가 가지고 있는 포인트+결제 금액으로 update
+						$.ajax({url:"/updatePoint.do",
+							type:"post",
+							data:data,	//작품번호
+							success:function(m){
+								if(m != -1){
+									alert("포인트 들어감");
+								}else{
+									alert("변경 실패");								
+								}
+							}
+						});
+						
+						//art_sell_tb의 art_sell 컬럼의 값을 sold로 변경해준다.
+						$.ajax({url:"/updateStatus.do",
+							type:"post",
+							data:{artNo:getArtNo},	//작품번호
+							success:function(m){
+								if(m != -1){
+									console.log("판매페이지 sold로 변경 완료");
+								}else{
+									alert("변경 실패");								
+								}
+							}
+						});
+						
+						
+					}else{
+						alert("입력정보가 비어있습니다!");
+						//유효성검사 하나씩 해보기
+					}
+				});
+			});
+		}});
+		
+	}
+	
+	//로그인한 회원정보 가져오기	
+	function getMemberInfo(){
+		
+		let data = {memNo: getMemNo};
+		
+			$.ajax({url:"/getMember.do",
+			data:data,
+			success:function(mem){
+				$("#memNo").val(mem.memNo);	 
+				$("#memName").val(mem.memName);	 
+				$("#memTel").val(mem.memTel);
+				$("#memAddr").val(mem.memAddr);
+		}});
+	}
+	
+	getMemberInfo();	//로그인한 회원정보 가져오기
+	loadArts();		//작품정보 불러오기
+	});
+});
+</script>
+</head>
+<body>
+<div class="container">
+<header id="header"></header>
+<div class="delivery">
+<h3>배송지 확인</h3>
+	수령인 <input type="text" id="memName" name="memName"><br>
+	휴대전화 <input type="text" id="memTel" name="memTel"><br> 
+	주소 <input type="text" id="memAddr" name="memAddr">
+	<hr>
+	<h3>결제 수단</h3>
+	<span class="payment">결제수단</span>
+	<div id="payment">
+		<form id="f">
+			<input type="hidden" id="memNo" name="memNo">
+			<input type="hidden" class="artNo" name="artNo">
+			<input type="hidden" class="payAmount" name="payAmount">
+			<input type="radio" class="payValue" name="payValue" value="신용카드">신용카드
+			<input type="radio" class="payValue" name="payValue" value="카카오페이">카카오페이
+			<input type="radio" class="payValue" name="payValue" value="실시간 계좌이체">실시간 계좌이체<br>
+			<input type="radio" class="payValue" name="payValue" value="무통장입금">무통장입금
+			<input type="radio" class="payValue" name="payValue" value="네이버페이">네이버페이
+			<input type="radio" class="payValue" name="payValue" value="휴대전화">휴대전화
+		</form>
+	</div>	
+</div>
+<hr>
+<table>
+	<thead>
+		<tr>
+			<th>작품</th>
+			<th>작품명</th>
+			<th>즉시구매가</th>
+			<th>낙찰가</th>
+		</tr>
+	</thead>
+	<tbody id="arts_list">
+	</tbody>
+</table>
+	<div class="div_pay">
+		<span class="payment">결제금액</span>
+		<span id="amount"></span>원
+		<button id="btnInsert">결제하기</button>
+	</div>
+<footer id="footer"></footer>
+</div>
+</body>
+</html>

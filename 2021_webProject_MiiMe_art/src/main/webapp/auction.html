@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>경매장</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style type="text/css">
+
+.div_info{
+	width:300px;
+	height:130px;
+	border: 1px solid #333;
+}
+
+.limit{
+position:relative;
+font-size: 30px;
+color: #4F81BD;
+left:10%;
+}
+
+.img{
+	width: 300px;
+	height: 200px;
+}
+
+span{
+	border: 1px solid #333;
+	font-size: 30px;
+}
+
+span.timer{
+	position:relative;
+	color: #f1a4b1;
+	left:10%;
+}
+
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+
+		
+$(function(){
+	let url = location.href;	//url 요청
+	let getArtNo = parseInt(url.charAt(url.length-1));	//쿼리스트링에서 작품번호만 잘라오기 , //여러개 받아온다면 다르게 구성해야한다
+		
+	let enterKey=13; //엔터키 지정번호
+	let getMemNo; //로그인한 회원번호
+	let getTime;  //db에서 불러오는 마감시간
+
+
+
+	//milliseconds를 시:분:초로 바꾸기
+	let SecondsTohhmmss = function(totalSeconds) {
+	  let hours   = Math.floor(totalSeconds / 3600);
+	  let minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+	  let seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+	
+	  // round seconds
+	  seconds = Math.round(seconds * 100) / 100
+	  let result = (hours < 10 ? "0" + hours : hours);
+	      result += ":" + (minutes < 10 ? "0" + minutes : minutes);
+	      result += ":" + (seconds  < 10 ? "0" + seconds : seconds);
+	  return result;
+	}//SecondsTohhmmss
+
+
+
+//art_sell_tb에서 가져온 남은 시간
+let reTime = setInterval(function() {
+	 $.ajax({url:"/remainTime.do",
+		 	data:{artNo:getArtNo},				 	
+		 	success:function(t){
+		 		let r = eval("("+t+")");			 		
+	 			getTime = r.artTime;	//db에서 가져온 시간
+	 			
+				$(".timer").html(SecondsTohhmmss(getTime));	//남은 시간 출력 (형식: 시:분:초)
+				
+		}});		
+	},1000)//reTime
+	/*
+	if(getTime == 0){
+	console.log("ok");
+	clearInterval(reTime);
+	}
+	*/
+	
+		
+				 
+	//엔터키 방지(값이 없는 상태에도 입력되는것을 방지)
+	$(document).keypress(function(pressKey) { 
+		if (pressKey.keyCode == enterKey) {
+		pressKey.preventDefault();
+		}
+	});
+	
+	
+	//로그인한 회원번호 가져오기 전부 포함시켜야한다.	
+	$.getScript("/loginCheck.js",function(){
+			getMemNo = memNo; //로그인한 회원번호	
+		
+			//작품정보 불러오기
+			$("#auction_info").empty();
+			$.ajax({url:"/detailAuction.do",
+				type:"get",
+				data:{artNo:getArtNo,memNo:memNo},
+				success:function(m){
+					arr = eval(m);	
+				
+					$.each(arr, function(index,auc){
+						let tr = $("<tr></tr>");
+							
+						let art_no = $("<td></td>").html(auc.artNo);
+						let art_pic = $("<td></td>").html($("<img>").attr("src","./art_pic/"+auc.artPic).css("width","200px","height","200px"));
+						let art_name = $("<td></td>").html(auc.artName);
+						let auc_start = $("<td></td>").html(auc.aucStart+"원");
+						let auc_bid = $("<td></td>").html(auc.aucBid+"원");
+						let auc_buy = $("<td></td>").html(auc.aucBuy+"원");
+						$(tr).append(art_no,art_pic,art_name,auc_start,auc_bid,auc_buy);
+						$("#auction_info").append(tr);
+	
+
+/* 
+찜관련 지영씨 코드 참고해서 재구현
+						//찜하기 누를 시					
+						$("#btnWish").click(function(){
+							let data={artNo:getArtNo,memNo:getMemNo};
+							$.ajax({
+								url:"/insertWish.do",
+								data:data,
+								success:function(data){
+								alert("찜 성공");
+								//찜하기 누르고 찜 목록 확인하기 물어보기?					
+								//location.href="wishList.html";	//href대신 replace를 쓰면 전 페이지로 돌아갈 수 없다.
+							}});
+						});	
+						
+						//찜하기 한번 더 누를시(찜 취소)
+						//토글로 두번째 클릭
+						$("#btnNoneWish").click(function(){
+							let data={artNo:getArtNo,memNo:getMemNo};
+							$.ajax({
+								url:"/deleteWish.do",
+								data:data,
+								success:function(data){
+								alert("찜 취소");
+							}});
+						});	//토글 클릭
+*/					
+						
+						
+						
+						//즉시구매 누를 시 , 즉시구매가로 결제창 이동
+						$("#btnBuy").click(function(){
+						
+							let artNo = $(".artNo").val(getArtNo);	//val(작품번호=getArtNo) //변수명은 자유롭게 가능
+							let memNo = $(".memNo").val(getMemNo);
+							$("#aucBid").val(auc.aucBuy);
+							
+							let data = $("#f").serializeArray();
+							
+							//현재 입찰가 업데이트
+							$.ajax({
+								url:"/updateBid.do",
+								data:data,
+								success:function(data){
+									location.href="payment.html?artNo="+auc.artNo;		//href대신 replace를 쓰면 전 페이지로 돌아갈 수 없다.
+							}});
+						});
+							//alert("낙찰되었습니다!");					
+							//location.href="payment.html?artNo="+auc.artNo;	//작품번호 가지고 결제페이지 이동
+						
+						//남은시간 5초로 만들어주기(테스트용)
+						$("#remainFive").click(function(){
+							$.ajax({
+								url:"/remainFive.do",
+								data:{artNo:getArtNo},
+										success:function(data){
+										 //location.reload();
+										 alert("남은시간 5초로 변경"); 
+								}});
+							});						
+						//location.href="payment.html?artNo="+auc.artNo;		//href대신 replace를 쓰면 전 페이지로 돌아갈 수 없다.
+									
+						
+						//입찰가 0원으로 초기화 (테스트용)
+						$("#btnResetBid").click(function(){
+							$.ajax({
+								url:"/resetBid.do",		
+								data:{artNo:getArtNo,memNo:getMemNo,aucBid:0},
+								success:function(data){
+									location.reload(); //업데이트된 입찰가로 새로고침
+								}});
+						});
+						
+							
+						//입찰 금액을 입력하고 입찰하기를 눌렀을 경우
+						$("#btnBid").click(function(){
+							let artNo = $(".artNo").val(getArtNo);	//val(작품번호=url) //변수명은 자유롭게 가능
+							let memNo = $(".memNo").val(getMemNo);
+							
+							let inputBid = $("#aucBid").val();	//입력할 입찰가
+							
+							//입찰가가 즉시구매가와 같거나 많을 경우 즉시구매가로 금액 변경 후 결제진행
+							if(inputBid>=auc.aucBuy){
+							  alert("입찰금액이 즉시구매가 이상이므로 즉시구매가로 결제 진행하겠습니다.");
+							  $("#aucBid").val(auc.aucBuy);
+							  location.href="payment.html?artNo="+auc.artNo;		//href대신 replace를 쓰면 전 페이지로 돌아갈 수 없다.
+							}//end if
+							
+							let data = $("#f").serializeArray();	//form안에 있는 값들을 넘겨준다.
+							
+							//입찰가 입력 후 입찰하기 누를 경우	
+							//입찰가가 시작가보다 같거나 높을 때 & 입찰가가 최고입찰가보다 높을 때, 최고입찰가를 update해준다.
+							if(inputBid!=""){	//빈칸 입력 방지
+								if(inputBid >= auc.aucStart && inputBid > auc.aucBid){
+									
+									//현재 입찰가 업데이트
+									$.ajax({
+										url:"/updateBid.do",		
+										data:data,
+										success:function(data){
+										alert("입찰성공");
+									}});
+										
+									//입찰 횟수 증가
+									$.ajax({
+										url:"/countBid.do",		
+										data:{artNo:getArtNo},
+										success:function(data){
+										 location.reload(); 
+									}});
+										
+								}else{
+									alert("입찰가는 시작가·최고입찰가보다 높아야하며 즉시구매가보다 낮아야 합니다.");
+									$("#aucBid").val("");	//입찰가 입력칸 초기화
+									$("#aucBid").focus();	//입찰가 입력칸에 커서두기
+								}//end else
+							}else{
+								alert("입찰가를 입력하세요!!");
+							}//end else
+						});//btnBid
+				});		
+						
+				//setInterval(reTime,1000); //1초마다 남은시간 출력
+					
+					
+			}});
+		});	//getScript
+	}); //function
+</script>
+</head>
+<body>
+<div class="container">
+<header id="header"></header>
+	<span class="limit">남은시간=></span>
+	<span class="timer"></span>
+	
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>작품번호</th>
+				<th>사진</th>
+				<th>작품명</th>
+				<th>시작가</th>
+				<th>최고 입찰가</th>
+				<th>즉시구매가</th>
+			</tr>
+		</thead>
+		<tbody id="auction_info">
+		</tbody>
+	</table>
+	
+	<form id="f">
+		<input type="hidden" class="artNo" name="artNo">
+		 <input type="hidden" class="memNo" name="memNo"> <!-- 누가 입찰 했는지 확인용-->
+		희망 입찰가<input type="text" id="aucBid" name="aucBid">원
+	</form> 
+	<button id="btnBid">입찰하기</button>
+	<button id="btnBuy">즉시구매</button>
+	<button id="remainFive">남은시간 5초</button>
+	<button id="btnWish">찜하기</button>
+	<button id="btnNoneWish">찜취소</button>
+	<button id="btnResetBid">입찰가 초기화</button>
+<footer id="footer"></footer>
+</div>
+</body>
+</html>
