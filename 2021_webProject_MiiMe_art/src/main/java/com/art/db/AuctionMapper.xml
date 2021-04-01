@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="auction">
+
+	<!-- 임시 작품보기 구현 -->
+	<select id="listArts" resultType="auctionVo">
+		select * from art_info_tb
+	</select>
+
+
+	<!-- 핫딜에서 작품 불러오기 (작품명, 작가명, 작품사진, 시작가,즉시구매가)-->
+	<!-- 핫딜 조건별 조회1, 찜 횟수(wishList_tb에서 최다 작품번호를 조회 후 목록 출력) -->
+	<select id="listHot_1" resultType="auctionVo">
+		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
+				info.art_theme art_theme,info.art_size art_size,info.art_year art_year,info.art_pic art_pic,
+				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
+				info.auc_start auc_start,info.auc_bid auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell
+		from art_info_tb info
+		join art_sell_tb sell
+		on info.art_no = sell.art_no
+		where info.art_no = (select art_no
+							from (select art_no,count(art_no) art_count
+								from wish_list_tb group by art_no
+							order by art_count desc)
+							where rownum = 1) and sell.art_sell='sale'
+	</select>
+
+
+	<!-- 핫딜 조건별 조회2, 입찰횟수가 많은 작품정보 -->
+	<select id="listHot_2" resultType="auctionVo">
+		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
+				info.art_theme art_theme,info.art_size art_size,info.art_year art_year,info.art_pic art_pic,
+				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
+				info.auc_start auc_start,info.auc_bid auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell
+		from art_info_tb info
+		join art_sell_tb sell
+		on info.art_no = sell.art_no
+		where info.art_no = (select art_no
+							from (select art_no,nvl(bid_count,0) bid_count
+									from auction_tb
+									order by bid_count desc)
+							where rownum = 1) and sell.art_sell='sale'
+	</select>
+	
+	<!-- 핫딜 조건별 조회3, 마감시간 임박-->
+	<select id="listHot_3" resultType="auctionVo">
+		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
+				info.art_theme art_theme,info.art_size art_size,info.art_year art_year,info.art_pic art_pic,
+				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
+				info.auc_start auc_start,info.auc_bid auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell
+		from art_info_tb info
+		join art_sell_tb sell
+		on info.art_no = sell.art_no
+		where info.art_no = (select art_no
+							from	(select art_no,art_time from art_sell_tb
+							order by art_time)
+							where rownum =1) and sell.art_sell='sale'
+	</select>
+
+
+	<!-- 경매장 페이지에서 작품 불러오기
+		(작품명, 작가명, 재료, 테마, 사이즈, 년도, 작품사진, 시작가, 입찰가, 즉시구매가, 최고 입찰자)-->
+	<select id="detailAuction" resultType="auctionVo">
+		select art_no,art_pic,art_name,auc_start,auc_bid,
+		(select mem_name from member_tb where mem_no=#{memNo}) mem_name,auc_buy
+		from art_info_tb
+		where art_no=#{artNo}
+	</select>
+	
+	<!-- art_sell_tb에서 남은시간 5초로 update(5초 후 입찰 금액으로 결제페이지 가지는지 확인) -->
+	<update id="remainFive">
+		update art_sell_tb
+		set art_time = sysdate+5/(24*60*60)
+		where art_no=#{artNo}
+	</update>
+	
+	
+	<!-- 입찰가 입력 정보를 art_ino_tb에 update -->
+	<update id="updateBid">
+		update art_info_tb set auc_bid=#{aucBid} where art_no=#{artNo}
+	</update>
+	
+	<!-- 입찰에 성공할 경우 입찰 횟수 증가-->
+	<update id="countBid">
+		update auction_tb
+		set bid_count= bid_count+1
+		where art_no=#{artNo}
+	</update>
+	
+	
+	<!-- 입찰가 초기화 (임시 생성) -->
+	<update id="resetBid">
+		update art_info_tb set auc_bid=0 where art_no=#{artNo}
+	</update>
+	
+	<!-- 작품의 남은시간 확인-->
+	<select id="remainTime" resultType="auctionVo">
+		select art_no, round((art_time-sysdate)*24*60*60) art_time
+		from art_sell_tb
+		where art_no=#{artNo}
+	</select>
+	
+	  
+	<!-- 찜하기(작품번호, 로그인한 회원번호) -->	
+	<insert id="insertWish">
+		insert into wish_list_tb values(#{artNo},#{memNo})
+	</insert>	
+			
+	<!-- 찜하기 취소(작품번호, 로그인한 회원번호) -->
+	<delete id="deleteWish">
+		delete wish_list_tb where art_no = #{artNo}	and mem_no = #{memNo}
+	</delete>	
+	
+</mapper>
+
+

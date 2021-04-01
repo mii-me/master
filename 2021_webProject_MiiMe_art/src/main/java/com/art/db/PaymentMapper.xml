@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="payment">
+
+	<insert id="insertPayment">
+		insert into payment_tb values (
+			payment_seq.nextval,#{memNo},
+			#{artNo},#{payAmount},#{payValue},sysdate)
+	</insert>
+	
+	<update id="updatePoint">
+		update artist_point_tb
+		set pay_point = pay_point+#{payAmount}
+		where mem_no=#{memNo}
+	</update>
+		 	
+	<select id="findInfo" resultType="paymentVo">
+		select mem_no, art_no, art_pic, art_name, auc_start, auc_bid, auc_buy
+		from art_info_tb
+		where art_no=#{artNo}
+	</select>
+	
+	
+	 <select id="getMember" resultType="paymentVo">
+  		select * from MEMBER_TB where MEM_NO = #{memNo}
+ 	 </select>
+	
+	
+	 <update id="updateStatus">
+		update art_sell_tb
+		set art_sell='sold'
+		where art_no=#{artNo}
+	 </update>
+	 
+</mapper>
