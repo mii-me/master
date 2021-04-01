@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>미미 美;Me 판매중인 작품</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style type="text/css">
+
+.detail{
+	visibility: hidden;
+	display: none;	
+}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+//header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+let memNo;
+$(function(){
+	let arr;
+	let artList;
+	//let list;
+	
+	// 남혜진 210328 _ 세션유지 후 회원번호 불러오기
+	$.getScript("js/loginCheck.js", function(){
+		memNo = sessionStorage.getItem("memNo");
+		
+		//남혜진 210322_판매중인 작품목록 보기
+		function listArtSell(){
+			let data;
+			data = {memNo:memNo};
+			$("#artSellList").empty();
+			/* data는 로그인 세션 유지 후 회원번호가 들어가게 된다 _ 210328 성공 */
+				$.ajax({url:"/listArtSell.do", 
+					data:data,
+					success:function(list){
+						arr = [];
+						list = eval("("+list+")");
+						arr = list;
+						$.each(arr, function(index, art){
+			 				let div = $("<div class='detailUpdate card-body'></div>").attr("idx", index);
+							// 상세보기
+							$(div).click(function(){
+								$("#detail").empty();
+								idx = $(this).attr("idx");
+								artList = arr[idx];
+								let pic = $("<img" + " src='art_pic/"+ art.artPic +"' width=200px>");
+								let name = $("<h3></h3>").html(artList.artName);
+								let material = $("<p></p>").html(artList.artMaterial);
+								let theme = $("<p></p>").html(artList.artTheme);
+								let size = $("<p></p>").html(artList.artSize1 + "x" + artList.artSize2);
+								let year = $("<p></p>").html(artList.artYear);
+								let tag1 = $("<p></p>").html("#" + artList.artTag1);
+								let tag2 = $("<p></p>").html("#" + artList.artTag2);
+								let tag3 = $("<p></p>").html("#" + artList.artTag3);
+								let start = $("<p></p>").html(artList.aucStart);
+								let buy = $("<p></p>").html(artList.aucBuy);
+								let exp = $("<p></p>").html(artList.artExp);
+								$("#detail").append(pic, name, material, theme, size, year, tag1, tag2, tag3, start, buy, exp);
+								// 상세보기 했을 때, 판매취소 버튼 보이게 하기
+								$(".detail").css("visibility", "visible");
+								$(".detail").css("display", "inline");
+							})// 상세보기를 위해 각각div클릭 했을 때 이벤트
+							
+							
+							let pic = $("<img" + " src='art_pic/"+ art.artPic +"' width=100% class='card_img_top m-1'>");
+							let name = $("<h3 class='card-title'></h3>").html(art.artName);
+							let material = $("<p class='card-text'></p>").html(art.artMaterial);
+							let year = $("<p class='card-text'></p>").html(art.artYear);
+							$(div).append(pic, name, material, year);
+							let card = $("<div class='card p-1 m-1' style='width:360px'></div>");
+							$(div).appendTo($(card));
+							$("#artSellList").append($(card));
+						})// 판매중 목록 each반복문
+				}})// 판매중 목록 보여주기 Ajax통신
+		}//listArtSell - 판매중인 목록 보여주기 
+		
+		//남혜진 210322 _ 판매취소
+		//판매취소 버튼 클릭 이벤트
+		$("#btnCancle").click(function(){
+			let artNo = artList.artNo;
+			let data = {artNo:artNo, memNo:memNo};
+			if(confirm("'"+artList.artName + "' 작품에 대한 판매를 취소하시겠습니까?")){
+				$.ajax({url:"/cancleArtSell.do", data:data, success:function(){
+					//수정되기 전의 상태를 보여주는 상세보기 접기
+					$("#detail").css("visibility", "hidden");
+					$("#detail").css("display", "none");
+					listArtSell();
+				}})
+			}
+		})//판매취소
+		
+		listArtSell();
+	})//getScript함수
+})
+
+</script>
+</head>
+<body>
+ <header id="header"></header>
+ 
+<h2>판매중인 작품목록</h2>
+<hr>
+
+<div class="container">
+	<!-- 판매중인 작품목록 -->
+	<div id="artSellList" class="row m-0"></div>
+	<hr>
+	<!-- 판매중인 작품목록_상세보기 -->
+	<div id="detail"></div>
+	<!-- 판매중인 작품목록_선택_판매취소 버튼 생성된다 -->
+	<button id="btnCancle" class="detail btn btn-dark">판매취소하기</button>
+</div>
+ <footer id="footer"></footer>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="artSell">
+	<!-- 남혜진 210318 판매하기_작품정보 등록 -->
+	<insert id="insertArtInfo">
+	  	insert all into ART_INFO_TB values(
+			#{memNo}, art_info_seq.nextval, #{artName}, 
+			#{artMaterial}, #{artTheme}, #{artSize1}, #{artSize2},
+			#{artYear}, #{artPic}, #{artExp}, 
+			#{artTag1}, #{artTag2}, #{artTag3}, 
+			#{aucStart}, #{aucBid}, #{aucBuy})
+			 into ART_SELL_CHECK_TB values(
+			#{memNo},
+			art_info_seq.nextval) 
+		select * from dual
+	</insert>
+  	<!-- 코드 통합 후 페이징 처리 완료하기 -->
+<!-- 	<select id="findSellCheckList" resultType="artInfo">
+		select num, MEM_NO as mamNo,
+		ART_NO as artNo,
+		ART_NAME as artName,
+		ART_MATERIAL as artMaterial,
+		ART_THEME as artTheme,
+		ART_SIZE1 as artSize1,
+		ART_SIZE2 as artSize2,
+		ART_YEAR as artYear,
+		ART_PIC as artPic,
+		ART_EXP as artExp,
+		ART_TAG1 as artTag1,
+		ART_TAG2 as artTag2,
+		ART_TAG3 as artTag3,
+		AUC_START as aucStart,
+		AUC_BID as aucBid,
+		AUC_BUY as aucBuy
+		 from
+		 (select rownum as num, mem_no, art_no, art_name, art_material, art_theme, art_size1, art_size2,
+		art_year, art_pic, art_exp, art_tag1, art_tag2, art_tag3, auc_start, auc_bid, auc_buy
+		 from (select * from art_info_tb where art_no in(select art_no from art_sell_check_tb where mem_no = #{memNo} )order by art_no))
+		 where num between #{start} and #{end}
+	</select> -->
+	<select id="findSellCheckList" resultType="artInfo">
+		select MEM_NO as memNo,
+		ART_NO as artNo,
+		ART_NAME as artName,
+		ART_MATERIAL as artMaterial,
+		ART_THEME as artTheme,
+		ART_SIZE1 as artSize1,
+		ART_SIZE2 as artSize2,
+		ART_YEAR as artYear,
+		ART_PIC as artPic,
+		ART_EXP as artExp,
+		ART_TAG1 as artTag1,
+		ART_TAG2 as artTag2,
+		ART_TAG3 as artTag3,
+		AUC_START as aucStart,
+		AUC_BID as aucBid,
+		AUC_BUY as aucBuy
+		 from
+		 (select mem_no, art_no, art_name, art_material, art_theme, art_size1, art_size2,
+		art_year, art_pic, art_exp, art_tag1, art_tag2, art_tag3, auc_start, auc_bid, auc_buy
+		 from (select * from art_info_tb where art_no in(select art_no from art_sell_check_tb where mem_no = #{memNo} )order by art_no))
+	</select>
+
+	<select id="totalRecord" resultType="java.lang.Integer">
+		select count(*) as count from art_info_tb where art_no in (select art_no from art_sell_check_tb where mem_no = #{memNo})
+	</select>
+
+	<update id="updateArtInfo">
+		 update art_info_tb set art_name = #{artName},
+		 art_material = #{artMaterial},
+		 art_theme = #{artTheme},
+		 art_size1 = #{artSize1},
+		 art_size2 = #{artSize2},
+		 art_year = #{artYear},
+		 art_pic = #{artPic},
+		 art_exp = #{artExp},
+		 art_tag1 = #{artTag1}, 
+		 art_tag2 = #{artTag2}, 
+		 art_tag3 = #{artTag3},
+		 auc_start = #{aucStart},
+		 auc_buy = #{aucBuy} where art_no = #{artNo}
+	</update>
+	
+	<insert id="insertArtSell">
+	<!-- art_time : 경매마감시간 : 5분으로 구현해두고 변경가능 -->
+		insert into art_sell_tb values(#{memNo}, #{artNo}, 'sale', sysdate + 3)
+	</insert>
+
+	<delete id="deleteArtSellCheck">
+		delete art_sell_check_tb where art_no = #{artNo}
+	</delete>
+	
+	<delete id="deleteArtInfo">
+		delete art_info_tb where art_no = #{artNo}
+	</delete>
+
+	<select id="findArtSellList" resultType="artInfo">
+		select
+		art.art_no as artNo,
+		art.art_name as artName,
+		art.art_material as artMaterial,
+		art.art_theme as artTheme,
+		art.art_size1 as artSize1,
+		art.art_size2 as artSize2,
+		art.art_year as artYear,
+		art.art_pic as artPic,
+		art.art_exp as artExp,
+		art.art_tag1 as artTag1,
+		art.art_tag2 as artTag2,
+		art.art_tag3 as artTag3,
+		art.auc_start as aucStart,
+		art.auc_buy as aucBuy from art_sell_tb sell
+		 inner JOIN art_info_tb art
+		 ON art.art_no = sell.art_no
+		 where sell.art_sell='sale' and sell.mem_no=#{memNo}
+	</select>
+
+	<delete id="deleteArtSell">
+		delete ART_SELL_TB where art_no = #{artNo}
+	</delete>
+	
+	<insert id="insertArtSellCheck">
+		insert into ART_SELL_CHECK_TB values(
+			#{memNo},
+			#{artNo}
+		)
+	</insert>
+	
+	<select id="findArtistPoint" resultType="java.lang.Integer">
+		select PAY_POINT as payPoint from ARTIST_POINT_TB where MEM_NO = #{memNo}
+	</select>
+	
+	<select id="findArtistName" resultType="String">
+		select MEM_NAME as memName from MEMBER_TB where MEM_NO = #{memNo}
+	</select>
+	
+
+</mapper>

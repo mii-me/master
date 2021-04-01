@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>미미 美;Me 작품등록</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+//header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+$(function() {
+	
+	//남혜진 210328 _ 세션유지된 회원번호 전달
+	$.getScript("js/loginCheck.js", function(){
+		
+		//세션유지된 회원번호를 가져오기
+		let memNo = sessionStorage.getItem("memNo"); // 회원번호
+		$("#memNo").val(memNo); // 회원번호를 hidden으로 input태그에 전달
+		
+		//남혜진 210318 판매하기_작품정보 등록 
+		//작품정보 등록하기 버튼
+		$("#btnInsert").click(function(){
+			// 작품 정보 유효성검사
+			//------------------------해야할것-------------------------------------
+			/* null값이 들어가면 안되는 것 : 회원번호(세션유지) 작품번호(시퀀스)
+			name, material, theme, pic(사진), auc_start(경매시작가), auc_buy(즉시구매가)
+			*/
+			
+			
+			
+			
+			
+			/* file데이터를 위해 자바스크립트 객체 생성 */
+			let data = new FormData(document.getElementById("artForm"));
+		
+			$.ajax({
+				url:"/insertArtInfo.do", 
+				type: "post",
+				processData:false, 
+				contentType:false,
+				data:data, 
+				success:function(){
+					let msg = "작품정보 등록에 성공하였습니다. 판매를 선택할 페이지로 이동하시겠습니까?";
+					if(confirm(msg) == true){
+						location.href="listArtSellCheck.html";
+					};
+			}})
+		})
+		
+		//등록된 작품 관리하기
+		$("#btnArtSellCheck").click(function(){
+			location.href="listArtSellCheck.html";
+		})
+		
+	})
+	
+	//파일선택 CSS적용
+	$(".custom-file-input").on("change", function() {
+		var fileName = $(this).val().split("\\").pop();
+		$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+	});
+	
+})
+</script>
+</head>
+<body>
+ <header id="header"></header>
+ 
+<div class="container p-9 my-5 border" style="width:30%">
+	<form id="artForm" method="post" enctype="multipart/form-data" class="was-validated">
+		<h4>작품 기본정보 입력</h4>
+		<input type="hidden" id="memNo" name="memNo">
+		<div class="form-group">
+			<label for="artName">작품명 :</label>
+			<input type="text" id="artName" class="form-control" name="artName" placeholder="자유형식으로 작성합니다." required>
+			<div class="valid-feedback">올바른 입력입니다.</div>
+      		<div class="invalid-feedback">작품명을 입력해주세요</div>
+		</div>
+		<div class="form-group">
+			<label for="artMaterial">재료 :</label>
+			<input type="text" class="form-control" id="artMaterial" name="artMaterial" placeholder="예: oil on canvas" required>
+			<div class="valid-feedback">올바른 입력입니다.</div>
+      		<div class="invalid-feedback">재료형식에 맞게 영문으로 입력해주세요.</div>
+		</div>
+		<div class="container mt-3">
+			형식 : 
+			<select id="artTheme" name="artTheme" class="custom-select mb-3">
+				<option>인물</option>
+				<option>정물</option>
+				<option>동물</option>
+				<option>풍경</option>
+				<option>추상</option>
+			</select>
+		</div>
+		<br>
+		<div class="form-group">
+			<label for="artSize">크기 :</label>
+			<input type="text" id="artSize1" class="form-control" name="artSize1" placeholder="세로x가로 형식으로 작성" required>
+			<div class="valid-feedback">x</div>
+      		<div class="invalid-feedback">작품의 세로 크기를 cm단위의 정수로 입력해 주세요.</div>
+			<input type="text" id="artSize2" name="artSize2"  class="form-control" placeholder="세로x가로 형식으로 작성" required>
+			<div class="valid-feedback">cm</div>
+      		<div class="invalid-feedback">작품의 가로 크기를 cm단위의 정수로 입력해 주세요.</div>
+		</div>
+		<div class="form-group">
+			<label for="artYear">년도 :</label> 
+			<input type="text" id="artYear" class="form-control" name="artYear" placeholder="숫자로 입력 (예: 2021)" required>
+			<div class="valid-feedback">올바른입력입니다</div>
+      		<div class="invalid-feedback">작품제작완료 년도를 정수로 입력해 주세요.</div>
+		</div>
+		
+		<input type="hidden" name="artPic" class="artPic">
+		
+		<div class="container mt-3">
+			<p>사진 : </p>
+			<div class="custom-file mb-3">
+				<input type="file" id="uploadFile" name="uploadFile"  class="custom-file-input"><br>
+				<label class="custom-file-label" for="customFile">사진을 선택해주세요</label>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label for="artExp">작품설명</label><br>
+			<textarea  class="form-control" rows="5" id="artExp" name="artExp" placeholder="작품에 대한 설명을 자유롭게 기입합니다."></textarea>
+		</div>
+		
+		<div class="container mt-3">
+			# 해시태그 설정하기<br>
+			해시태그는 선택사항입니다
+			<select id="artTag1" name="artTag1" class="custom-select mb-3">
+				<option>선택안함</option>
+				<option>인테리어</option>
+				<option>선물</option>
+			</select>
+			<select id="artTag2" name="artTag2" class="custom-select mb-3">
+				<option>선택안함</option>
+				<option>순수미술</option>
+				<option>일러스트</option>
+				<option>사진</option>
+			</select>
+			<select id="artTag3" name="artTag3" class="custom-select mb-3">
+				<option>선택안함</option>
+				<option>서양화</option>
+				<option>동양화</option>
+				<option>판화</option>
+				<option>펜화</option>
+				<option>수채화</option>
+				<option>포스터</option>
+				<option>분위기</option>
+				<option>몽환적</option>
+				<option>힐링</option>
+				<option>따뜻함</option>
+				<option>빈티지</option>
+				<option>고전</option>
+				<option>현대</option>
+			</select>
+		</div>
+
+		<hr>
+		<div class="form-group">
+			<label for="aucStart">경매시작가격 : </label>
+			<input type="number" id="aucStart" name="aucStart" placeholder="숫자만 입력합니다" required>원<br>
+			<div class="valid-feedback">올바른입력입니다</div>
+      		<div class="invalid-feedback">경매시작 가격을 정수로 입력해 주세요.</div>
+		</div>
+		<div class="form-group">
+			<label for="aucBuy">경매종료가격 : </label>
+			<input type="number" id="aucBuy" name="aucBuy" placeholder="숫자만 입력합니다" required>원<br>
+			<div class="valid-feedback">올바른입력입니다</div>
+      		<div class="invalid-feedback">정수만 입력해 주세요. 경매시작 가격보다 높아야 합니다.</div>
+		</div>
+	</form>
+	<button id="btnInsert" class="btn btn-dark">작품정보등록</button>
+	<hr>
+	<button id="btnArtSellCheck" class="btn btn-dark">등록된 작품 관리</button>
+</div>
+
+
+
+ <footer id="footer"></footer>
+</body>
+</html>
