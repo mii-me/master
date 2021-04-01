@@ -30,7 +30,8 @@ $(function(){
 	//let list;
 	
 	// 남혜진 210328 _ 세션유지 후 회원번호 불러오기
-	$.getScript("js/loginCheck.js", function(){
+	//210401 통합 후 js파일 위치 변경 수정
+	$.getScript("loginCheck.js", function(){
 		memNo = sessionStorage.getItem("memNo");
 		
 		//남혜진 210322_판매중인 작품목록 보기

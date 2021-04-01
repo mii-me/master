@@ -23,7 +23,8 @@ let data;
 $(function(){
 	
 	// 남혜진 210328 로그인 세션 유지 _ 회원번호 사용
-	$.getScript("js/loginCheck.js", function(){
+	//210401 통합 후 js파일 위치 변경 수정
+	$.getScript("loginCheck.js", function(){
 		let memNo = sessionStorage.getItem("memNo");
 		data = {memNo:memNo};
 		
