@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="artinfo">
+ <!-- 
+ 
+ 	<update id="update">
+ 		update customer set name=#{name}, email=#{email}, phone=#{phone} where no=#{no}
+ 	</update>
+ 	-->
+ 	
+ 	<select id="maxAucBuy">
+ 		select max(auc_buy)
+ 		from art_info_tb
+ 	</select>
+ 	
+	<insert id="insertWishList">
+ 		insert into wish_list_tb 
+ 		values(#{artNo},#{userNo})
+ 	</insert> 
+ 	<delete id="deleteWishList">
+ 		delete wish_list_tb where art_no=#{artNo} and mem_no=#{userNo}
+ 	</delete>
+ 
+ 	<select id="detail" resultType="artinfoVo">
+ 		select art_info_tb.mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
+			art_tag1, art_tag2, art_tag3, auc_start, nvl(auc_start,auc_bid) auc_bid, auc_buy,
+			artist_info_tb.artist_name,artist_info_tb.artist_pic, artist_info_tb.artist_intro,artist_info_tb.artist_career
+		from art_info_tb
+		inner join artist_info_tb
+		on art_info_tb.mem_no = artist_info_tb.mem_no
+		where art_info_tb.mem_no=#{memNo} and art_no=#{artNo}
+ 	</select>
+ 
+ 	<select id="detailArtHash" resultType="artinfoVo">
+ 		select * 
+ 		from art_info_tb
+ 		where art_tag1=#{tag}
+ 		order by art_no desc
+ 	</select>
+ 
+ 
+ 
+ 	<select id="totArt" resultType="java.lang.Integer">
+ 		select count(*) 
+ 		from art_info_tb
+		 	<choose>
+			     <when test="responseTheme != '' and sizeRange1 != '0' and sizeRange2 != '101' and responsePrice != '1000000000'">
+				     where art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
+				    </when>
+					<when test="responseTheme != '' and sizeRange1 != '0' and sizeRange2 != '101'">
+				      where art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2}
+				    </when>
+					<when test="responseTheme != '' and responsePrice != '1000000000'">
+				      where art_theme = #{responseTheme} and auc_buy &lt;= #{responsePrice}
+				    </when>
+					<when test="sizeRange1 != '0' and sizeRange2 != '101' and responsePrice != '1000000000'">
+				      where art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
+				    </when>
+					<when test="responseTheme != ''">
+				      where art_theme = #{responseTheme}
+				    </when>
+				   <when test="sizeRange1 != '0' and sizeRange2 != '101'">
+				      where art_size1 between #{sizeRange1} and #{sizeRange2}
+					</when>
+				   <when test="responsePrice != '1000000000'">
+				      where auc_buy &lt;= #{responsePrice}
+					</when>
+				<otherwise>
+						      
+				</otherwise>
+			</choose>
+ 	</select>
+ 
+ 
+ 	<select id="selectAll" resultType="artinfoVo">
+	 	select num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
+		nvl2(art_tag1,(concat('#',art_tag1)),' ') art_tag1, nvl2(art_tag2,(concat('#',art_tag2)),' ') art_tag2, nvl2(art_tag3,(concat('#',art_tag3)),' ') art_tag3, auc_start, nvl(auc_start,auc_bid) auc_bid, auc_buy
+		from (select rownum num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
+		art_tag1, art_tag2, art_tag3, auc_start, nvl(auc_start,auc_bid) auc_bid, auc_buy
+			from (select *
+			 	from art_info_tb
+			 	<choose>
+				     <when test="responseTheme != '' and sizeRange1 != '0' and sizeRange2 != '101' and responsePrice != '1000000000'">
+				     where art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
+				    </when>
+					<when test="responseTheme != '' and sizeRange1 != '0' and sizeRange2 != '101'">
+				      where art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2}
+				    </when>
+					<when test="responseTheme != '' and responsePrice != '1000000000'">
+				      where art_theme = #{responseTheme} and auc_buy &lt;= #{responsePrice}
+				    </when>
+					<when test="sizeRange1 != '0' and sizeRange2 != '101' and responsePrice != '1000000000'">
+				      where art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
+				    </when>
+					<when test="responseTheme != ''">
+				      where art_theme = #{responseTheme}
+				    </when>
+				   <when test="sizeRange1 != '0' and sizeRange2 != '101'">
+				      where art_size1 between #{sizeRange1} and #{sizeRange2}
+					</when>
+				   <when test="responsePrice != '1000000000'">
+				      where auc_buy &lt;= #{responsePrice}
+					</when>
+					<otherwise>
+							      
+					</otherwise>
+				</choose>
+			 	))
+		where num between #{start} and #{end}
+		order by art_no desc
+ 	</select>
+ 	
+  
+  <select id="login"  resultType="artinfoVo">
+		select * from member_tb
+		where mem_id=#{id}
+	</select>
+  
+</mapper>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+<title>작품 보기</title>
+<link rel="stylesheet" type="text/css" href="artList.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+
+$(function(){
+	
+	$.getScript("artList.js", function(){
+		console.log("$.getscript : artList.js 실행됨");
+		
+		let userNo = sessionStorage.getItem("memNo");	
+//		if(userNo == null){
+//			$(".login-span").text("로그인");
+//			$(".login-a").attr("href","login.html");
+//		}else{
+//			$(".login-span").text("로그아웃");
+//			$(".login-span").click(function(){
+//				sessionStorage.clear();
+//				location.href="artList.html";
+//			})
+//		}
+		
+		
+		
+		loadArtList(1,"",0,100,1000000000);
+	});
+	
+});
+</script>
+
+</head>
+<body> 
+<header id="header"></header>
+	<div id="searchDiv">
+		<div class="searchCss" id="searchTheme">
+			<div class="searchTitle searchTheme-title"><span class="searchTheme-title">테마</span></div>
+			<div class="searchTheme-list">
+			<ul id="searchThemeUl">
+				<li class="searchThemeli">인물</li>
+				<li class="searchThemeli">정물</li>
+				<li class="searchThemeli">동물</li>
+				<li class="searchThemeli">풍경</li>
+				<li class="searchThemeli">추상</li>
+			</ul>
+			</div>
+		</div>
+		<div class="searchCss" id="searchSize">
+			<div class="searchTitle searchSize-title"><span class="searchSize-title">크기</span></div>
+			<div class="searchSize-list">
+			<ul id="searchSizeUl">
+				<li class="searchSizeli" id="size1">1~5호</li>
+				<li class="searchSizeli" id="size2">6~10호</li>
+				<li class="searchSizeli" id="size3">~20호</li>
+				<li class="searchSizeli" id="size4">~30호</li>
+				<li class="searchSizeli" id="size5">~40호</li>
+			</ul>
+			</div>
+		</div>
+		<div class="searchCss" id="searchPrice">
+			<div class="searchTitle searchPrice-title"><span class="searchPrice-title">가격</span></div>
+			<div class="searchPrice-list">
+			<input type="range" id="searchPriceBar" list="steplist">&nbsp;&nbsp;&nbsp;<span id="searchPriceBar-value"></span>원
+			<datalist id="steplist">
+			    <option>1000000</option>
+			    <option>2000000</option>
+			    <option>3000000</option>
+			    <option>4000000</option>
+			    <option>5000000</option>
+			    <option>6000000</option>
+			    <option>7000000</option>
+			    <option>8000000</option>
+			    <option>9000000</option>
+			</datalist>
+			</div>
+		</div>
+		<div class="btnReset" >초기화</div>
+	</div>
+	<hr>
+	<div id="container">
+		<div class="art_list">
+		
+		</div>
+
+	<hr>
+	</div>
+	<div id="page">
+	</div>
+	
+	<footer id="footer"></footer>
+</body>
+</html>

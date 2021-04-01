@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<title>작품 상세보기</title>
+<link rel="stylesheet" type="text/css" href="artDetail.css"> 
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+$(function(){
+		
+	  
+		
+		
+		$.getScript("artDetail.js",function(){
+					
+			loadArtdetail(memNo,artNo);
+			loadArtHash(tag);
+			btnClick();
+			
+			//위시리스트 insert,delete
+			$("#divBtnWishList").click(function(){
+				
+				//찜하기를 클릭했을 때 userNo가 null이 아니라면 아래를 실행한다
+				if(userNo != null) {
+					//세션스토리지에 작품관련 세션 생성
+					sessionStorage.setItem("wishList"+artNo, wishList);
+					wishListVal = sessionStorage.getItem("wishList"+artNo); //value값
+					//console.log(wishList + " : value의 값");
+					
+					//만약 한번도 클릭되지 않았으면 처음 클릭했을 때 상태를 true로 둔다.
+					//찜하기 처음 클릭했을 때 : 찜하기
+					if(wishListVal == null){
+						wishList = true; //찜 한 상태
+					}
+					
+					//얻어온 wishList의 value가 true라면 insert를 실행하고
+					//wishList를 false로 바꾼다. 
+					if(wishListVal == 'true') {
+						console.log("wishList : " + wishList);
+						wishlistInsert(userNo,artNo);
+						wishList = false;	
+						console.log("insert 실행 후 wishList : " + wishList);	
+					}else{
+						wishlistDelete(userNo,artNo);
+						wishList = true;
+						console.log("delete 실행 후 wishList : " + wishList);
+					}
+				}else{ //userNo가 null이라면 로그인 페이지로 이동한다.
+					alert("로그인 후 이용할 수 있습니다.");
+					location.href="login.html";
+				}
+				
+			});//click
+			
+		
+		});
+
+});
+</script>
+</head>
+<body>
+<header id="header"></header>
+	<!-- <div>
+	<a id="goList">목록으로 돌아가기</a>
+	</div> -->
+	<div class="detail">
+		<div class="detail-content">
+			<div class="detail-content-box">
+				<div class="box detail-content-box-pic">
+						<img class="detail-content-pic-link">
+				</div>
+				<div class="box detail-content-box-info">
+					<h1><span class="name"></span></h1>
+					<span id="artistName"></span><br>
+					<span class="material"></span><br><br>
+					<!-- <span id="bidstart">작품 경매 시작가 : <span id="start"></span></span><br> -->
+					<b>작품 현재 경매가</b> &nbsp;&nbsp;&nbsp; <span id="bid"></span><br>
+						<div id="divBtnBid"><a id="btnBid">경매 참여하기</a></div><br>
+					<b>작품 즉시 구매가</b> &nbsp;&nbsp;&nbsp; <span id="buy"></span><br>
+						<div id="divBtnBuy"><a id="btnBuy">즉시 구매하기</a></div>
+						<br>
+						<div id="divBtnWishList">찜하기</div>
+				</div>
+			</div>
+			
+			 
+					<hr>
+			<!-- 작품 걸어보기 --> 
+			<div class="simulation">
+				<div class="simulation-box">
+					<h3>작품 걸어보기</h3>
+					<div class="simulation-img">
+						<div class="simulation-img-box">
+							<img class="simulation-bg" src="serverPic/studyRoom.jpg" width="200px">
+							<img class="simulation-art">
+						</div>			
+						<div class="simulation-img-box">
+							<div class="btnLeft"><button class="btnLeft-left">&lt;</button></div>
+							<div class="smBox simulation-img-box-other">
+							</div>
+							<div class="btnRight"><button class="btnRight-right">></button></div>
+						</div>
+					</div>
+				</div>
+			</div>
+					<hr>
+			
+			<!-- 작가 정보 -->
+			<div class="artistInfo">
+				<div class="artistInfo-box">
+					<div class="textbox">
+						<div class="artistInfo-box-text">
+							
+							<div class="artistInfo-box-name"> <!-- 작가 사진,이름,한줄소개 -->
+								<div class="artistInfo-box-name-pic">
+								</div>
+								<div class="artistInfo-box-name-text>">
+								<span id="infoArtistName"></span>
+								 - "<span id="infoArtistIntro"></span>"<br>
+								</div>
+							</div>
+							<div class="artistInfo-box-career">
+								<span id="infoArtistCareer"></span><br>
+							</div>
+						</div>
+						<div class="artistInfo-box-btn">
+							<a class="artistInfo-box-btn-moreArtist">작가정보 더 보기</a>
+						</div>
+					</div>
+					
+					<div class="artistInfo-box-artInfo">
+						<h3><span class="name"></span></h3>
+						<span class="material"></span><br>
+						<span class="size"></span> , <span class="year"></span><br>
+					</div>
+					
+				</div>
+			</div>
+			
+			
+				<!-- 작품 설명 -->
+			<div class="artExp">
+				<div class="artExp-box">
+									
+				
+				</div>
+			</div>
+			
+		</div>
+	</div>	
+	<hr>
+	<div class="artHashTag"> 
+		<div class="artHashTag-title">
+			<h3>#<span class="artHashTag-Name"></span>Tag와 관련있는 작품들</h3>
+		</div> 
+		<div class="artHashTag-box">
+			<div class="artHashTag-img-btnLeft"><button class="artHashTag-img-btnLeft-left">&lt;</button></div>
+				<div class="artHashTag-img-box">
+					<div class="artHashTag-img">
+					</div>
+				</div>
+			<div class="artHashTag-img-btnRight"><button class="artHashTag-img-btnRight-right">></button></div>
+		</div>
+	</div>
+ <footer id="footer"></footer>
+</body>
+</html>

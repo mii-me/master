@@ -1,0 +1,238 @@
+/* .detail-content {
+		width:1000px;
+		height:800px;
+	} */
+	.box {
+		float:left;
+	}
+	.smBox{	
+		float:left;
+		margin-right: 40px;
+	}
+	.detail-content-box{
+		width: 80%;
+	    max-width: 1000px;
+	    height: 650px;
+	    margin: 0px auto;
+	    padding: 15px;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	}
+	.detail-content-box-pic{
+		margin: 0px auto;
+	}
+	.detail-content-box-info{
+		width:400px;
+		height:400px;
+		text-align: right;
+		padding:20px;
+	}
+	#btnBuy,#btnBid,.artistInfo-box-btn-moreArtist {
+	display: inline-block;
+    padding: 0 20px;
+    background-color: #2d3648;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 40px;
+    color: #fff;
+    letter-spacing: -.5px;
+    vertical-align: top;
+    text-decoration: none;
+	}
+	.detail-content-pic-link {
+		max-width:500px;
+		max-height:500px;
+	}
+	#artistName,#bidstart {
+		font-size: 8px;
+	}
+	h1,h2,h3 {
+		margin-bottom: 0px;
+	}
+	h3{
+		margin-top: 0px;
+	}
+	.simulation-box{
+		clear:both;
+		width:800px;
+		height:450px;
+		margin: 0px auto;
+	}
+	.simulation-bg{
+		width:300px;
+		height:400px;
+	}
+	.simulation-art{
+		position: absolute;
+	    width: 70px;
+	    height: 70px;
+	    top: 70px;
+	    left: 120px;
+	}
+	.simulation-bg-other {
+		width:100px;
+		height:100px;
+	}
+	.simulation-img-box{
+		display: flex;
+		align-items: center;
+	    /* margin: 0 auto; */
+	    margin-right: 50px;
+	    position: relative;
+	}
+	.btnLeft-left, .btnRight-right, .artHashTag-img-btnLeft-left, .artHashTag-img-btnRight-right{
+	 	background-color: black;
+	    border: none;
+	    color: white;
+	    padding: 10px 15px;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 16px;
+	}
+	
+	
+	hr{
+		clear:both;
+	}
+	.artistInfo-box{
+		border:1px solid #F1F2F4;
+		background-color: #F1F2F4;
+		width:600px;
+		margin:0px auto;
+		padding: 15px;
+	}
+	.artistInfo-box-name{
+		display:flex;
+		align-items:center;
+	}
+	.artistInfo-box-btn{
+		margin-top:15px;
+	}
+	#divBtnBid, #divBtnBuy{
+		margin-top: 10px;
+	}
+	#infoArtistCareer {
+		font-size: 9px;
+	}
+	.artistInfo-box-career{
+		margin-bottom: 10px;
+		padding-bottom: 10px;
+	}
+	#infoArtistName,#infoArtistIntro{
+		font-size: 15px;
+	}
+	.detail-content-box{
+		margin:0px auto;	
+	}
+	.detail-content-box-pic{
+		display:flex;
+		justify-content:center;
+		align-items:center;
+	}
+	.textbox{
+	    display: flex;
+	    justify-content: space-between;
+	    border-bottom: 1px solid #dfdfdf;
+    }
+    .artistInfo, .simulation{
+    	clear: both;
+	    width: 80%;
+	    max-width: 1000px;
+	    margin: 0px auto;
+	    padding: 5px;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+    }
+    .artHashTag{
+  	  clear: both;
+	    width: 100%;
+	    max-width: 1200px;
+	    margin: 0px auto;
+	    padding: 5px;
+    }
+    .artHashTag-img{
+    	display: flex;
+    	align-items: center;
+    }
+    .artHashTag-imgbox{
+    	display:flex;
+    	align-items:center;
+    	max-width:100%;
+    }
+    .artHashTag-img-div-link{
+    /* 	flex: 1; */
+  		width: 300px;
+	    margin-right: 15px;
+	    height: 300px;
+	    display: flex;
+	    align-items: center;
+	    background-color: #e6e6e6;
+    }
+    .artHashTag-img-div-link:last-child{
+    	margin-right:0;
+    }
+    
+    .artHashTag-title {
+    	width:70%;
+    	max-width:700px;
+    	text-align: left;
+    	margin-bottom: 30px;
+    }
+    .artHashTag-img-box{
+        width: 940px;
+	    overflow: hidden;
+	    display: flex;
+	    margin: 10px;
+    }
+    .simulation-img-box-other{
+    	display: flex;
+	    margin: 10px;
+	    align-items: center;
+	    width: 440px;
+	    overflow: hidden;
+	    text-align: center;
+    }
+    .simulation-bg-box{
+	    display: flex;
+	    align-items: center;
+    	margin-right: 10px;
+    }
+    .simulation-bg-box-one{
+	    margin-right: 10px;
+    }
+    .simulation-img{
+    	display:flex;
+    	margin-top: 20px;
+    }
+    .artistInfo-box-artInfo{
+    	margin-top:20px;
+    }
+    #divBtnWishList{
+    	display: inline-block;
+	    padding: 0 20px;
+	    background-color: #2d3648;
+	    font-size: 13px;
+	    font-weight: 700;
+	    line-height: 40px;
+	    color: #fff;
+	    letter-spacing: -.5px;
+	    vertical-align: top;
+	    text-decoration: none;
+    }
+    .artExp{
+    	margin-top: 15px;
+    	padding:20px;
+    }
+    .artExp-box{
+	    display: flex;
+    	justify-content: center;
+	    align-items: center;
+    }
+    .artHashTag-box{
+        display: flex;
+ 	 	align-items: center;
+ 	    justify-content: center;
+    }
