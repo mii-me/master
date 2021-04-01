@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>미미 美;Me 포인트관리</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style type="text/css">
+
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+//header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+let data;
+$(function(){
+	
+	// 남혜진 210328 로그인 세션 유지 _ 회원번호 사용
+	$.getScript("js/loginCheck.js", function(){
+		let memNo = sessionStorage.getItem("memNo");
+		data = {memNo:memNo};
+		
+		let arr;
+		let pointList;
+		
+		// 남혜진 210324 _ point 조회
+		function listPoint(){
+			$("#point").empty();
+			/* 세션유지: 회원번호 */
+			$.ajax({url:"/findArtistPoint.do", data:data, success:function(point){
+				let artPoint = point.payPoint;
+				let artistName = point.artistName;
+				console.log(artPoint);
+				console.log(artistName);
+				$("#artistName").append(artistName);
+				$("#point").append(artPoint);
+			}})
+		}
+		
+		listPoint();
+		
+		// 남혜진 210331 _ 포인트 출력 하단 이벤트
+		// 1. 포인트 환전
+		$("#pointChg").click(function(){
+			alert("포인트 환전");
+			
+		})
+		
+		// 2. 수수료 안내
+		$("#infoTax").click(function(){
+			// 더보기란 만들어서 하기
+			
+		})
+		
+		// 3. 판매 등록 / 취소
+		$("#listArtSell").click(function(){
+			location.href="listArtSell.html";
+		})
+		
+		// 4. 판매하기 메인으로이동
+		$("#artSellMain").click(function(){
+			location.href="artSell.html";
+		})
+		
+		
+		
+	})
+	
+})
+</script>
+</head>
+<body>
+ <header id="header"></header>
+<div class="container p-3 my-3 border">
+	<div id="pointBar">
+		'<span id="artistName"></span>' 회원님의 현재 포인트 잔액은 <span id="point"></span>원 입니다.
+	</div>
+</div>
+<hr>
+<div class="container" style="width:1000px">
+	<div class="row m-0">
+		<div class="card p-1 m-1 bg-light" style="width:45%" id="pointChg">
+			<div class="card-body">
+				<h5 class="card-title">
+				<!-- 아이콘으로 적용해보기 -->
+					1. 포인트 환전
+				</h5>
+			</div>
+		</div>
+		<div class="card p-1 m-1 bg-light" style="width:45%"  id="infoTax">
+			<div class="card-body">
+				<h5 class="card-title">
+					2. 수수료 안내
+				</h5>
+			</div>
+		</div>
+		<div class="card p-1 m-1 bg-light" style="width:45%" id="listArtSell">
+			<div class="card-body">
+				<h5 class="card-title">
+					3. 판매 등록 / 취소
+				</h5>
+			</div>
+		</div>
+		<div class="card p-1 m-1 bg-light" style="width:45%" id="artSellMain">
+			<div class="card-body">
+				<h5 class="card-title">
+					4. 판매하기 메인으로이동
+				</h5>
+			</div>
+		</div>
+	</div>
+</div>
+
+ <footer id="footer"></footer>
+</body>
+</html>

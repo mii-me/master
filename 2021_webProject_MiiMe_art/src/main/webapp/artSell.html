@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>미미 美;Me 판매관리</title>
+<style type="text/css">
+.bakcol{
+	background-color: #dfe6e9;
+}
+</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+//header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+	$(function(){
+		
+		//let memNo = sessionStorage.getItem("memNo");
+		//let data = {memNo:memNo}
+		
+		// 남혜진 210318 판매하기_작품정보 등록 
+		/* 1. 등록된 작품관리 클릭 */
+		$("#btnInsertArtInfo").click(function(){
+			location.href="insertArtInfo.html";
+		})
+		
+		// 남혜진 210320 등록된 작품 목록 _ 수정, 삭제, 판매
+		/* 2. 등록된 작품관리 */
+		$("#btnCheckArtSell").click(function(){
+			location.href="listArtSellCheck.html";
+		})
+		
+		// 남혜진 210322 판매중인 작품목록 _ 판매취소
+		/* 3. 판매중인 작품관리 */
+		$("#btnSellArtList").click(function(){
+			location.href="listArtSell.html";
+		})
+		
+		// 남혜진 210324 _ point 조회
+		/* 4. 포인트 관리 */
+		$("#btnArtistPoint").click(function(){
+			location.href="listArtPoint.html";
+		})
+		
+		
+	})
+</script>
+</head>
+<body>
+<header id="header"></header>
+
+<div class="container p-3 my-3 border">
+	이곳에서 작품 정보를 등록할 수 있습니다.<br>
+	판매를 원하는 작품의 정보를 등록하고, 판매를 진행해주세요.<br>
+	작가님들의 작품 활동에 관심을 가지는 서포터들이 기다리고 있습니다.
+	<div>
+		<br>작품 정보 등록하러 가기  <button id="btnInsertArtInfo" type="button" class="btn btn-dark">작품 등록하기</button>
+	</div>
+</div>
+
+<div class="container p-3 my-3 border">
+	등록된 작품을 본격적으로 판매에 등록하기 전에 작품을 관리해주세요.<br>
+	판매 시작 전까지 언제든지 수정과 삭제를 할 수 있습니다.<br>
+	다만, <span style="color:red">삭제하신다면 해당 작품에 대한 정보는 완전히 삭제</span> 되기 때문에 신중하게 선택해주세요.<br>
+	이제, 판매까지 얼마 남지 않았습니다!<br>
+	작품의 실제 사진과 사이즈를 꼼꼼하게 검토해 주세요.<br>
+	작품정보를 검토하셨다면, 이곳에서 판매여부에 대한 선택을 할 수 있습니다.<br>
+	<div>
+		<br>작품등록을 완료하셨습니까? <br>등록된 작품에 대한 수정,삭제,판매하러 가기  <button id="btnCheckArtSell" type="button" class="btn btn-dark">등록된 작품관리</button>
+	</div>
+</div>
+
+<div class="container p-3 my-3 border">
+	판매중 여부를 알고 싶다면 판매중인 작품관리 페이지로 들어오세요.<br>
+	이곳에서 판매중인 작품목록을 살펴볼 수 있습니다.<br>
+	판매를 중지하고 싶다면, 해당 작품에 대한 판매가 완료되기 전까지 판매를 취소할 수 있습니다.<br>
+	취소한 작품을 재판매하고 싶다면, 다시 두번째 순서로 돌아가서 작품정보를 확인 후 판매등록을 하셔야 합니다.
+	<div>
+		<br>판매중인 작품을 둘러보기, 여기서 작품판매를 취소할 수 있습니다  <button id="btnSellArtList" type="button" class="btn btn-dark">판매중인 작품관리</button>
+	</div>
+</div>
+
+<div class="container p-3 my-3 border">
+	축하드립니다!<br>
+	판매가 완료된 작품에 대한 금액은 포인트제로 운영되고 있습니다.<br>
+	이곳에서 판매실적을 확인하시고, 계좌와 환전을 관리해주세요.
+	<div>
+		<br>회원님의 판매실적을 확인하세요  <button id="btnArtistPoint" type="button" class="btn btn-dark">포인트 관리</button>
+	</div>
+</div>
+
+ <footer id="footer"></footer>
+</body>
+</html>
