@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>미미 美;Me</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
 <script type="text/javascript">
 // header, footer include
 $(document).ready(function(){
@@ -15,18 +16,61 @@ $(document).ready(function(){
     $("#footer").load("/footer.html");
 });
 </script>
+
 <style type="text/css">
-.main{
-	width: 50%;
-	height: 40%;
-}	
+.main_art{
+	max-width: 100%;
+	max-height: 900px;
+}
 </style>
 </head>
+
 <body>
-<header id="header"></header>
-<div id="body">
-<div><img class="main" src="./art_pic/main.jpg"></div>
-</div>
-<footer id="footer"></footer>
+ <header id="header"></header>
+ 
+	<div id="demo" class="carousel slide" data-ride="carousel">
+	  <ul class="carousel-indicators">
+	    <li data-target="#demo" data-slide-to="0" class="active"></li>
+	    <li data-target="#demo" data-slide-to="1"></li>
+	    <li data-target="#demo" data-slide-to="2"></li>
+	  </ul>
+	  <div class="carousel-inner" style="background-color: #212529!important;">
+	    <div class="carousel-item active">
+	      <img src="art_pic/annoying.jpg" class="main_art">
+	      <div class="carousel-caption text-right">
+	        <h1 style="margin-bottom: 50px;">준비중</h1>
+	        <div style="margin-bottom: 100px;">
+	        	<button class="btn btn-dark">작품 보러가기</button>
+	        </div>
+	      </div>   
+	    </div>
+	    <div class="carousel-item" style="background-color: #212529!important;">
+	      <img src="art_pic/flower.jpg" class="main_art" align="right">
+	      <div class="carousel-caption text-left">
+	        <h1 style="margin-bottom: 50px;">준비중</h1>
+	        <div style="margin-bottom: 100px;">
+	        	<button class="btn btn-dark">작품 보러가기</button>
+	        </div>
+	      </div>   
+	    </div>
+	    <div class="carousel-item" style="background-color: #212529!important;">
+	      <img src="art_pic/gui_dingding.jpg" class="main_art">
+	      <div class="carousel-caption text-right">
+	        <h1 style="margin-bottom: 50px;">준비중</h1>
+	        <div style="margin-bottom: 100px;">
+	        	<button class="btn btn-dark">작품 보러가기</button>
+	        </div>
+	      </div>   
+	    </div>
+	  </div>
+	  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+	    <span class="carousel-control-prev-icon"></span>
+	  </a>
+	  <a class="carousel-control-next" href="#demo" data-slide="next">
+	    <span class="carousel-control-next-icon"></span>
+	  </a>
+	</div>
+
+<!-- <footer id="footer"></footer> -->
 </body>
 </html>
