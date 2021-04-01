@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+	<meta charset="UTF-8">
+	<title>태그별 후기</title>
+	<style>
+		img{
+			margin-left:auto;
+			margin-right: auto;
+			width: 400px;
+			height: 400px;
+		}
+	</style>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			$("#header").load("/header.html");
+			$("#footer").load("/footer.html");
+		});
+		// header, footer include
+
+		let clickCnt = 1;
+		var keyword = ""; // 검색어
+		var orderField = "";
+		var output = '';
+		var tagNumber = "0";
+
+		function clickAddAction() {
+			clickCnt += 1;
+			console.log(clickCnt)
+			$("#reviewList" + tagNumber).empty(); // 목록이 중첩되지않게 초기화
+			loadReviewList(keyword, orderField, "#reviewList" + tagNumber);
+		}
+
+		function clickTagBtn(btn) {
+			$('#' + btn).toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
+			switch (btn) {
+				case 'btnTag1': { tagNumber = '1'; break; }
+				case 'btnTag2': { tagNumber = '2'; break; }
+				case 'btnTag3': { tagNumber = '3'; break; }
+				case 'btnTag4': { tagNumber = '4'; break; }
+				case 'btnTag5': { tagNumber = '5'; break; }
+			}
+
+			if ($('#' + btn).attr('class') == 'actionButton on') {
+				$("#reviewList" + tagNumber).empty(); // 목록이 중첩되지않게 초기화
+				keyword = btn;
+				loadReviewList(keyword, "", "#reviewList" + tagNumber)
+			} else {
+				$("#reviewList" + tagNumber).empty();
+			}
+		}
+
+		// 모든 상품목록을 Ajax 통신으로 요청하는 함수 시작
+		function loadReviewList(keyword, orderField, editList) {
+
+			let data = { keyword: keyword, orderField: orderField };
+
+			$.ajax({
+				url: "/detailTagReviewProto.do",
+				dataType: "JSON", ////*****************형변환 
+				data: data,
+				success: function (data) {
+					arr = []
+					arr = data.list; // 페이징 처리를 위함
+
+					output = '';
+					output += '<div class="container" style="width:100%" ><div class="d-grid gap-2 d-sm-flex justify-content-sm-center">'
+					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('likeDesc')">좋아요 높은 순서</button>`
+					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceAsc')">가격 낮은 순서</button>`
+					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceDesc')">가격 높은 순서</button>`
+					output += '</div>'
+					output += '</div>'
+					if (clickCnt * 9 > data.list.length) {
+						for (var i = 0; i < data.list.length; i++) {
+							output += '<div class="col">'
+							output += '<div class="card shadow-sm">';
+							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].REVIEW_IMAGE + '"/></svg>'
+							output += '<div class="card-body">';
+							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].MEM_NO + '&artNo=' + data.list[i].ART_NO + '&tag=' + data.list[i].ART_TAG1
+								+ '" class="link-dark"><font size="4em">'
+								+ data.list[i].ART_NAME + '</font></a></p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].AT_MEM_NO + '">'
+								+ data.list[i].ARTIST_NAME + '</a>&emsp;</p>'
+							output += '<p class="card-text">' + data.list[i].REVIEW_TEXT + '</p>'
+
+
+							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].PAY_AMOUNT + '&emsp;</p>'
+
+							output += '<ul class="nav justify-content-end">'
+							if (data.list[i].ART_TAG1 != null) {
+								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].ART_TAG1 + '</font></a></li>'
+							}
+							if (data.list[i].ART_TAG2 != null) {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].ART_TAG2 + '</font></a></li>'
+							}
+							if (data.list[i].ART_TAG3 != null) {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].ART_TAG3 + '</font></a></li>'
+							}
+							output += '</ul>'
+							output += '<br>'
+
+							output += '<div class="d-flex justify-content-between align-items-center">'
+							output += ' <div class="btn-group">'
+							output += ' <button type="button"  onClick="clickAction(' + data.list[i].REVIEW_NO + ')" class="like" id="'
+								+ data.list[i].REVIEW_NO + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
+
+							output += ' </div>'
+							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].REVIEW_LIKE + '</small>'
+							output += ' </div>'
+							output += ' </div>'
+							output += ' </div>'
+							output += ' </div>'
+						}
+						$('#buttonAdd').empty();
+					} else {
+
+						for (var i = 0; i < clickCnt * 9; i++) {
+							output += '<div class="col">'
+							output += '<div class="card shadow-sm">';
+							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].REVIEW_IMAGE + '"/></svg>'
+							output += '<div class="card-body">';
+							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].MEM_NO + '&artNo=' + data.list[i].ART_NO + '&tag=' + data.list[i].ART_TAG1
+								+ '" class="link-dark"><font size="4em">'
+								+ data.list[i].ART_NAME + '</font></a></p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].AT_MEM_NO + '">'
+								+ data.list[i].ARTIST_NAME + '</a>&emsp;</p>'
+							output += '<p class="card-text">' + data.list[i].REVIEW_TEXT + '</p>'
+
+
+							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].PAY_AMOUNT + '&emsp;</p>'
+
+							output += '<ul class="nav justify-content-end">'
+							if (data.list[i].ART_TAG1 != null) {
+								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].ART_TAG1 + '</font></a></li>'
+							}
+							if (data.list[i].ART_TAG2 != null) {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].ART_TAG2 + '</font></a></li>'
+							}
+							if (data.list[i].ART_TAG3 != null) {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].ART_TAG3 + '</font></a></li>'
+							}
+							output += '</ul>'
+							output += '<br>'
+
+							output += '<div class="d-flex justify-content-between align-items-center">'
+							output += ' <div class="btn-group">'
+							output += ' <button type="button"  onClick="clickAction(' + data.list[i].REVIEW_NO + ')" class="like" id="'
+								+ data.list[i].REVIEW_NO + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
+
+							output += ' </div>'
+							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].REVIEW_LIKE + '</small>'
+							output += ' </div>'
+							output += ' </div>'
+							output += ' </div>'
+							output += ' </div>'
+						}
+						let buttonAdd = '<div class="d-grid gap-2"> <button onClick="clickAddAction()" class="btn btn-primary" type="button">더보기</button></div>'
+						$('#buttonAdd').append(buttonAdd);
+					}
+					$(editList).append(output);
+				}//data	(success)
+			});//ajax
+		}//loadReviewList 끝
+
+
+
+
+
+		function clickSortAction(orderField) {
+			console.log(keyword);
+			console.log(orderField);
+			$("#reviewList" + tagNumber).empty();
+			loadReviewList(keyword, orderField, "#reviewList" + tagNumber);
+		};
+
+
+		function clickAction(review_no) {
+			console.log("like ready activate")
+			alert("좋아요!");
+
+			//  $('.likeButton')
+			//  <img class="likeButton"/>
+			$('.like').toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
+
+			if ($('.like').attr('class') == 'like on') {
+				console.log(review_no)
+				insertLike(review_no)
+			} else { //null
+				deleteLike(review_no)
+			}
+		}
+
+
+		function insertLike(review_no) {
+			let data = { REVIEW_NO: review_no };
+			console.log(data)
+			$.ajax({
+				type: "POST", //POST 타입
+				url: "/insertLikeReviewProto.do",
+				data: data,
+				success: function () {
+					alert("좋아요 +1");
+					// window.location.reload();
+
+				}
+			})
+		};
+
+		function deleteLike(review_no) {
+			let data = { REVIEW_NO: review_no };
+
+			$.ajax({
+				type: "POST", //POST 타입
+				url: "/deleteLikeReviewProto.do",
+				data: data,
+				success: function () {
+					alert("좋아요 -1");
+					// window.location.reload();
+
+				}
+			})
+		};
+
+	</script>
+</head>
+
+<body>
+	<header id="header"></header>
+	<main>
+		<section class="py-5 text-center container">
+			<div class="row py-lg-5">
+				<div class="col-lg-6 col-md-8 mx-auto">
+					<h1 class="fw-light">#태그로 리뷰 모아보기</h1>
+					<p class="lead text-muted">작가가 pick한 #태그로 리뷰 모아보기</p>
+					<p>
+						<a href="artDetail.html" class="btn btn-primary my-2">작품 목록</a>
+						<a href="artistDetail.html" class="btn btn-secondary my-2">작가 목록</a>
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<div class="accordion" id="accordionExample">
+
+
+			<div class="accordion-item">
+				<h2 class="accordion-header" id="headingOne">
+					<div class="actionButton" id="btnTag1" onClick="clickTagBtn('btnTag1')">
+						<button class="accordion-button" type="button"># 인테리어 / # 선물</button>
+					</div>
+				</h2>
+				<div class="accordion-body">
+					<div id="reviewList1" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+					<div id="buttonAdd"></div>
+				</div>
+			</div>
+
+
+			<div class="accordion-item">
+				<h2 class="accordion-header" id="headingTwo">
+					<div class="actionButton" id="btnTag2" onClick="clickTagBtn('btnTag2')">
+						<button class="accordion-button" type="button"># 순수미술 / # 일러스트 / # 사진</button>
+					</div>
+				</h2>
+				<div class="accordion-body">
+					<div id="reviewList2" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+					<div id="buttonAdd"></div>
+				</div>
+			</div>
+
+
+		<div class="accordion-item">
+			<h2 class="accordion-header" id="headingThree">
+				<div class="actionButton" id="btnTag3" onClick="clickTagBtn('btnTag3')">
+					<button class="accordion-button" type="button"># 서양화 / # 동양화 / # 판화 / # 펜화 / # 수채 / # 포스터</button>
+				</div>
+			</h2>
+			<div class="accordion-body">
+				<div id="reviewList3" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+				<div id="buttonAdd"></div>
+			</div>
+		</div>
+
+
+		<div class="accordion-item">
+			<h2 class="accordion-header" id="headingFour">
+				<div class="actionButton" id="btnTag4" onClick="clickTagBtn('btnTag4')">
+					<button class="accordion-button" type="button"># 몽환적 / # 분위기 / # 힐링 / # 따뜻함</button>
+				</div>
+			</h2>
+			<div class="accordion-body">
+				<div id="reviewList4" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+				<div id="buttonAdd"></div>
+			</div>
+		</div>
+
+
+		<div class="accordion-item">
+			<h2 class="accordion-header" id="headingFive">
+				<div class="actionButton" id="btnTag5" onClick="clickTagBtn('btnTag5')">
+					<button class="accordion-button" type="button"># 빈티지 / #고전 / #현대</button>
+				</div>
+			</h2>
+			<div class="accordion-body">
+				<div id="reviewList5" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+				<div id="buttonAdd"></div>
+			</div>
+		</div>
+	</div>
+
+	</main>
+
+	<footer id="footer"></footer>
+
+
+</body>
+
+</html>

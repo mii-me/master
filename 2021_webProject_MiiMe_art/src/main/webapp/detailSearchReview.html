@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+	<meta charset="UTF-8">
+	<title>리뷰 검색</title>
+
+	<style>
+		img{
+			margin-left:auto;
+			margin-right: auto;
+			width: 400px;
+			height: 400px;
+		}
+	</style>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			$("#header").load("/header.html");
+			$("#footer").load("/footer.html");
+		});
+		// header, footer include
+
+
+		$(function () {
+
+			loadReviewList("", "", "");
+
+		});
+
+
+		let clickCnt = 1;
+		var searchField = "";
+		var keyword = "";
+		var orderField = "";
+
+		function clickAddAction() {
+			clickCnt += 1;
+			console.log(clickCnt)
+			$("#reviewList").empty(); // 목록이 중첩되지않게 초기화
+			loadReviewList(1, keyword, searchField, orderField);
+		}
+
+
+		// 모든 상품목록을 Ajax 통신으로 요청하는 함수 시작
+		function loadReviewList(keyword, searchField, orderField) {
+			$("#reviewList").empty(); // 목록이 중첩되지않게 초기화
+
+			let data = {keyword: keyword, searchField: searchField, orderField: orderField };
+
+			$.ajax({
+				url: "/detailSearchReviewProto.do",
+				dataType: "JSON", ////*****************형변환 
+				data: data, success: function (data) {
+
+					arr = []
+					arr = data.list; // 페이징 처리를 위함
+
+					let output = '';
+					//오브젝트는 each 반복 안되니까 일반 for문 사용 
+					if (clickCnt * 9 > data.list.length) {
+						for (var i = 0; i < data.list.length; i++) {
+							output += '<div class="col">'
+							output += '<div class="card shadow-sm">';
+							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].REVIEW_IMAGE + '"/></svg>'
+							output += '<div class="card-body">';
+							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].MEM_NO + '&artNo=' + data.list[i].ART_NO + '&tag=' + data.list[i].ART_TAG1
+								+ '" class="link-dark"><font size="4em">'
+								+ data.list[i].ART_NAME + '</font></a></p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].AT_MEM_NO + '">'
+								+ data.list[i].ARTIST_NAME + '</a>&emsp;</p>'
+							output += '<p class="card-text">' + data.list[i].REVIEW_TEXT + '</p>'
+
+
+							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].PAY_AMOUNT + '&emsp;</p>'
+
+						output += '<ul class="nav justify-content-end">'
+						if (data.list[i].ART_TAG1 != null) {
+							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].ART_TAG1 + '</font></a></li>'
+						}
+						if (data.list[i].ART_TAG2 != null) {
+							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								+ data.list[i].ART_TAG2 + '</font></a></li>'
+						}
+						if (data.list[i].ART_TAG3 != null) {
+							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								+ data.list[i].ART_TAG3 + '</font></a></li>'
+						}
+							output += '</ul>'
+							output += '<br>'
+
+							output += '<div class="d-flex justify-content-between align-items-center">'
+							output += ' <div class="btn-group">'
+							output += ' <button type="button"  onClick="clickAction(' + data.list[i].REVIEW_NO + ')" class="like" id="'
+								+ data.list[i].REVIEW_NO + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
+
+							output += ' </div>'
+							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].REVIEW_LIKE + '</small>'
+							output += ' </div>'
+							output += ' </div>'
+							output += ' </div>'
+							output += ' </div>'
+						}
+						$('#buttonAdd').empty();
+
+					} else {
+						for (var i = 0; i < clickCnt * 9; i++) {
+							output += '<div class="col">'
+							output += '<div class="card shadow-sm">';
+							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].REVIEW_IMAGE + '"/></svg>'
+							output += '<div class="card-body">';
+							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].MEM_NO + '&artNo=' + data.list[i].ART_NO + '&tag=' + data.list[i].ART_TAG1
+								+ '" class="link-dark"><font size="4em">'
+								+ data.list[i].ART_NAME + '</font></a></p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].AT_MEM_NO + '">'
+								+ data.list[i].ARTIST_NAME + '</a>&emsp;</p>'
+							output += '<p class="card-text">' + data.list[i].REVIEW_TEXT + '</p>'
+
+
+							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].PAY_AMOUNT + '&emsp;</p>'
+
+						output += '<ul class="nav justify-content-end">'
+						if (data.list[i].ART_TAG1 != null) {
+							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].ART_TAG1 + '</font></a></li>'
+						}
+						if (data.list[i].ART_TAG2 != null) {
+							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								+ data.list[i].ART_TAG2 + '</font></a></li>'
+						}
+						if (data.list[i].ART_TAG3 != null) {
+							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								+ data.list[i].ART_TAG3 + '</font></a></li>'
+						}
+							output += '</ul>'
+							output += '<br>'
+
+							output += '<div class="d-flex justify-content-between align-items-center">'
+							output += ' <div class="btn-group">'
+							output += ' <button type="button"  onClick="clickAction(' + data.list[i].REVIEW_NO + ')" class="like" id="'
+								+ data.list[i].REVIEW_NO + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
+
+							output += ' </div>'
+							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].REVIEW_LIKE + '</small>'
+							output += ' </div>'
+							output += ' </div>'
+							output += ' </div>'
+							output += ' </div>'
+						}
+						let buttonAdd= '<div class="d-grid gap-2"> <button onClick="clickAddAction()" class="btn btn-primary" type="button">더보기</button></div>'
+						$('#buttonAdd').append(buttonAdd);
+					}
+					$('#reviewList').append(output);
+
+
+				}//data 
+			}); //ajax
+		};//func. loadReviewList
+
+
+		// 검색시작
+		function clickSearchAction() {
+			searchField = $("#searchField").val();
+			keyword = $("#keyword").val();
+			loadReviewList(keyword, searchField, "");
+		};
+		//검색 종료 
+
+		function clickSortAction(orderField) {
+			console.log(searchField);
+			console.log(keyword);
+			console.log(orderField);
+			if (keyword == null) {
+				loadReviewList( "", "", orderField);
+			} else {
+				loadReviewList(keyword, searchField, orderField);
+			}
+		};
+
+		function clickAction(review_no) {
+			console.log("like ready activate")
+			alert("좋아요!");
+
+			//  $('.likeButton')
+			//  <img class="likeButton"/>
+			$('.like').toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
+
+			if ($('.like').attr('class') == 'like on') {
+				console.log(review_no)
+				insertLike(review_no)
+			} else { //null
+				deleteLike(review_no)
+			}
+
+
+			function insertLike(review_no) {
+				let data = { REVIEW_NO: review_no };
+				console.log(data)
+				$.ajax({
+					type: "POST", //POST 타입
+					url: "/insertLikeReviewProto.do",
+					data: data,
+					success: function () {
+						alert("좋아요 +1");
+						// window.location.reload();
+					}
+				})
+			};
+
+			function deleteLike(review_no) {
+				let data = { REVIEW_NO: review_no };
+
+				$.ajax({
+					type: "POST", //POST 타입
+					url: "/deleteLikeReviewProto.do",
+					data: data,
+					success: function () {
+						alert("좋아요 -1");
+						// window.location.reload();
+
+					}
+				})
+			};
+
+		}
+
+
+	</script>
+</head>
+
+<body>
+	<header id="header"></header>
+	
+	<main>
+		<section class="py-5 text-center container">
+			<div class="row py-lg-5">
+				<div class="col-lg-6 col-md-8 mx-auto">
+					<h1 class="fw-light">리뷰 검색</h1>
+					<p class="lead text-muted">작가명, 작품명으로 리뷰를 검색</p>
+					<p>
+						<a href="artDetail.html" class="btn btn-primary my-2">작품 목록</a>
+						<a href="artistDetail.html" class="btn btn-secondary my-2">작가 목록</a>
+					</p>
+				</div>
+			</div>
+		</section>
+		
+		
+		
+		<div class="input-group mb-3">
+			<div class="form-floating">
+				<select class="form-select" id="floatingSelect" aria-label="Floating label select example" id="searchField">
+					<option value="artName"><a class="dropdown-item">작품명</a></option>
+					<!-- DB에 있는 이름과 똑같이 value를 설정 -->
+					<option value="artistName"><a class="dropdown-item">작가명</a></option>
+				</select>
+			</div>
+			
+			<input type="text" class="form-control" aria-label="Text input with dropdown button" id="keyword">
+			<!-- 검색 창 -->
+			<button class="btn btn-dark" onClick="clickSearchAction()" id="btnSearch">검색</button>
+		</div>
+		<br>
+		<br>
+		
+		<div class="container">
+			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+				<button type="button" class="btn btn-dark" onClick="clickSortAction('likeDesc')">좋아요 높은 순서</button>
+				<button type="button" class="btn btn-dark" onClick="clickSortAction('priceAsc')">가격 낮은 순서</button>
+				<button type="button" class="btn btn-dark" onClick="clickSortAction('priceDesc')">가격 높은 순서</button>
+			</div>
+		</div>
+
+
+		<div class="album py-5 bg-light">
+			<div class="container">
+				<h3 class="pricing-header p-3 pb-md-4 mx-auto text-center" class="display-4 fw-normal">후기 검색</h3><br>
+				<div id="reviewListMostLike3" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+				</div>
+				<br>
+				<div id="reviewList" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+				</div><br>
+				<div id="buttonAdd"></div>
+			</div>
+		</div>
+	</main>
+
+	<footer id="footer"></footer>
+
+</body>
+
+</html>

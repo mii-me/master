@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review">
+	<!-- 목표에 따라서 xml 파일을 찢기 -->
+	<!--xml?: 선언문의 역할, sql문을 선언해놓고, 이름을 정해놓는 것(그 이름이 id), resultType은 반환하는 자료형 -->
+
+	<select id="totalRecord" resultType="java.lang.Integer">
+		<!-- int형으로 반환이 되도록 Integer로 설정해줬지만, java가 알아듣지 못하기 때문에 java에게 알려주는 것 -->
+		select count(*)
+		from review_tb r
+		inner join art_info_tb a on
+		r.art_no=a.art_no
+		Inner join
+		payment_tb p on r.art_no=p.art_no
+		inner join
+		member_tb m on
+		r.mem_no=m.mem_no
+		inner join artist_info_tb at on
+		at.mem_no=a.mem_no
+
+		<if test="keyword != ''">
+			<choose>
+				<when test="searchField == 'artName'">
+					where a.art_name = #{keyword}
+				</when>
+				<otherwise>
+					where at.artist_name = #{keyword}
+				</otherwise>
+			</choose>
+		</if>
+	</select>
+
+
+
+	<insert id="insert">
+		insert into review_tb 
+		values(review_seq.nextval,sysdate,'${reviewImage}',0,'${reviewText}',${memNo},${artNo})
+	</insert>
+
+
+
+	<select id="findAll" resultType="reviewVo">
+		select r.mem_no, m.mem_name, r.review_no, r.review_time,a.art_no,
+		r.review_image, r.review_like, r.review_text, p.pay_amount,
+		a.art_name, a.art_theme , a.art_tag1 , a.art_tag2 ,a.art_tag3,
+		at.ARTIST_NAME, at.mem_no as at_mem_no
+		
+		from review_tb r
+		inner join art_info_tb a on
+		r.art_no=a.art_no
+		inner join payment_tb p on r.art_no=p.art_no
+		inner
+		join member_tb m on r.mem_no=m.mem_no
+		inner join
+		artist_info_tb at on
+		at.mem_no=a.mem_no
+
+		<if test="orderField != ''">
+			<choose>
+				<when test="orderField == 'likeDesc'">
+					order by r.review_like desc, review_time desc
+				</when>
+				<when test="orderField == 'priceAsc'">
+					order by p.pay_amount, review_time desc
+				</when>
+				<when test="orderField == 'priceDesc'">
+					order by p.pay_amount desc, review_time desc
+				</when>
+				<otherwise>
+					order by r.review_time desc
+				</otherwise>
+			</choose>
+		</if>
+
+	</select>
+
+
+
+
+
+	<select id="findSearchAll" resultType="reviewVo">
+		select r.mem_no,a.art_no,
+		m.mem_name, r.review_no, r.review_time,
+		r.review_image,
+		r.review_like,
+		r.review_text, p.pay_amount,
+		a.art_name,
+		a.art_theme ,
+		a.art_tag1 ,
+		a.art_tag2 ,a.art_tag3,
+		at.ARTIST_NAME, at.mem_no as at_mem_no
+		
+		from
+		review_tb r
+		inner join art_info_tb a on
+		r.art_no=a.art_no
+		inner join
+		payment_tb p on r.art_no=p.art_no
+		inner
+		join member_tb m on
+		r.mem_no=m.mem_no
+		inner join
+		artist_info_tb at on
+		at.mem_no=a.mem_no
+
+		<if test="searchField != ''">
+			<choose>
+				<when test="searchField == 'artName'">
+					where a.art_name like '%'|| #{keyword}||'%' 
+				</when>
+				<otherwise>
+					where at.artist_name like '%'|| #{keyword}||'%' 
+				</otherwise>
+			</choose>
+		</if>
+
+		<if test="orderField != ''">
+			<choose>
+				<when test="orderField == 'likeDesc'">
+					order by r.review_like desc, review_time desc
+				</when>
+				<when test="orderField == 'priceAsc'">
+					order by p.pay_amount, review_time desc
+				</when>
+				<when test="orderField == 'priceDesc'">
+					order by p.pay_amount desc, review_time desc
+				</when>
+
+				<otherwise>
+					order by r.review_time desc
+				</otherwise>
+			</choose>
+		</if>
+
+	</select>
+
+
+
+
+
+
+	<select id="findThemeAll" resultType="reviewVo">
+		select r.mem_no,
+		m.mem_name, r.review_no, r.review_time,
+		r.review_image,
+		r.review_like,
+		r.review_text, p.pay_amount,
+		a.art_name,
+		a.art_theme ,
+		a.art_no,
+		a.art_tag1 ,
+		a.art_tag2 ,a.art_tag3,
+		at.ARTIST_NAME, at.mem_no as at_mem_no
+		
+		from
+		review_tb r
+		inner join art_info_tb a on
+		r.art_no=a.art_no
+		inner join
+		payment_tb p on r.art_no=p.art_no
+		inner
+		join member_tb m on
+		r.mem_no=m.mem_no
+		inner join
+		artist_info_tb at on
+		at.mem_no=a.mem_no
+		<!-- where a.art_tag1 like ＇%인테리어%' or a.art_tag2 like '% 인테리어 %' or a.art_tag3 
+			like '% 인테리어 %’ -->
+
+		<if test="keyword != ''">
+			<choose>
+				<when test="keyword == '인물'">
+					where art_theme = '${keyword}'
+				</when>
+				<when test="keyword == '정물'">
+					where a.art_theme = #{keyword}
+				</when>
+				<when test="keyword == '동물'">
+					where a.art_theme = #{keyword}
+				</when>
+				<when test="keyword == '풍경'">
+					where a.art_theme = #{keyword}
+				</when>
+				<when test="keyword == '추상'">
+					where a.art_theme = #{keyword}
+				</when>
+			</choose>
+		</if>
+
+		<if test="orderField != ''">
+			<choose>
+				<when test="orderField == 'likeDesc'">
+					order by r.review_like desc, review_time desc
+				</when>
+				<when test="orderField == 'priceAsc'">
+					order by p.pay_amount, review_time desc
+				</when>
+				<when test="orderField == 'priceDesc'">
+					order by p.pay_amount desc, review_time desc
+				</when>
+
+				<otherwise>
+					order by r.review_time desc
+				</otherwise>
+			</choose>
+		</if>
+
+	</select>
+
+
+
+
+
+	<select id="findTagAll" resultType="reviewVo">
+		select r.mem_no,a.art_no,
+		m.mem_name, r.review_no, r.review_time,
+		r.review_image,
+		r.review_like,
+		r.review_text, p.pay_amount,
+		a.art_name,
+		a.art_theme ,
+		a.art_tag1 ,
+		a.art_tag2 ,a.art_tag3,
+		at.ARTIST_NAME, at.mem_no as at_mem_no
+		
+		from
+		review_tb r
+		inner join art_info_tb a on
+		r.art_no=a.art_no
+		inner join
+		payment_tb p on r.art_no=p.art_no
+		inner
+		join member_tb m on
+		r.mem_no=m.mem_no
+		inner join
+		artist_info_tb at on
+		at.mem_no=a.mem_no
+		<!-- where a.art_tag1 like ＇%인테리어%' or a.art_tag2 like '% 인테리어 %' or a.art_tag3 
+			like '% 인테리어 %’ -->
+
+		<if test="keyword != ''">
+			<choose>
+				<when test="keyword == 'btnTag1'">
+					where art_tag1 = '인테리어' or art_tag1 = '선물'
+					or
+					art_tag2 = '인테리어' or art_tag2 = '선물'
+					or art_tag3 = '인테리어' or
+					art_tag3 = '선물'
+				</when>
+				<when test="keyword == 'btnTag2'">
+					where art_tag1 = '순수미술' or art_tag1 = '일러스트' or
+					art_tag1 = '사진'
+					or art_tag2 = '순수미술' or art_tag2 = '일러스트' or
+					art_tag2 = '사진'
+					or art_tag3 = '순수미술' or art_tag3 = '일러스트' or
+					art_tag3 = '사진'
+				</when>
+				<when test="keyword == 'btnTag3'">
+					where art_tag1 = '서양화' or art_tag1 = '동양화' or
+					art_tag1 = '판화' or art_tag1 = '펜화' or art_tag1 = '수채' or art_tag1 =
+					'포스터'
+					or art_tag2 = '서양화' or art_tag2 = '동양화' or art_tag2 = '판화' or
+					art_tag2 = '펜화' or art_tag2 = '수채' or art_tag2 = '포스터'
+					or art_tag3 =
+					'서양화' or art_tag3 = '동양화' or art_tag3 = '판화' or art_tag3 = '펜화' or
+					art_tag3 = '수채' or art_tag3 = '포스터'
+
+				</when>
+				<when test="keyword == 'btnTag4'">
+					where art_tag1 = '몽환적' or art_tag1 = '분위기' or art_tag1 = '힐링' or	 art_tag1 = '따뜻함'
+					or art_tag2 = '몽환적' or art_tag2 = '분위기' or art_tag2 = '힐링' or art_tag2 = '따뜻함'
+					or art_tag3 = '몽환적' or art_tag3 = '분위기' or art_tag3 = '힐링' or art_tag3 = '따뜻함'
+				</when>
+				<when test="keyword == 'btnTag5'">
+					where art_tag1 = '빈티지' or art_tag1 = '고전' or art_tag1 = '현대'
+					or art_tag2 = '빈티지' or art_tag2 = '고전' or art_tag2 = '현대'
+					or art_tag3 = '빈티지' or art_tag3 = '고전' or art_tag3 = '현대'
+				</when>
+			</choose>
+		</if>
+
+		<if test="orderField != ''">
+			<choose>
+				<when test="orderField == 'likeDesc'">
+					order by r.review_like desc, review_time desc
+				</when>
+				<when test="orderField == 'priceAsc'">
+					order by p.pay_amount, review_time desc
+				</when>
+				<when test="orderField == 'priceDesc'">
+					order by p.pay_amount desc, review_time desc
+				</when>
+
+				<otherwise>
+					order by r.review_time desc
+				</otherwise>
+			</choose>
+		</if>
+
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+
+	<select id="findRealTimeAll" resultType="reviewVo">
+		select r.mem_no,a.art_no,
+		m.mem_name, r.review_no, r.review_time,
+		r.review_image,
+		r.review_like,
+		r.review_text, p.pay_amount,
+		a.art_name, a.art_theme ,
+		a.art_tag1 ,
+		a.art_tag2 ,a.art_tag3,
+		at.ARTIST_NAME, at.mem_no as at_mem_no
+		
+		from review_tb r
+		inner join
+		art_info_tb a on
+		r.art_no=a.art_no
+		inner join payment_tb p on
+		r.art_no=p.art_no
+		inner join
+		member_tb m on r.mem_no=m.mem_no
+		inner join
+		artist_info_tb at on
+		at.mem_no=a.mem_no
+		order by r.review_time desc
+
+	</select>
+	<select id="findRealTimeMost3LikeAll" resultType="reviewVo">
+		select * from ( select
+		r.mem_no,
+		m.mem_name, r.review_no, r.review_time,
+		r.review_image,
+		r.review_like,
+		r.review_text, p.pay_amount,
+		a.art_name, a.art_theme ,
+		a.art_tag1 ,
+		a.art_tag2 ,a.art_tag3,
+		at.ARTIST_NAME, at.mem_no as at_mem_no
+		
+		from review_tb r
+		inner join
+		art_info_tb a on
+		r.art_no=a.art_no
+		inner join payment_tb p on
+		r.art_no=p.art_no
+		inner join
+		member_tb m on r.mem_no=m.mem_no
+		inner join
+		artist_info_tb at on
+		at.mem_no=a.mem_no
+		order by r.review_like desc)
+		where rownum between 1 and 3
+	</select>
+
+
+
+
+	<update id="insertLike">			
+update REVIEW_TB set REVIEW_LIKE =review_like+1 
+ where REVIEW_NO=#{reviewNo}
+	</update>
+
+	<update id="deleteLike">
+update REVIEW_TB set REVIEW_LIKE =review_like-1 
+ where REVIEW_NO=#{reviewNo}	
+ </update>
+
+
+</mapper>
