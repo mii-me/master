@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js
+"></script>
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+
+	// 로그인페이지 : 로그인 후 회원번호를 세션스토리지에 set 
+	// [by 정소윤]
+
+	$(function(){
+		$("#btnLogin").click(function(){
+		
+			let data = $("#login").serializeArray();
+			
+			$.ajax({url:"/loginOK.do", data:data, success:function(m){
+			
+	//			console.log(m.memId);
+	//			console.log(m.memName);
+				
+				let inputId = $("#memId").val();
+				let inputPwd = $("#memPwd").val();
+				
+				// 로그인 성공 시
+				if(m.memId == inputId && m.memPwd == inputPwd){
+					
+					// 세션스토리지에 저장하기 ==> 다른 페이지에서 언제든 꺼내 사용 가능
+					sessionStorage.setItem("memNo", m.memNo);
+					sessionStorage.setItem("memIsArtist", m.memIsArtist);
+								
+					location.href="main.html";
+				
+				// 로그인 실패 시	
+				}else{
+					alert("아이디와 비밀번호를 확인해주세요.");
+				}
+				
+			}});//ajax
+			
+	    });//click
+		
+	});
+</script>
+</head>
+<body>
+ <header id="header"></header>	
+	<div class="container" style="height: 100vh; ">
+		<div class="row" align="center">
+			<div class="col-4 p-1 center" style="margin-top: 300px;">
+				<form id="login">
+					<input type="text" name="memId" id="memId" class="form-control" placeholder="아이디"><br>
+					<input type="password" name="memPwd" id="memPwd" class="form-control" placeholder="비밀번호"><br>		
+				</form>
+			</div>
+		</div>
+		<div class="row" align="center">
+			<div class="col-4">
+				<button id="btnLogin" class="btn btn-secondary">로그인</button>
+			</div>
+		</div>
+	</div>
+ <footer id="footer"></footer>	
+</body>
+</html>

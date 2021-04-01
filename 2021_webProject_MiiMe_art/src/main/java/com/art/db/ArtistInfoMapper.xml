@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="artistInfo"><!-- [by 정소윤] -->
+	
+  <!-- 작가회원 가입하기 -->
+  <insert id="insertArtistInfo">
+ 	insert all into MEMBER_TB values(MEMBER_SEQ.nextval,
+ 	#{memId},#{memPwd},#{memName},#{memRrn},#{memGender},#{memTel},#{memEmail},#{memAddr},'S',sysdate)
+	into ARTIST_INFO_TB values(MEMBER_SEQ.nextval,
+	#{artistName},#{artistPic},#{artistIntro},#{artistDetail},#{artistCareer})
+	into ARTIST_POINT_TB values(MEMBER_SEQ.nextval, 0)
+	select * from dual
+  </insert>
+  
+  
+   
+  <!-- 인기작가 Top3 -->
+  <select id="topArtistInfo" resultType="ArtistInfoVo">
+	select MEM_NO, ARTIST_PIC, ARTIST_NAME, ARTIST_INTRO
+	  from (select AA.MEM_NO as MEM_NO
+			     , BB.ARTIST_PIC as ARTIST_PIC
+			     , BB.ARTIST_NAME as ARTIST_NAME
+			     , BB.ARTIST_INTRO as ARTIST_INTRO
+			 from (select A.MEM_NO
+			     	 	, count(S.ART_NO) as CNT
+					 from ARTIST_INFO_TB A, ART_SELL_TB S
+			 		where A.MEM_NO = S.MEM_NO(+)
+			   		  and 'sold' = S.ART_SELL(+)
+			 		group by A.MEM_NO) AA,
+				  (select MEM_NO, ARTIST_PIC, ARTIST_NAME, ARTIST_INTRO
+				 	 from (select rownum num, MEM_NO, ARTIST_PIC, ARTIST_NAME, ARTIST_INTRO
+							 from (select * from ARTIST_INFO_TB
+									order by MEM_NO desc) ) ) BB
+					where AA.MEM_NO = BB.MEM_NO
+					order by AA.CNT desc, AA.MEM_NO desc)
+	where rownum &lt;= 3
+  </select>
+ 
+
+  
+  <!-- 작가소개 목록 총 레코드 수 반환 SQL -->
+  <select id="totalArtist" resultType="java.lang.Integer">
+  	select count(*) from ARTIST_INFO_TB
+  	<if test="keyword != ''">
+  		where ARTIST_NAME like '%'|| #{keyword} ||'%'
+  	</if>
+  	<if test="consonant != ''">
+  		<choose>
+  			<when test='consonant == "ㄱ"'>
+  				where substr(ARTIST_NAME,1,1) between '가' and '낗'
+  			</when>
+  			<when test='consonant == "ㄴ"'>
+  				where substr(ARTIST_NAME,1,1) between '나' and '닣'
+  			</when> 
+  			<when test='consonant == "ㄷ"'>
+  				where substr(ARTIST_NAME,1,1) between '다' and '띻'
+  			</when>
+  			<when test='consonant == "ㄹ"'>
+  				where substr(ARTIST_NAME,1,1) between '라' and '맇'
+  			</when>
+  			<when test='consonant == "ㅁ"'>
+  				where substr(ARTIST_NAME,1,1) between '마' and '밓'
+  			</when>
+  			<when test='consonant == "ㅂ"'>
+  				where substr(ARTIST_NAME,1,1) between '바' and '삫'
+  			</when>
+  			<when test='consonant == "ㅅ"'>
+  				where substr(ARTIST_NAME,1,1) between '사' and '앃'
+  			</when>
+  			<when test='consonant == "ㅇ"'>
+  				where substr(ARTIST_NAME,1,1) between '아' and '잏'
+  			</when>
+  			<when test='consonant == "ㅈ"'>
+  				where substr(ARTIST_NAME,1,1) between '자' and '찧'
+  			</when>
+  			<when test='consonant == "ㅊ"'>
+  				where substr(ARTIST_NAME,1,1) between '차' and '칳'
+  			</when>
+  			<when test='consonant == "ㅋ"'>
+  				where substr(ARTIST_NAME,1,1) between '카' and '킿'
+  			</when>
+  			<when test='consonant == "ㅌ"'>
+  				where substr(ARTIST_NAME,1,1) between '타' and '팋'
+  			</when>
+  			<when test='consonant == "ㅍ"'>
+  				where substr(ARTIST_NAME,1,1) between '파' and '핗'
+  			</when>
+  			<when test='consonant == "ㅎ"'>
+  				where substr(ARTIST_NAME,1,1) between '하' and '힣'
+  			</when>
+  			<otherwise>
+  				where substr(ARTIST_NAME,1,1) between 'A' and 'z'
+  			</otherwise>
+  		</choose>
+  	</if>
+  </select>
+  
+  
+  <!-- 작가소개 목록(최신순 정렬이 기본, 인기순 동적쿼리 적용) -->
+  <select id="listArtistInfo" resultType="ArtistInfoVo">
+  
+  	<if test='sort == "best"'>
+		select AAAA.*
+			 , AAAA.num
+		from (select AAA.*, rownum as num
+				from (  	  
+  	</if>
+  
+   	select MEM_NO, ARTIST_PIC, ARTIST_NAME, ARTIST_INTRO
+   	
+  	<if test='sort == "best"'>
+	  from (select AA.MEM_NO as MEM_NO
+			     , BB.ARTIST_PIC as ARTIST_PIC
+			     , BB.ARTIST_NAME as ARTIST_NAME
+			     , BB.ARTIST_INTRO as ARTIST_INTRO
+			  		from (select A.MEM_NO
+			     			   , count(S.ART_NO) as CNT
+								  from ARTIST_INFO_TB A, ART_SELL_TB S
+			 				 	 where A.MEM_NO = S.MEM_NO(+)
+			   					   and 'sold' = S.ART_SELL(+)
+			 					 group by A.MEM_NO) AA,
+						 (select MEM_NO, ARTIST_PIC, ARTIST_NAME, ARTIST_INTRO   		
+	</if>
+	
+  	  from (select rownum num, MEM_NO, ARTIST_PIC, ARTIST_NAME, ARTIST_INTRO
+  			from (select * from ARTIST_INFO_TB
+  			 
+  			<if test='keyword != ""'>
+  				where ARTIST_NAME like '%'|| #{keyword} ||'%'
+  			</if>
+  			
+  			<if test='consonant != ""'>
+		  		<choose>
+		  			<when test='consonant == "ㄱ"'>
+		  				where substr(ARTIST_NAME,1,1) between '가' and '낗'
+		  			</when>
+		  			<when test='consonant == "ㄴ"'>
+		  				where substr(ARTIST_NAME,1,1) between '나' and '닣'
+		  			</when> 
+		  			<when test='consonant == "ㄷ"'>
+		  				where substr(ARTIST_NAME,1,1) between '다' and '띻'
+		  			</when>
+		  			<when test='consonant == "ㄹ"'>
+		  				where substr(ARTIST_NAME,1,1) between '라' and '맇'
+		  			</when>
+		  			<when test='consonant == "ㅁ"'>
+		  				where substr(ARTIST_NAME,1,1) between '마' and '밓'
+		  			</when>
+		  			<when test='consonant == "ㅂ"'>
+		  				where substr(ARTIST_NAME,1,1) between '바' and '삫'
+		  			</when>
+		  			<when test='consonant == "ㅅ"'>
+		  				where substr(ARTIST_NAME,1,1) between '사' and '앃'
+		  			</when>
+		  			<when test='consonant == "ㅇ"'>
+		  				where substr(ARTIST_NAME,1,1) between '아' and '잏'
+		  			</when>
+		  			<when test='consonant == "ㅈ"'>
+		  				where substr(ARTIST_NAME,1,1) between '자' and '찧'
+		  			</when>
+		  			<when test='consonant == "ㅊ"'>
+		  				where substr(ARTIST_NAME,1,1) between '차' and '칳'
+		  			</when>
+		  			<when test='consonant == "ㅋ"'>
+		  				where substr(ARTIST_NAME,1,1) between '카' and '킿'
+		  			</when>
+		  			<when test='consonant == "ㅌ"'>
+		  				where substr(ARTIST_NAME,1,1) between '타' and '팋'
+		  			</when>
+		  			<when test='consonant == "ㅍ"'>
+		  				where substr(ARTIST_NAME,1,1) between '파' and '핗'
+		  			</when>
+		  			<when test='consonant == "ㅎ"'>
+		  				where substr(ARTIST_NAME,1,1) between '하' and '힣'
+		  			</when>
+		  			<otherwise>
+		  				where substr(ARTIST_NAME,1,1) between 'A' and 'z'
+		  			</otherwise>
+		  		</choose>
+  			</if>
+  			
+  			order by MEM_NO desc))
+  			
+  	<if test='sort == "best"'>
+  			 						) BB
+		where AA.MEM_NO = BB.MEM_NO
+		order by AA.CNT desc, AA.MEM_NO desc)
+												) AAA
+													) AAAA
+  	</if>  			
+  			
+  	where num between #{start} and #{end}
+  </select>
+  
+  
+  
+  
+  <!-- 작가별 상세프로필 상단 -->
+  <select id="selectArtistInfo" resultType="ArtistInfoVo">
+  	select * from ARTIST_INFO_TB where MEM_NO=#{memNo}
+  </select>
+
+
+
+  
+  <!-- 작품 목록 총 레코드 수 반환 SQL -->
+  <select id="totalArtistArt" resultType="java.lang.Integer">
+  	select count(ART_NO) from ART_INFO_TB
+  	where MEM_NO = #{memNo}
+  </select>
+  
+  
+  <!-- 작가별 상세프로필 중단 : 이 작가의 작품목록(최신순 기본 고정) -->
+  <select id="listArtistInfoArt" resultType="ArtistInfoVo">
+  	select MEM_NO, ART_NO, ART_PIC, ART_NAME
+  	 from (select rownum num, MEM_NO, ART_NO, ART_PIC, ART_NAME
+  	 		 from (select MEM_NO, ART_NO, ART_PIC, ART_NAME 
+  	 		 		 from ART_INFO_TB 
+  	 		 		where MEM_NO = #{memNo}
+ 					order by ART_NO desc))
+ 	where num between #{start} and #{end}
+  </select>
+  
+  
+  
+  
+  <!-- 작가 한줄 기대평 목록 총 레코드 수 반환 SQL -->
+  <select id="totalArtistComment" resultType="java.lang.Integer">
+  	select count(ARTIST_CMT_NO) from ARTIST_COMMENT_TB
+  	where MEM_NO = #{memNo}
+  </select>
+  
+  
+  <!-- 작가별 상세프로필 하단 : 이 작가에 대한 한줄기대평 -->
+  <!-- 작성자 이름 가운데 마스킹 처리 -->
+  <select id="listArtistComment" resultType="ArtistCommentVo">
+	select AAAA.*
+	     , AAAA.num
+	  from (select AAA.*, rownum as num
+	  		  from (select AA.ARTIST_CMT as ARTIST_CMT
+	  		  			 , substr(AA.MEM_NAME, 1, 1) || lpad('*', length(AA.MEM_NAME)-2, '*') || substr(AA.MEM_NAME, length(AA.MEM_NAME), 1) as MEM_NAME
+	  		  			 , AA.ARTIST_CMT_DATE as ARTIST_CMT_DATE
+	  		  			 , AA.ARTIST_CMT_NO as ARTIST_CMT_NO
+	  		  			 , AA.MEM_NO_B as MEM_NO_B
+					  from (select C.ARTIST_CMT as ARTIST_CMT
+								 , M.MEM_NAME as MEM_NAME
+								 , C.ARTIST_CMT_DATE as ARTIST_CMT_DATE
+								 , C.ARTIST_CMT_NO as ARTIST_CMT_NO
+								 , C.MEM_NO_B AS MEM_NO_B
+							  from ARTIST_COMMENT_TB C, ARTIST_INFO_TB T, MEMBER_TB M
+							 where T.MEM_NO = C.MEM_NO
+							   and C.MEM_NO_B = M.MEM_NO
+							   and T.MEM_NO = #{memNo}
+							 order by C.ARTIST_CMT_DATE desc) AA
+			 		) AAA
+			) AAAA
+	where AAAA.num between #{start} and #{end}
+  </select>
+
+
+  
+  <!-- 작가기대평 등록 [by 정소윤] -->
+  <!-- #{memNo}: 페이지에서 매개변수로 받은 해당 작가 회원번호 -->
+  <!-- #{memNoB}: 작성자 회원번호(로그인 세션 이용) -->
+  <!-- #{artistCmt}: 작성한 코멘트내용 -->
+  <insert id="insertArtistComment">
+  	insert into ARTIST_COMMENT_TB values(
+	ARTIST_COMMENT_SEQ.nextval,
+	#{memNo}, #{memNoB},
+	#{artistCmt}, sysdate)
+  </insert>
+  
+  
+  <!-- 작가기대평 삭제 -->
+  <!-- #{cmtNo}: 기대평 고유번호 -->  
+  <delete id="deleteArtistComment">
+  	delete ARTIST_COMMENT_TB 
+  	where ARTIST_CMT_NO=#{cmtNo}
+  </delete>
+
+</mapper>

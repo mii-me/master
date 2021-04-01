@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>미미 美;Me</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  
+<style type="text/css">
+</style>
+
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+
+
+
+	// <작가소개> 메뉴 진입 시 처음 보이는 작가 목록 페이지
+	// 상단: 인기 TOP3 작가 캐러셀
+	// [by 정소윤]
+	
+	
+	$(function(){
+	
+		let arr;
+		let idx;
+		let totalPage; // 전체페이지수
+		
+		let keyword="";  // 검색 값
+		let consonant="" // 작가명 가나다 선택 자음
+		let sort=""; // 최신순(기본), 인기순(best) 선택
+		
+		
+		// ============================ 인기작가 Top3 함수 시작 ============================
+		
+		// 메인페이지 진입 시 상단에 인기작가 Top3 슬라이더 불러옴. [by 정소윤]
+		function artistTop(){
+		
+		    $("#topArtist").empty();
+				
+		    $.ajax({url:"/topArtistInfo.do", success:function(data){
+		    
+		        arr = eval("("+data+")");
+		        
+		        $.each(arr, function(index, t){
+		    		
+		            let topList;
+		            
+		            // 인기작가 div 열기
+		            if(index == 0){ // 처음 div만 활성화
+		                topList = $(`<div class="carousel-item active">`);
+		                
+		            }else{ // 나머지 div 비활성화
+		                topList = $(`<div class="carousel-item">`);
+		            }
+					
+					// 인기작가 프로필사진 캐러셀
+		            $(topList).append($(`<img alt="top3" width="500" height="500" align="right"></img>`)
+		                                	.attr('src', 'artist_pic/' + t.artistPic));
+		            
+		            // 작가명에 인기작가 상세페이지 링크걸기
+		            let topLink = $(`<a style="text-decoration: none; color: white;" class="link2"></a>`).attr('href', '/artistDetail.html?memNo='+t.memNo);
+		            let topName = $(`<h1 style="margin-bottom: 30px;"></h1>`).text(t.artistName);
+		            $(topLink).append(topName);
+		            
+		            // 인기작가 정보
+		            let topInfo = $(`<div class="carousel-caption text-left">`);
+		            $(topInfo).append($(`<h4 style="margin-bottom: 150px;"></h4>`).html(`<i class="fas fa-medal"></i>`+" 실시간 인기작가 Top "+(index+1) ));
+		            $(topInfo).append(topLink);
+		            $(topInfo).append($(`<p style="margin-bottom: 100px;"></p>`).text(t.artistIntro));
+		            
+		            $(topList).append(topInfo);
+		            
+		            $("#topArtist").append(topList);
+		             
+		        });//each
+		    
+		    }});//ajax
+		
+		}//artistTop
+		
+		// ============================ 인기작가 Top3 함수 END ============================
+
+		
+		
+		// =================================== 작가목록 함수 시작 ===================================
+		
+		// 메인페이지 진입 시 작가목록 최신순 정렬 불러옴. [by 정소윤]
+		function artistList(pageNUM, keyword, consonant, sort){
+		
+			$("#artistList").empty(); // 목록이 중첩되지않게 초기화
+			
+			let data = {pageNUM:pageNUM, keyword:keyword, consonant:consonant, sort:sort}
+			
+			$.ajax({url:"/listArtistInfo.do", data:data, success:function(data){
+			
+				arr = [];
+				data = eval("("+data+")");
+				
+				arr = data.list; // 페이징처리를 위함
+				totalPage = data.totalPage;
+				
+				
+				// ======================= 페이지번호 출력 시작 =======================
+				
+				$("#page").empty();
+				
+				for(i=1; i<=totalPage; i++){
+				
+                    let pageBtn;
+                    
+                    // 페이지 버튼 구분
+					if (i == pageNUM){ // 현재 페이지(활성화)
+                        pageBtn = $(`<button type="button" class="btn btn-dark"></button>`).text(i);
+                        
+                    }else{ // 나머지 페이지(비활성화)
+                        pageBtn = $(`<button type="button" class="btn btn-outline-dark"></button>`).text(i);
+                    }
+
+					$("#page").append(pageBtn).append(" ");
+					
+					// 페이지 버튼 클릭 이벤트
+					$(pageBtn).click(function(){
+						let pageNUM = $(this).text();
+						artistList(pageNUM, keyword, consonant, sort);
+					});
+					
+				}//for
+				
+				// ======================= 페이지번호 출력 END =======================
+				
+				
+				
+				// ======================= 작가목록 출력 시작 =======================
+				
+				$.each(arr, function(index, a){
+					
+					// 작가목록 div 열기  // img class="rounded"하면 p-1빼기
+                    let listCard = $(`<div class="card p-1 m-1" style="width:360px; border-color: #343a40!important;">`);
+					$(listCard).append($(`<img style="width: 100%; height: 360px;"></img>`)
+                                    		.attr('src', 'artist_pic/' + a.artistPic));
+                    
+                    // 작가목록 작가정보                
+                    let listInfo = $(`<div class="card-body">`);
+                    $(listInfo).append($(`<h4 class="card-title"></h4>`).text(a.artistName));
+                    $(listInfo).append($(`<p class="card-text"></p>`).text(a.artistIntro));
+                    
+                    // listInfo에 작가별 상세페이지 링크걸기
+                    let listLink = $(`<a style="text-decoration: none; color: black;"></a>`).attr('href', '/artistDetail.html?memNo='+a.memNo);
+                    
+                    // card에 작가정보 넣고 상세페이지 링크걸기
+                    $(listCard).append(listInfo);
+                    $(listLink).append(listCard);
+
+					$("#artistList").append(listLink);
+
+				});//each
+				// ======================= 작가목록 출력 END =======================
+
+			}});//ajax	
+		
+		}//artistList
+		
+		// =================================== 작가목록 함수 END ===================================
+		
+		
+		
+		// =======================  최신순, 인기순 정렬 기능 =======================
+		
+		// 최신순 정렬
+		$("#new").click(function(){
+			sort = "";
+			
+			// 작가목록 출력
+			artistList(1, keyword, consonant, "");
+			
+			// 정렬 버튼 클릭 활성화
+			$(this).attr("class", "btn btn-dark");
+			$("#best").attr("class", "btn btn-outline-dark");
+		});  
+		
+		// 인기순 정렬
+		$("#best").click(function(){
+			sort = "best";
+			
+			// 작가목록 출력
+			artistList(1, keyword, consonant, sort);
+			
+			// 정렬 버튼 클릭 활성화
+			$(this).attr("class", "btn btn-dark");
+			$("#new").attr("class", "btn btn-outline-dark");
+		});  
+		
+		// =======================  최신순, 인기순 정렬 기능 END =======================
+
+		
+		
+		// ===== 검색 기능 =====
+		$("#btnSearch").click(function(){
+			keyword = $("#keyword").val();
+			
+			// 검색창 비우기
+			$("#keyword").val("");
+			
+			// 정렬 버튼 기본 최신순으로
+			$("#new").attr("class", "btn btn-dark");
+			$("#best").attr("class", "btn btn-outline-dark");			
+			
+			consonant = "";
+			sort = "";
+			
+			// 목록 출력
+			artistList(1, keyword, "", "");
+		});
+		// ===== 검색 기능 END =====
+		
+		
+		// ===== 가나다 작가명 목록 기능 =====
+		$("#c0").click(function(){
+		
+				// 정렬 버튼 기본 최신순으로
+				$("#new").attr("class", "btn btn-dark");
+				$("#best").attr("class", "btn btn-outline-dark");
+				
+				keyword = "";
+				consonant = "";
+				sort = "";
+				
+			// 목록 출력
+			artistList(1, "", consonant, "");
+		});	
+		
+		for(i=1; i<16; i++){
+			$("#c"+i).click(function(){
+			
+				// 정렬 버튼 기본 최신순으로
+				$("#new").attr("class", "btn btn-dark");
+				$("#best").attr("class", "btn btn-outline-dark");
+				
+				keyword = "";
+				consonant = $(this).text();
+				sort = "";
+				
+				// 목록 출력
+				artistList(1, "", consonant, "");
+			});
+		}
+		// ===== 가나다 작가명 목록 기능 END =====
+		
+
+		// 함수 호출
+		artistTop();
+		// 매개변수 기본값: 1페이지, 검색어 null, 작가명 가나다 선택자음 null, 기본 null(최신순) 
+		artistList(1, "", "", "");
+        
+	});
+</script>
+</head>
+<body>
+ <header id="header"></header>
+ 
+    <div class="container">
+    	
+    	<!-- ========== 인기작가 Top3 슬라이드 시작 ========== -->
+		<div id="demo" class="carousel slide" data-ride="carousel">
+		  <ul class="carousel-indicators">
+		    <li data-target="#demo" data-slide-to="0" class="active"></li>
+		    <li data-target="#demo" data-slide-to="1"></li>
+		    <li data-target="#demo" data-slide-to="2"></li>
+		  </ul>
+		  
+		  <div id="topArtist" class="carousel-inner" style="background-color: #212529!important;">
+		  </div>
+		  
+		  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+		    <span class="carousel-control-prev-icon"></span>
+		  </a>
+		  <a class="carousel-control-next" href="#demo" data-slide="next">
+		    <span class="carousel-control-next-icon"></span>
+		  </a>
+		</div>
+		<br>
+    	<!-- ========== 인기작가 Top3 슬라이드 END ========== -->
+    	
+    	
+    	<!-- ========== 가나다순, 검색 그리드 시작 ========== -->
+		<div class="row m-0">
+		
+	    	<!-- 그리드 좌측: 가나다순 -->
+			<div class="col-sm-9" style="margin-top: 5px;">
+ 				<span style="cursor: pointer; margin-left: 10px;" id="c0">전체</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c1">ㄱ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c2">ㄴ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c3">ㄷ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c4">ㄹ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c5">ㅁ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c6">ㅂ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c7">ㅅ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c8">ㅇ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c9">ㅈ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c10">ㅊ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c11">ㅋ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c12">ㅌ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c13">ㅍ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c14">ㅎ</span><span style="margin-left: 15px;">|</span>
+				<span style="cursor: pointer; margin-left: 10px;" id="c15">A~Z</span>
+			</div>
+			
+			<!-- 그리드 우측: 검색 -->
+			<div class="col-sm-3">
+				<!-- 검색창 -->
+				<div class="input-group mb-3">
+				  <input type="text" class="form-control" placeholder="작가명 검색" id="keyword" style="border-color: #343a40!important;">
+				  <div class="input-group-append">
+				    <button class="btn btn-dark p-0 pl-2 pr-2" id="btnSearch"><i class="fas fa-search"></i></button>
+				  </div>
+				</div>
+			</div>
+			
+		</div>
+		<br>
+		<!-- ========== 가나다순 / 검색 그리드 END ========== -->
+		
+		
+		<!-- ========== 작가목록 시작 ========== -->
+		
+		<!-- 최신순, 인기순 정렬 버튼 -->
+		<div id="sort" class="pl-2">
+			<button type="button" class="btn btn-dark" id="new">최신순</button>
+			<button type="button" class="btn btn-outline-dark" id="best">인기순</button>
+		</div>
+		<br>
+		
+		<!-- 작가목록 3x3 -->		
+        <div class="row m-0" id="artistList">
+            
+        </div>
+		<br>
+		
+		<!-- 작가목록 페이지 레이어 -->
+		<!-- 전체페이지수만큼 #page안에 동적으로 노드 추가 -->
+		<div id="page" class="text-center">
+		</div>
+		
+		<!-- ========== 작가목록 END ========== -->
+		
+    </div><!-- container -->
+    
+ <footer id="footer"></footer>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>미미 美;Me</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+<style type="text/css">
+/* 작가프로필 상단 우측 상세소개, 작가이력 내용 출력창 */
+textarea{
+	resize: none;
+	border: none;
+	background-color: white;
+}
+
+/* 작가프로필 상단 우측 상세소개, 작가이력 탭 박스 고정 값 강제 설정 */
+ul.nav{
+	border-color: #343a40!important;
+}
+
+</style>
+
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+
+
+	// artistDetail: 작가프로필 상단. 해당 작가의 상세프로필
+	// artistDetailArt: 작가프로필 중단. 해당 작가의 작품목록
+	// artistComment: 작가프로필 하단. 해당 작가에 대한 기대평목록
+	// [by 정소윤]
+
+	$(function(){
+		
+        let arr;
+        let idx;
+        let totalPageArt; // 작품목록 페이지 개수
+        let totalPageCmt; // 기대평목록 페이지 개수
+
+    	let t_arr; // 삭제처리할 레코드
+        
+        
+		let uri = decodeURI(location.search);
+//      console.log("uri: "+uri);
+        
+		let qs = uri.substr(uri.indexOf("?")+1);
+//		console.log("qs: "+qs);  // memNo=20
+
+		let artistNo = qs.substring(qs.indexOf("=")+1); // 해당작가의 회원번호
+//		console.log("artistNo: "+artistNo);  // 20
+		
+		
+		// =================================== 작가프로필 상단 함수 시작 ===================================
+		
+		// 상세프로필 함수
+        function artistDetail(memNo){
+        
+            let data = {memNo:memNo};
+            
+            // detailArtistInfo.do?memNo=20
+            $.ajax({url:"/detailArtistInfo.do?memNo="+artistNo, data:data, success:function(data){
+                
+                arr = [];
+                data = eval("("+data+")"); 
+                
+//                console.log(data);
+ 
+                    // 그리드 좌측: 작가 프로필사진, 작가명, 한줄소개        
+                    $("#artistPic").append($(`<img class="rounded-circle" style="min-width: 350px; height: 350px;"></img>`)
+                    	.attr('src', 'artist_pic/' + data.artistPic));
+                    $("#artistName").append($(`<h1></h1>`).text(data.artistName));
+                    $("#artistIntro").append($(`<span></span>`).text(data.artistIntro));
+                    
+                    
+					// 그리드 우측: 상세소개, 작가이력
+					$("#artistDetail").append($(`<textarea class="w-100" rows=10 disabled></textarea>`).text(data.artistDetail)); 
+					$("#artistCareer").append($(`<textarea class="w-100" rows=10 disabled></textarea>`).text(data.artistCareer)); 
+
+            }});//ajax
+            
+        }//artistDetail
+        
+        // =================================== 작가프로필 상단 함수 END ===================================
+        
+        
+        
+        // =================================== 작가프로필 중단 함수 시작 ===================================
+        
+        // 작품목록 함수
+        function artistDetailArt(memNo, pageNUM){
+        
+        	$("#artistInfoArtList").empty(); // 목록이 중첩되지않게 초기화
+        
+        	let data = {memNo:memNo, pageNUM:pageNUM};
+
+            $.ajax({url:"/detailArtistInfoArt.do?memNo="+artistNo, data:data, success:function(data){
+ 	            
+                arr = [];
+                data = eval("("+data+")"); 
+                
+                arr = data.list;
+                totalPageArt = data.totalPageArt;
+                
+// 	            console.log(data);
+				
+				// 해당 작가의 작품이 존재하지 않을 경우
+				if(!arr.length){
+					$("#artistInfoArtList").append(`<div class="mx-auto" style="margin-top: 50px">작품 등록을 준비중입니다.</div>`);
+				}
+
+                
+				// ======================= 페이지번호 출력 시작 =======================
+				
+				$("#page").empty();
+				
+				for(i=1; i<=totalPageArt; i++){
+					
+                    let pageBtn;
+                    
+                    // 페이지 버튼 구분
+					if (i == pageNUM){ // 현재 페이지(활성화)
+                        pageBtn = $(`<button type="button" class="btn btn-dark"></button>`).text(i);
+                        
+                    }else{ // 나머지 페이지(비활성화)
+                        pageBtn = $(`<button type="button" class="btn btn-outline-dark"></button>`).text(i);
+                    }
+	                
+                    $("#page").append(pageBtn).append(" ");
+					
+					$(pageBtn).click(function(){
+						let pageNUM = $(this).text();
+						artistDetailArt(memNo, pageNUM);
+					});
+					
+				}//for
+				
+				// ======================= 페이지번호 출력 END =======================
+                
+                
+				// ======================= 작품목록 출력 시작 =======================
+				
+				$.each(arr, function(index, a){
+				
+					// 작품목록 div 열기  // img class="rounded"하면 p-1빼기
+                    let listCard = $(`<div class="card p-1 m-1" style="width:360px; border-color: #343a40!important;">`);
+					$(listCard).append($(`<img style="width: 100%; height: 360px;"></img>`)
+                                    		.attr('src', 'art_pic/' + a.artPic));
+                    
+                    // 작품목록 작품정보                
+                    let listInfo = $(`<div class="card-body">`);
+                    $(listInfo).append($(`<h4 class="card-title"></h4>`).text(a.artName));
+                    
+                    // listInfo에 작품 상세페이지 링크걸기
+                    let listLink = $(`<a style="text-decoration: none; color: black;"></a>`)
+                    				.attr('href', "/artDetail.html?memNo=" + a.memNo + "&artNo=" + a.artNo);
+                    
+                    // card에 작품정보 넣고 상세페이지 링크걸기
+                    $(listCard).append(listInfo);
+                    $(listLink).append(listCard);
+
+					$("#artistInfoArtList").append(listLink);
+
+				});//each
+				// ======================= 작품목록 출력 END =======================
+
+            }});//ajax
+        
+        }//artistDetailArt
+        
+        // =================================== 작가프로필 중단 함수 END ===================================
+        
+        
+        
+        // =================================== 작가프로필 하단 함수 시작 ===================================
+        
+        // 작가 한줄기대평 함수
+        function artistComment(memNo, pageNUM){
+        	
+        	$("#artistCommentList").empty(); // 목록이 중첩되지않게 초기화
+        
+        	let data = {memNo:memNo, pageNUM:pageNUM};
+
+            $.ajax({url:"/detailArtistComment.do?memNo="+artistNo, data:data, success:function(data){
+                
+                arr = [];
+                data = eval("("+data+")"); 
+                
+                arr = data.listCmt;
+
+                t_arr= data.listCmt;
+
+                totalPageCmt = data.totalPageCmt;
+                
+//                console.log(data);
+
+				// 해당 작가에 대한 기대평이 존재하지 않을 경우
+				if(!arr.length){
+					let trNullCmt = $(`<tr></tr>`);
+					$(trNullCmt).append(`<td colspan="4" align="center"><br>작가에 대한 기대평이 존재하지 않습니다.<br>이 작가에 대한 첫 기대평을 남겨보는 건 어떨까요?</td>`);
+					$("#artistCommentList").append(trNullCmt);
+				}
+                
+                
+				// ======================= 페이지번호 출력 시작 =======================
+				
+				$("#cmtPage").empty();
+				
+				for(i=1; i<=totalPageCmt; i++){
+				
+                    let cmtPageBtn;
+                    
+                    // 페이지 버튼 구분
+					if (i == pageNUM){ // 현재 페이지(활성화)
+                        cmtPageBtn = $(`<button type="button" class="btn btn-dark"></button>`).text(i);
+
+                    }else{ // 나머지 페이지(비활성화)
+                        cmtPageBtn = $(`<button type="button" class="btn btn-outline-dark"></button>`).text(i);
+                    }
+
+					$("#cmtPage").append(cmtPageBtn).append(" ");
+					
+					$(cmtPageBtn).click(function(){
+						let pageNUM = $(this).text();
+						artistComment(artistNo, pageNUM);
+					});
+					
+				}//for
+				
+				// ======================= 페이지번호 출력 END =======================
+                
+                    
+                let arr_i = 0; // 삭제기호(x, &times) 넣기, 삭제 레코드 구분용
+                
+				$.each(arr, function(index, a){
+				
+					let tr = $(`<tr id="trCmt` + arr_i + `"></tr>`).attr("idx", index);
+					
+					// 기대평이 1줄을 넘어갈 경우 말줄임표(...) 생성, 마우스를 올릴 경우 말풍선으로 보임
+					let tdCmt = $(`<td style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"></td>`).text(a.artistCmt);
+					tdCmt.attr('title', a.artistCmt);
+					let tdId = $(`<td style="text-align: center;" class="pl-0 pr-0"></td>`).text(a.memName); // DB에서 마스킹처리
+					let tdDate = $(`<td style="text-align: center;"></td>`).text(a.artistCmtDate);
+					
+					
+					let tdDelete = $(`<td style="cursor: pointer;" class="pl-0" id="deleteCmt` + arr_i + `"></td>`).html("&times"); // 삭제기호문자
+					
+//					$("#trCmt" + arr_i).hover(function(){
+//						$("#deleteCmt".html).css("display", "block");
+//					});
+					
+					$(tr).append(tdCmt, tdId, tdDate, tdDelete);
+					$("#artistCommentList").append(tr);
+                    
+                    arr_i++; 
+                    
+				});//each
+
+
+                // 현재 로그인한 회원(작성자) memNo 가져오기
+                let memNoD = sessionStorage.getItem("memNo");
+//                console.log("로그인 세션: "+memNoD);
+
+                for(let arr_k=0; arr_k < arr_i; arr_k++) {
+                	
+                    $("#deleteCmt" + arr_k).click(function(){
+                        
+                        let artistCmtNo = t_arr[arr_k].artistCmtNo; // 삭제선택한 기대평 고유번호
+                        let memNoB = t_arr[arr_k].memNoB; // 삭제선택한 기대평의 작성자 회원번호       
+
+
+                        // 유효성 검사
+                        if(!memNoD){ // 로그인하지 않은 사용자라면
+                            alert("로그인 후 이용하실 수 있습니다.");
+                            location.href = "login.html";
+                            return;
+                        }             
+
+                        if(memNoD != memNoB){ // 자신이 작성한 기대평을 삭제선택한 게 아닐 경우
+                            alert("자신이 작성한 기대평만 삭제할 수 있습니다.");
+                            return;
+                        }  
+                                                  
+                        if(memNoD == memNoB){ // 기대평 삭제 여부 묻기
+                            let conDel = confirm("기대평을 삭제하시겠습니까?");
+                            
+                            if(conDel == false){
+                            	return;
+                            }
+                        }                            
+
+                        let data = {artistCmtNo:artistCmtNo};
+
+                        $.ajax({ url:"/deleteArtistComment.do", 
+                            data:data, 
+                            async:false,
+                            success:function(){ // 성공 시
+                                alert("기대평을 삭제하였습니다."); 
+
+                                // 입력창 비우기
+                                $("#artistCmt").val("");
+                                
+                                // 작가 기대평 목록 새로고침
+                                artistComment(artistNo, 1);
+                                
+                        }});//ajax
+                            
+                    });//click
+                        
+                }//for
+				
+            }});//ajax
+            
+            
+            
+            // 기대평 작성
+        	$("#btnCmtInsert").click(function(){
+        		
+                // 해당 페이지 작가 memNo을 artistNo로 설정
+        		artistNo = memNo;
+//        		console.log("1. 작가 회원번호: "+artistNo);
+//        		console.log(memNo);
+
+                console.log("loginCheck.js 작동");
+                
+                // 현재 로그인한 회원(작성자) memNo 가져오기
+                let memNoI = sessionStorage.getItem("memNo");
+//                console.log("2. 작성자 회원번호: "+memNoI);
+            
+            
+                // 유효성 검사			
+                let artistCmt = $("#artistCmt").val(); // input text 입력값 받아옴
+ //               console.log("3. 기대평: "+artistCmt);
+                
+                if(!memNoI){ // 로그인하지 않은 사용자라면
+                    alert("로그인 후 이용하실 수 있습니다.");
+                    location.href = "login.html";
+                    return;
+                }
+                
+                if(Object.is(memNoI, artistNo)){ // 작가 자신의 기대평 작성 시
+                    alert("자신의 기대평은 작성할 수 없습니다.");
+                    $("#artistCmt").val("");
+                    return;
+                }
+                
+                if(!artistCmt){ // 기대평 입력내용이 없다면
+                    $("#artistCmt").attr("placeholder", "기대평을 입력해주세요.").attr("");
+                    return;
+                }
+                
+                
+                // form 내용 배열에 담기
+                let data = $("#formCmt").serializeArray();
+                
+                // 배열에 해당 작가 회원번호, 작성자 회원번호 추가
+                data.push({name:"memNo", value:artistNo}); // 작가
+                data.push({name:"memNoB", value:memNoI}); // 작성자(로그인 세션)
+
+//					console.log("4. data serializeArray: "+data); // 객체 배열 확인
+                
+                
+                $.ajax({ url:"/insertArtistComment.do", 
+                    data:data, 
+                    async:false,
+                    success:function(){ // 성공 시
+                        alert("기대평이 등록되었습니다."); 
+
+                        // 입력창 비우기
+                        $("#artistCmt").val("");
+                        
+                        // 작가 기대평 목록 새로고침
+                        artistComment(artistNo, 1);
+                    }
+                    
+                });//ajax
+        	
+			});//click
+			
+
+        }//artistComment
+        
+        // =================================== 작가프로필 하단 함수 END ===================================
+        
+        
+        // 함수 호출, 처음 진입 시 보여주는 매개변수 값 설정
+        artistDetail(artistNo);
+        artistDetailArt(artistNo, 1);
+        artistComment(artistNo, 1);
+
+	});
+</script>
+</head>
+<body>
+ <header id="header"></header>
+
+    <!-- ========== 작가정보 그리드 ========== -->
+    <div class="container" style="margin-bottom: 60px; margin-top: 60px;">
+    
+        <div class="row m-0"> 
+        
+        	<!-- 작가정보 그리드 좌측 -->
+        	<div class="col-sm-6">
+        		<div class="row rounded-circle" style="max-width:360px;" id="artistPic"></div>
+        		<div class="row" style="max-width:360px;" id="artistName"></div>
+        		<div class="row" style="max-width:360px;" id="artistIntro"></div>
+        	</div>
+        	<!-- 작가정보 그리드 좌측 END -->
+        	
+        	<!-- 작가정보 그리드 우측 -->
+			<div class="col-sm-6">
+			  
+			  <!-- Nav tabs -->
+			  <ul class="nav nav-tabs" role="tablist" style="margin-top: 80px;">
+			    <li class="nav-item" style="border-color: #343a40!important;">
+			      <a class="nav-link active" data-toggle="tab" href="#artistDetail" style="color: #343a40; border-color: #343a40; border-bottom: transparent;">상세소개</a>
+			    </li>
+			    <li class="nav-item">
+			      <a class="nav-link" data-toggle="tab" href="#artistCareer" style="color: #343a40; border-color: #343a40; border-bottom: transparent; border-left: transparent;">작가이력</a>
+			    </li>
+			  </ul>
+			  
+			  <!-- Tab panes -->
+			  <div class="tab-content">
+			    <div id="artistDetail" class="container tab-pane active border border-top-0 p-3" style="border-color: #343a40!important;"></div>
+			    <div id="artistCareer" class="container tab-pane fade border border-top-0 p-3" style="border-color: #343a40!important;"></div>
+			  </div>
+			</div>
+        	<!-- 작가정보 그리드 우측 END -->
+        	
+        </div><br>
+    	<hr class="my-4" style="border-color: #BDBDBD;">   	
+    </div><!-- container -->
+    <!-- ========== 작가정보 그리드 END ========== -->
+        	
+        
+        
+	<!-- 작품목록 --> 
+	<div class="container">
+		<h3><i class="fas fa-palette"></i> 작품 목록</h3>
+		<p>이 작가의 작품을 만나보세요.</p>
+        <div class="row m-0" id="artistInfoArtList"> 
+        
+        </div>
+		<br>
+		
+		<!-- 작품목록 페이지 레이어 -->
+		<!-- 전체페이지수만큼 #page안에 동적으로 노드 추가 -->
+		<div id="page" class="text-center"></div>
+		
+	</div><!-- container -->
+	<!-- 작품목록 END -->
+			
+			
+			
+		<!-- ========== 작가 기대평 ========== -->
+		<div class="container" style="margin-top: 100px;">
+		
+			<h3><i class="fas fa-comment-dots"></i> 작가 기대평</h3>
+			<p>이 작가에 대한 기대평을 남겨주세요.</p><br>
+			
+			<!-- 기대평 입력창 -->
+			<div class="row input-group mb-3">
+				<div class="col-sm-10 pr-1">
+					<form id="formCmt">
+						<input type="text" class="form-control" placeholder="한줄 기대평" name="artistCmt" id="artistCmt" style="border-color: #343a40!important;">
+					</form>
+				</div>
+				<!-- 기대평 입력 버튼 -->
+				<div class="col-sm-2 p-0">
+					<button type="submit" class="btn btn-dark btn-block" id="btnCmtInsert">기대평 작성</button>
+				</div>
+			</div>
+			<!-- 기대평 입력창 END -->
+			
+			<!-- 기대평 목록 -->
+			<table class="table table-striped" style="table-layout: fixed;">
+			  <thead>
+			    <tr>
+			      <th style="width: 75%; text-align: center;">기대평</th>
+			      <th class="pl-0 pr-0" style="width: 7%; text-align: center;">작성자</th>
+			      <th style="width: 16%;text-align: center;">작성일</th>
+			      <th class="pl-0 pr-0"></th>
+			    </tr>
+			  </thead>
+			  <tbody id="artistCommentList">
+			  </tbody>
+			</table>
+			<!-- 기대평 목록 END -->
+			<br>
+			
+			<!-- 작가 기대평 페이지 레이어 -->
+			<!-- 전체페이지수만큼 #cmtPage안에 동적으로 노드 추가 -->
+			<div id="cmtPage" class="text-center"></div>
+			
+		</div><!-- container -->
+		<!-- ========== 작가 기대평 END ========== -->
+		
+ <footer id="footer"></footer>
+</body>
+</html>
