@@ -111,11 +111,5 @@
 		where num between #{start} and #{end}
 		order by art_no desc
  	</select>
- 	
-  
-  <select id="login"  resultType="artinfoVo">
-		select * from member_tb
-		where mem_id=#{id}
-	</select>
   
 </mapper>

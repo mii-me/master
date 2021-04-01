@@ -42,12 +42,5 @@ public class ArtInfoDAO {
 	}
 	
 	
-	//로그인
-	public ArtInfoVo login(String id) {
-		System.out.println("ArtDAO의 login 작동함");
-		return DBManager.login(id); 
-	}
-
-	
 	
 }

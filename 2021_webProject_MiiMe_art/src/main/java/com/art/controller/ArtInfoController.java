@@ -99,20 +99,6 @@ public class ArtInfoController {
 		return gson.toJson(list);
 	}
 	
-	@RequestMapping("/loginOK.do")
-	public ArtInfoVo login(String id, String pwd) {
-		
-		 ArtInfoVo av = new ArtInfoVo();
-		 System.out.println("입력받은 id : " + id + ",data : " + av.getMemId()); 
-		 System.out.println("입력받은 pwd : " + pwd + ",data : " + av.getMemPwd()); 
-		 
-		 av = dao.login(id);
-		 
-		 System.out.println("Controller의 login 작동함"); 
-		 return av;
-		
-	}
-	
 	
 	
 }
