@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원정보변경</title>
+<style type="text/css">
+	#checkPwd{
+		visibility: hidden;
+	}
+	#memberInfo_form{
+		visibility: hidden;
+	}
+	#artistInfo_form{
+		visibility: hidden;
+	}
+	#btns1{
+		visibility: hidden;
+	}
+	#btns2{
+		visibility: hidden;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+//by 현익 / 회원정보변경 html / 210321 
+	$(function(){
+		//by 현익 / 세션 유지한 채로 맴버넘버 받아오기 / 210326
+		$.getScript("js/loginCheck.js", function() {
+			let broughtMemNo;
+			alert("loginCheck.js 작동");
+			broughtMemNo = memNo;
+			alert("broughtMemNo = "+broughtMemNo);
+		
+		//접속시 비밀번호부터 묻기
+		$("#checkPwd").css("visibility","visible");
+		$("#memberInfo_form").css("visibility","hidden");
+		$("#artistInfo_form").css("visibility","hidden");
+		loadDetailMemberInfo();
+///////////////////////////////////////////////////////////////////////////////////////////////////		
+		function loadDetailMemberInfo(){
+			let arr;
+			$("#pwdOk").click(function(){
+				let data = {memNo : broughtMemNo}
+				$.ajax({url:"/detailMemberInfo.do", data:data, success:function(data){
+					arr = eval("("+data+")");
+					$.each(arr, function(index, d){
+						//입력한 비밀번호가 받아온 비밀번호와 일치하는지
+						if($("#pwd").val() == d.memPwd){
+							//비밀번호 입력란 숨기기 
+							$("#checkPwd").css("visibility","hidden");
+							//회원정보 변경란 보여주기 및 값 출력
+							$("#memberInfo_form").css("visibility","visible");
+							$("#memId").html(d.memId);
+							$("#memName").html(d.memName);
+							$("#memTel").val(d.memTel);
+							$("#memEmail").val(d.memEmail);
+							$("#memPwd").val("");
+							$("#btns1").css("visibility","visible");
+							$(".memNo").val(d.memNo);
+							
+							if(d.memIsartist == "S"){ //작가회원이라면
+								//작가정보 변경란 보여주기 및 값 출력
+								$("#artistInfo_form").css("visibility","visible");
+								$("#btns2").css("visibility","visible");
+								$("#btns1").css("visibility","hidden");
+								$("#artistName").val(d.artistName);
+								$("#artistIntro").val(d.artistIntro);
+								$("#artistDetail").val(d.artistDetail);
+								$("#artistCareer").val(d.artistCareer);
+								$("#artistPic").val(d.artistPic);					
+								$("#picture").attr("src","artistPic/"+d.artistPic);
+							}//end if
+						}else{
+							alert("비밀번호를 확인해주세요.");			
+						}//end else
+					});
+				}});
+			});
+		}//loadDetailMemberInfo
+///////////////////////////////////////////////////////////////////////////////////////////////////		
+		// by 현익 / 회원정보 수정하기 / 210322		
+		//1. 구매자회원일 때
+		$("#btnInsert1").click(function(){
+			let pwd = $("#pwd").val().trim();
+			if(pwd ==""){
+				$("#pwd_msg").text("비밀번호를 반드시 입력해주세요.");
+				return;
+			}
+			let data = $("#member_form").serializeArray();
+			$.ajax({url:"/updateMemberInfo.do", data:data, success:function(){
+				alert("회원정보를 변경하였습니다.");
+				location.href="/mypage.html";
+			}});
+		});	
+		//2. 작가(판매자)회원일 때	
+		$("#btnInsert2").click(function(){
+			let pwd = $("#pwd").val().trim();
+			if(pwd ==""){
+				$("#pwd_msg").text("비밀번호를 반드시 입력해주세요.");
+				return;
+			}
+			let data1 = $("#member_form").serializeArray();
+			$.ajax({url:"/updateMemberInfo.do", data:data1, success:function(){
+				let data2 = new FormData( document.getElementById("artist_form") );
+				$.ajax({
+						url:"/updateArtistInfo.do",
+						type:"post",
+						processData:false,
+						contentType:false,
+						data:data2,
+				 		success:function(artistPic){
+							setTimeout(function(){
+								$("#picture").attr("src","artistPic/"+artistPic);
+							}, 300);
+						alert("회원정보를 변경하였습니다.");
+						location.href="/mypage.html";
+				}});
+			}});
+		});	
+			
+		$(".btnCancel").click(function(){
+				location.href="/memberinfo.html";
+		});	
+		
+		});//getScript
+	});
+</script>
+</head>
+<body>
+ <header id="header"></header>
+	<div id="checkPwd">
+	<input type="password" id="pwd" placeholder="비밀번호입력">
+	<button id="pwdOk">확인</button>
+	<input type="hidden" id="bringPwd">
+	<input type="hidden" id="bringMemNo">
+	<hr>
+	</div>
+	<h2>회원정보 변경</h2>
+	<br>
+	<div id="memberInfo_form">
+		<form id="member_form">
+			아이디 : <span id="memId"></span><br>
+			고객명 : <span id="memName"></span><br>
+			연락처 : <input type="text" id="memTel" name="memTel" >
+							<span id="tel_msg"></span><br>
+			이메일 : <input type="text" id="memEmail" name="memEmail" >
+							<span id="email_msg"></span><br>
+			비밀번호 : <input type="text" id="memPwd" name="memPwd" >
+							<span id="pwd_msg"></span><br>
+			<input type="hidden" class="memNo" name="memNo"><br>
+			<input type="hidden" id="memIsartist" name="memIsartist"><br>
+		</form>
+	</div>
+	<div id="btns1">
+		<button id="btnInsert1">변경</button>
+		<button class="btnCancel">취소</button>
+	</div>
+	<div id="artistInfo_form">
+		<h3>작가정보 변경</h3>
+		<form id="artist_form" method="post" enctype="multipart/form-data">
+			작가명 : <input type="text" id="artistName" name="artistName" >
+							<span id="artistName_msg"></span><br>
+			한줄소개 <br>
+			<textarea rows="3" cols="20" id="artistIntro" name="artistIntro"></textarea>
+							<span id="intro_msg"></span><br>
+			작가소개 <br>
+			<textarea rows="3" cols="20" id="artistDetail" name="artistDetail"></textarea>
+							<span id="detail_msg"></span><br>
+			작가경력 <br>
+			<textarea rows="3" cols="20" id="artistCareer" name="artistCareer"></textarea>
+							<span id="career_msg"></span><br>
+			작가사진 : <input type="file" id="uploadFile" name="uploadFile" >
+			<input type="hidden" id="artistPic" name="artistPic" >
+			<input type="hidden" class="memNo" name="memNo"><br>
+		</form>
+			<img id="picture" width="150" height="200" ><br>
+	</div>
+	<div id="btns2">
+		<button id="btnInsert2">변경</button>
+		<button class="btnCancel">취소</button>
+	</div>
+	<footer id="footer"></footer>
+</body>
+</html>

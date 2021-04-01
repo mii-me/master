@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="delivery">
+	<!-- by현익 / 배송정보를 출력하는 쿼리 / 210319 -->
+	<select id="findAll" resultType="deliveryVo">
+		select  DEL_NO delNo, MEM_NO memNo, DEL_NAME delName,
+	     DEL_TEL delTel, DEL_ADDR delAddr, DEL_MSG delMsg
+		from DELIVERY_INFO_TB
+		where MEM_NO = #{memNo}
+	</select>
+	<!-- by현익 / 기본 배송지를 출력하는 쿼리 / 210319 -->
+	<select id="default" resultType="deliveryVo">
+	    select  D.DEL_NO delNo, M.MEM_NO memNo, D.DEL_NAME delName,
+	     D.DEL_TEL delTel, M.MEM_ADDR delAddr, D.DEL_MSG delMsg
+		from MEMBER_TB M
+		left outer join DELIVERY_INFO_TB D 
+		on M.MEM_NO = D.MEM_NO
+		where (D.DEL_ADDR = M.MEM_ADDR) and (M.MEM_NO=${memNo})
+	</select>
+	<!-- by현익 / 신규배송지를 등록하는 쿼리  / 210319 -->
+	<insert id="insert">
+		insert into delivery_info_tb
+		values( delivery_seq.nextval, #{memNo}, #{delName}, #{delTel}, #{delAddr}, #{delMsg} )
+	</insert>
+	<!-- by현익 / 배송지 목록에서 선택한 배송지를 삭제하는 쿼리  / 210319 -->
+	<delete id="delete">
+		delete delivery_info_tb
+		where del_no = #{delNo}
+	</delete>
+	<!-- by현익 / 선택한 배송지를 기본 배송지로 설정하는 쿼리  / 210319 -->
+	<update id="update">
+		update member_tb mt
+		set mt.mem_addr =
+				   (select dit.del_addr
+				 	from delivery_info_tb dit
+		 			where dit.del_no = #{delNo})
+		where mt.mem_no = #{memNo}
+	</update>
+</mapper>
