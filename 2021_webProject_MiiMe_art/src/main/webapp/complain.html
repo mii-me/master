@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>고객센터</title>
+<style type="text/css">
+	.high_light{
+		background-color: ivory;
+	}
+	.active{
+		background-color: yellow;
+	}
+	#btnInsert{
+		visibility: hidden;
+	}
+	#btnCancel{
+		visibility: hidden;
+	}
+	#btnDelete{
+		visibility: hidden;
+	}
+	#pwd{
+		visibility: hidden;
+	}
+	#pwdOk{
+		visibility: hidden;
+	}
+	#complain_insert{
+		visibility: hidden;
+	}
+	#bringPwd{
+		visibility: hidden;
+	}
+	#bringTitle{
+		visibility: hidden;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+//by 현익 / 고객센터 html / 210319 
+	$(function(){
+		//by 현익 / 세션 유지한 채로 맴버넘버 받아오기 / 210326
+		$.getScript("js/loginCheck.js", function() {
+			let broughtMemNo;
+			alert("loginCheck.js 작동");
+			broughtMemNo = memNo;
+			alert("broughtMemNo = "+broughtMemNo);
+			//form에 회원번호 숨겨서 전달
+			$("#memNo").val(broughtMemNo);
+///////////////////////////////////////////////////////////////////////////////////////////////		
+		//접속시 자동실행
+		loadComplainList();
+		//문의 내역을 보여줍니다.
+		function loadComplainList(){
+			let arr;
+			let data = {memNo : broughtMemNo}
+			$("#complain_list").empty(); //리스트중복방지
+			$.ajax({url:"/listComplain.do",data:data, success:function(data){
+				arr = eval("("+data+")");
+				//전체 배송지 목록 출력합니다.
+				$.each(arr, function(index, c){
+					let tr = $("<tr></tr>");
+					$(tr).attr("idx",index);
+					let td_title = $("<td></td>").html(c.comTitle);
+					let td_msg = $("<td></td>").html(c.comMsg);
+					let td_date = $("<td></td>").html(c.comDate);
+					let td_img;
+					if(c.comImg == null){
+					 	td_img = $("<td></td>").html("");
+					}else{
+						td_img = $("<td></td>").html($("<img>")
+						.attr("src","complain/"+c.comImg).css("width","100px","height","50px"));
+					}//end else
+					$(tr).append(td_title, td_msg, td_date, td_img);
+					$("#complain_list").append(tr);
+					
+					$("#btnCancel").css("visibility","hidden");
+
+					$(tr).click(function(){
+						//우선 모든 하이라이트 제거
+						$("tr").removeClass("active");
+						//누르면 하이라이트 처리
+						$(this).addClass("active");
+						//누르면 문의번호 담아주기
+						$("#comNo").val(c.comNo);
+						//alert(c.comNo);
+						
+						//삭제버튼 등장
+						$("#btnDelete").css("visibility","visible");
+						//비밀번호 가져오기
+						$("#bringPwd").html(c.comPwd);
+						//alert(c.comPwd);
+					});
+					
+					//마우스 올렸을때, 마우스 내렸을때 함수 2개
+					$(tr).hover( function(){
+						$(this).addClass("high_light");
+					} , function(){
+						$(this).removeClass("high_light");
+					} );
+				});
+			}});
+		}//loadComplainList
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		$("#btnDelete").click(function(){
+			$("#pwd").css("visibility","visible");
+			$("#pwdOk").css("visibility","visible");
+			$("#pwd").html("");
+			//확인을 눌렀을때 비밀번호 유효성 검사를 시행합니다.
+			$("#pwdOk").click(function(){
+				if( $("#pwd").val() == $("#bringPwd").html()){
+					//삭제를 재확인하는 함수 : confirm
+					let re = confirm("정말로 삭제하시겠습니까?");
+					if( re == true){
+						//제목의 값을 넘겨준다.
+						let comNo = $("#comNo").val();
+						let data = {comNo:comNo};
+						$.ajax({url:"/deleteComplain.do", data:data, success:function(){
+							loadComplainList();
+							$("#pwd").css("visibility","hidden");
+							$("#pwdOk").css("visibility","hidden");
+							$("#btnInsert").css("visibility","hidden");
+							$("#btnDelete").css("visibility","hidden");
+						}});
+					}//end if
+				}else{
+					alert("삭제암호를 확인해주세요.");
+				}//end else
+			});
+		});
+////////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		$("#btnNew").click(function(){
+			$("#comTitle").val("");
+			$("#comMsg").val("");
+			$("#comPwd").val("");
+			$("#comImg").val("");
+			$("#complain_insert").css("visibility","visible");
+			$("#btnInsert").css("visibility","visible");
+			$("#btnCancel").css("visibility","visible");
+			$("#btnDelete").css("visibility","hidden");
+		});
+		$("#btnCancel").click(function(){
+			$("#complain_insert").css("visibility","hidden");
+			$("#btnCancel").css("visibility","hidden");
+			$("#btnInsert").css("visibility","hidden");
+		});
+///////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		let comImg = null;
+		$("#btnInsert").click(function(){
+			$("#btnDelete").css("visibility","hidden");
+			let comTitle = $("#comTitle").val().trim();
+			let comMsg = $("#comMsg").val().trim();
+			let comPwd = $("#comPwd").val().trim();
+			comImg = $("#comImg").val().trim();
+			if(comTitle ==""){
+				$("#title_msg").text("제목을 반드시 입력해주세요.");
+				return;
+			}
+			if(comMsg ==""){
+				$("#addr_msg").text("");
+				$("#complain_msg").text("문의 내용을 반드시 입력해주세요.");
+				return;
+			}
+			if(comPwd ==""){
+				$("#addr_msg").text("");
+				$("#pwd_msg").text("삭제 암호를 반드시 입력해주세요.");
+				return;
+			}
+			
+			
+			//text data와 file data를 객체로 만들어준다.
+			let data = new FormData( document.getElementById("form") );
+			$.ajax({
+					url:"/insertComplain.do",
+					type:"post",
+					processData:false,
+					contentType:false,
+					data:data,
+			 		success:function(){
+						loadComplainList();
+						$("#btnInsert").css("visibility","hidden");
+						$("#complain_insert").css("visibility","hidden");
+						$("#comImg").html("");
+			}});
+		});
+		
+/////////////////////////////////////////////////////////////////////////////////////////////////////////		
+		$("#btnInsert").css("visibility","hidden");
+		$("#btnDelete").css("visibility","hidden");
+		});//getScript
+	});
+</script>
+</head>
+<body>
+ <header id="header"></header>
+	<h2>고객센터</h2>
+	<h3>문의 내역</h3>
+	<table border="1" width="80%">
+		<thead>
+			<tr>
+				<th>문의 제목</th>
+				<th>문의 내용</th>
+				<th>작성일</th>
+				<th>사진첨부(옵션)</th>
+			</tr>
+		</thead>
+		<tbody id = "complain_list">
+		</tbody>
+	</table>
+	<button id="btnNew">문의하기</button>
+	<button id="btnDelete">문의 내역 삭제</button>
+	<input type="password" id="pwd" placeholder="삭제암호">
+	<button id="pwdOk">확인</button>
+	<div id="complain_insert">
+		<form id="form" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="memNo" name="memNo"><br>
+			제목 : <input type="text" id="comTitle" name="comTitle" >
+							<span id="title_msg"></span><br>
+			문의 내용 <br>
+			<textarea rows="5" cols="20" id="comMsg" name="comMsg"></textarea>
+							<span id="complain_msg"></span><br>
+			삭제 암호 : <input type="text" id="comPwd" name="comPwd" >
+							<span id="complain_pwd"></span><br>
+			<input type="hidden" id="comImg" name="comImg" >
+			사진 첨부: <input type="file" id="uploadFile" name="uploadFile" >
+		</form>
+	</div>
+		<button id="btnInsert">등록</button>
+		<button id="btnCancel">취소</button>
+		
+	<!-- tr을 눌렀을때 비밀번호와 제목을 불러와 저장하는 태그  -->	
+	<label id="bringPwd"></label>
+	<label id="comNo"></label>
+	<footer id="footer"></footer>
+</body>
+</html>

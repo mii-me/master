@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="changeInfo">
+	<!-- by현익 / 배송정보를 출력하는 쿼리 / 210319 -->
+	<select id="findAll" resultType="changeVo">
+		select  M.MEM_ID memId, M.MEM_NAME memName, M.MEM_NO memNo,
+				 M.MEM_EMAIL memEmail, M.MEM_TEL memTel,
+				 M.MEM_PWD memPwd, M.MEM_ISARTIST memIsartist, 
+		         A.ARTIST_NAME artistName, A.ARTIST_DETAIL artistDetail,
+		         A.ARTIST_CAREER artistCareer,
+		         A.ARTIST_INTRO artistIntro, A.ARTIST_PIC artistPic
+		from MEMBER_TB M
+		left outer join ARTIST_INFO_TB A on M.MEM_NO = A.MEM_NO
+		where M.MEM_NO = #{memNo}
+	</select>
+	<update id="updateMember">
+		update member_tb set mem_tel=#{memTel}, mem_email=#{memEmail},
+									  mem_pwd=#{memPwd}
+		where mem_no=#{memNo}
+	</update>
+	<update id="updateArtist">
+		update artist_info_tb 
+		set artist_name=#{artistName}, artist_intro=#{artistIntro}, 
+			 artist_detail=#{artistDetail}, artist_career=#{artistCareer},
+			 artist_pic=#{artistPic}
+		where mem_no=#{memNo}
+	</update>
+	
+	
+</mapper>

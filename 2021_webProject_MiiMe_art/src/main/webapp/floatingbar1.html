@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+<title>구매목록</title>
+<style type="text/css">
+.high_light {
+	background-color: ivory;
+}
+
+.active {
+	background-color: yellow;
+}
+
+#btnReview {
+	visibility: hidden;
+}
+
+</style>
+<style>
+body {
+  font-family: "malgungothic", sans-serif;
+}
+
+.sidenav {
+  width: 130px;
+  position: fixed;
+  z-index: 1;
+  top: 300px;
+  right: 10px;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+}
+
+.sidenavs {
+  padding: 5px 5px 0px 0px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #2196F3;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+
+.main {
+  margin-left: 40px; /* Same width as the sidebar + left position in px */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript">
+//by 현익 / 구매목록 html / 210323 
+	let cookieName;
+	$(function(){
+		//by 현익 / 세션 유지한 채로 맴버넘버 받아오기 / 210326
+		$.getScript("js/loginCheck.js", function() {
+			let broughtMemNo=null;
+			broughtMemNo = memNo;
+
+////////////////////////////////////////////////////////////////////////////////////////////////		
+		//쿠키를 저장하는 함수
+		function setCookie(cookieName, value, days) {
+ 			 let exdate = new Date();
+  			 exdate.setDate(exdate.getDate() + days);
+  			// 설정 일수만큼 현재시간에 만료값으로 지정
+  			let cookieValue = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+ 		    document.cookie = cookieName + '=' + cookieValue;
+		}//setCookie
+////////////////////////////////////////////////////////////////////////////////////////////////		
+		//쿠키를 불러오는 함수
+		function getCookie(cookieName) {
+		  let x;
+		  let y;
+		  let val = document.cookie.split(';');
+		  //alert("val : "+val);
+		  //alert("val.length : "+val.length);
+		  let cookieArr = [];
+		  for (let i = 0; i < val.length; i++) {
+		    x = val[i].substr(0, val[i].indexOf('='));
+		    y = val[i].substr(val[i].indexOf('=') + 1);
+		    //alert("x : "+x);
+		    //alert("y : "+y);
+		    cookieArr.push(y);
+		    x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+		    				//if (x == cookieName) {
+		     				 //return unescape(y); // unescape로 디코딩 후 값 리턴
+		  					  //}
+		  }//end for
+		    return cookieArr;
+		}//getCookie
+////////////////////////////////////////////////////////////////////////////////////////////////		
+		//여러개의 쿠키 저장(중복방지)
+		function renewCookie(artPic, cookieName) {
+		  let items = [];
+		  alert("cookieName : "+ artPic);
+		  items =  getCookie(cookieName); // 이미 저장된 값을 쿠키에서 가져오기
+		  alert("items : "+items);
+		  let expire = 1; // 쿠키값을 저장할 기간
+		  
+		  for(i=0 ; i<items.length ; i++){
+		  	if( artPic == items[i]){
+				alert("이미존재함");
+				$.removeCookie(cookieName);
+		  	}//end if
+		  }//end for
+		  
+		   // 신규 id값 저장하기
+		   setCookie(cookieName, artPic, expire);
+		  
+		}//renewCookie
+////////////////////////////////////////////////////////////////////////////////////////////////		
+		//쿠키에 담긴 value들의 배열을 가져온다.
+		let cookieArr = getCookie(cookieName);
+		//alert("0 : "+cookieArr[0]);
+		//alert("1 : "+cookieArr[1]);
+		//alert("2 : "+cookieArr[2]);
+		//alert("3 : "+cookieArr[3]);
+		//alert("cookieArr.length : "+cookieArr.length);
+		
+		let i = cookieArr.length
+		$("#sidenav1").html($("<img>").
+		attr("src","./img/"+cookieArr[i-1]).css("width","100px","height","70px"));
+		$("#sidenav2").html($("<img>").
+		attr("src","./img/"+cookieArr[i-2]).css("width","100px","height","70px"));
+		$("#sidenav3").html($("<img>").
+		attr("src","./img/"+cookieArr[i-3]).css("width","100px","height","70px"));
+		
+////////////////////////////////////////////////////////////////////////////////////////////////		
+
+		//by현익 / top버튼 만들기 / 210331
+		$("#topBtn").click(function(){
+			$("html, body").stop().animate({scrollTop : 0}, 1000);
+		});
+		
+		});//getScript
+	});
+</script>
+</head>
+<body>
+	
+<div class="sidenav" align="center">
+	  <span class="sidenavs">최근 본 작품</span>
+	  <span>___________________</span>
+	  <a href="#services" id="sidenav1"> </a>
+	  <a href="#services" id="sidenav2"></a>
+	  <a href="#services" id="sidenav3"> </a>
+	  <span>___________________</span>
+	  <a href="#contact" class="sidenavs">찜목록</a>
+	  <span>___________________</span>
+	  <div id="topBtn">
+		  <button>TOP</button>
+	  </div>
+</div>
+	 
+
+</body>
+</html>

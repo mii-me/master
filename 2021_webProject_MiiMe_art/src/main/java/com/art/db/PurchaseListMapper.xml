@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="purchase">
+	<!-- by현익 / 구매목록을 출력하는 쿼리 / 210323 -->
+	<select id="findAll" resultType="purchaseVo">
+		select  p.MEM_NO memNo, p.PAY_NO payNo, p.ART_NO artNo,
+				 p.PAY_AMOUNT payAmount, p.PAY_VALUE payValue, 
+				 p.PAY_TIME payTime, a.ART_PIC artPic,	a.ART_NAME artName
+		from PAYMENT_TB p
+		left outer join ART_INFO_TB a
+		on p.art_no = a.art_no
+		where p.MEM_NO = #{memNo}
+	</select>
+</mapper>

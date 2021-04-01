@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>구매목록</title>
+<style type="text/css">
+	.high_light{
+		background-color: ivory;
+	}
+	.active{
+		background-color: yellow;
+	}
+	#btnReview{
+		visibility: hidden;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+// header, footer include
+//by 현익 / 구매목록 html / 210323 
+	$(function(){
+		//by 현익 / 세션 유지한 채로 맴버넘버 받아오기 / 210326
+		$.getScript("js/loginCheck.js", function() {
+			let broughtMemNo=null;
+			alert("loginCheck.js 작동");
+			broughtMemNo = memNo;
+			alert("broughtMemNo = "+broughtMemNo);
+		
+		//접속시 자동실행
+		loadPurchaseList();
+		
+		//문의 내역을 보여줍니다.
+		function loadPurchaseList(){
+			let arr;
+			let data = {memNo : broughtMemNo}
+			$("#purchase_list").empty(); //리스트중복방지
+			$.ajax({url:"/purchaseList.do", data:data, success:function(data){
+				arr = eval("("+data+")");
+				//구매 목록 출력합니다.
+				$.each(arr, function(index, p){
+					let tr = $("<tr></tr>");
+					$(tr).attr("idx",index);
+					let td_artNo = $("<td></td>").html(p.artNo);
+					let td_artPic = $("<td></td>").html($("<img>")
+										.attr("src","./img/"+p.artPic).css("width","200px","height","150px"));
+					let td_artName = $("<td></td>").html(p.artName);
+					let td_payAmount = $("<td></td>").html(p.payAmount+"원");
+					let td_payTime = $("<td></td>").html(p.payTime);
+					let td_payValue = $("<td></td>").html(p.payValue);
+					$(tr).append(td_artNo, td_artPic, td_artName, 
+									td_payAmount, td_payTime, td_payValue);
+					$("#purchase_list").append(tr);
+					
+					$(tr).click(function(){
+						//우선 모든 하이라이트 제거
+						$("tr").removeClass("active");
+						//누르면 하이라이트 처리
+						$(this).addClass("active");
+						//누르면 해당 ArtNo 담기
+						$("#bringArtNo").val(p.artNo);
+						alert("작품번호 : "+p.artNo);
+						//리뷰작성 버튼 보이기
+						$("#btnReview").css("visibility","visible");						
+						
+					});
+					//마우스 올렸을때, 마우스 내렸을때 함수 2개
+					$(tr).hover( function(){
+						$(this).addClass("high_light");
+					} , function(){
+						$(this).removeClass("high_light");
+					} );
+				});
+			}});
+		}//loadPurchaseList
+		$("#btnReview").click(function(){
+			let re = confirm("해당 작품의 후기를 작성하시겠습니까?");
+			if( re == true){
+				// 해당 페이지에 작품번호를 전달한다.
+				let sendNo = $("#bringArtNo").val();
+				location.href="insertReview.html?artNo="+sendNo;		
+			}//end if
+		});
+
+		});//getScript
+	});
+</script>
+</head>
+<body>
+ <header id="header"></header>
+	<h2>구매목록</h2>
+	<table border="1" width="80%">
+		<thead>
+			<tr>
+				<th>작품 번호</th>
+				<th>작품 사진</th>
+				<th>작품명</th>
+				<th>구매 가격</th>
+				<th>결제일</th>
+				<th>결제방식</th>
+			</tr>
+		</thead>
+		<tbody id = "purchase_list">
+		</tbody>
+	</table>
+		<button id="btnReview">작품후기 작성하기</button>
+		<input type="hidden" id="bringArtNo" name="artNo">
+		<footer id="footer"></footer>
+</body>
+</html>
