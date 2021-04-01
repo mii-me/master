@@ -40,7 +40,7 @@
 		 from (select * from art_info_tb where art_no in(select art_no from art_sell_check_tb where mem_no = #{memNo} )order by art_no))
 		 where num between #{start} and #{end}
 	</select> -->
-	<select id="findSellCheckList" resultType="artInfo">
+	<select id="findSellCheckList" resultType="artinfoVo">
 		select MEM_NO as memNo,
 		ART_NO as artNo,
 		ART_NAME as artName,
@@ -96,7 +96,7 @@
 		delete art_info_tb where art_no = #{artNo}
 	</delete>
 
-	<select id="findArtSellList" resultType="artInfo">
+	<select id="findArtSellList" resultType="artinfoVo">
 		select
 		art.art_no as artNo,
 		art.art_name as artName,

@@ -13,8 +13,4 @@
 		on W.ART_NO = A.ART_NO
 		where W.MEM_NO = #{memNo}
 	</select>
-	<delete id="delete">
-		delete wish_list_tb
-		where art_no=#{no}
-	</delete>
 </mapper>

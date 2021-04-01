@@ -19,9 +19,4 @@ public class WishListDao {
 		return DBManager.listWish(memNo);
 	}
 
-	public int deleteWishList(int no) {
-		System.out.println("2. WishListDao-deleteWishList 작동");
-		System.out.println("3. DBManager로 이동");
-		return DBManager.deleteWishList(no);
-	}
 }//class

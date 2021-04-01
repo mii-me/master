@@ -739,16 +739,6 @@ private static SqlSessionFactory factory;
 			session.close();
 			return list;
 		}
-		
-		//by 현익 / 찜목록 삭제 / 210323
-		public static int deleteWishList(int no) {
-			SqlSession session = factory.openSession(); //세션얻어오기
-			int re = session.delete("wish.delete", no);
-			System.out.println("4. DBManager-delete 작동");
-			System.out.println("5. DeliveryMapper -> SQL문 실행");
-			session.commit();
-			return re;
-		}
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 서현익] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	

@@ -31,16 +31,6 @@ public class WishListController {
 		return r;
 	}
 	
-	@RequestMapping("/deleteWishList.do")
-	public String deleteWishList(int no) {
-		System.out.println("1. Controller-deleteWishList 실행");
-		String r = "ok";
-		int re = dao.deleteWishList(no);
-		if (re !=1) {
-			r="no";
-		}//end if
-		return r;
-	}
 	
 	
 }//Controller

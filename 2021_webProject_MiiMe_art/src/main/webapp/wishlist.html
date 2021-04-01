@@ -91,8 +91,9 @@ $(document).ready(function(){
 			//삭제를 재확인하는 함수 : confirm
 			let re = confirm("찜목록에서 삭제하시겠습니까?");
 			if( re == true){
-				let no = $("#bringArtNo").val();
-				let data = {no:no};
+				let artNo = $("#bringArtNo").val();
+				let userNo = broughtMemNo;
+				let data = {userNo : userNo , artNo : artNo};
 				$.ajax({url:"/deleteWishList.do", data:data, success:function(){
 					loadWishList();
 					$("#btnBuy").css("visibility","hidden");
