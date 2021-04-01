@@ -79,7 +79,7 @@
     <mapper resource="com/art/db/ArtSellMapper.xml"/>
     
     <!-- 신지영 -->
-    <mapper resource="com/art/db/ReviewMapper.xml" />
+    <mapper resource="com/art/db/ReviewMapper.xml"/>
     
   </mappers>
   
