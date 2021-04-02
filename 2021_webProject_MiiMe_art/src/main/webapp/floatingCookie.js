@@ -30,13 +30,39 @@
 			
 			//링크도 설정해줘야 한다. 210402
 			let i = cookieArr.length
-			$("#sidenav1").html($("<img>").
-			attr("src","./art_pic/"+cookieArr[i-1]).css("width","100px","height","70px"));
-			$("#sidenav2").html($("<img>").
-			attr("src","./art_pic/"+cookieArr[i-2]).css("width","100px","height","70px"));
-			$("#sidenav3").html($("<img>").
-			attr("src","./art_pic/"+cookieArr[i-3]).css("width","100px","height","70px"));
+			for(let j= i-1; j>= i-3 ; j--){
+				let artPic = cookieArr[j];
+				let data = {artPic : artPic}
+				setTimeout(function() {  
+					$.ajax({url:"/findArtElements.do", data:data, success:function(av){
+					let img = $("<a></a>")
+					.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
+																	+av.artNo+"&tag="+av.artTag1)
+					.html($("<img>")
+					.attr("src","./art_pic/"+cookieArr[j]).css("width","100px","height","70px"));
+					//images div에 추가해준다.
+					$("#images").append(img);
+					let hr = $("<hr>");
+					$("#images").append(hr);
+					}});				
+				}, 200);
+			}//end for
 			
+			/*$("#sidenav1")
+			.attr("href","artDetail.html?memNo="+artistNo+"&artNo="+artNo+"&tag="+tag1)
+			.html($("<img>")
+			.attr("src","./art_pic/"+cookieArr[i-1]).css("width","100px","height","70px"));
+			
+			$("#sidenav2")
+			.attr("href","artDetail.html?memNo="+artistNo+"&artNo="+artNo+"&tag="+tag1)
+			.html($("<img>")
+			.attr("src","./art_pic/"+cookieArr[i-2]).css("width","100px","height","70px"));
+			
+			$("#sidenav2")
+			.attr("href","artDetail.html?memNo="+artistNo+"&artNo="+artNo+"&tag="+tag1)
+			.html($("<img>")
+			.attr("src","./art_pic/"+cookieArr[i-3]).css("width","100px","height","70px"));
+			*/
 		}//showCookie
 ////////////////////////////////////////////////////////////////////////////////////////////////		
 		

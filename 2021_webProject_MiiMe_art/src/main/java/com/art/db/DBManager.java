@@ -719,7 +719,6 @@ private static SqlSessionFactory factory;
 			session.close();
 			return list;
 		}
-
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 서현익] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	
 	
@@ -1029,7 +1028,9 @@ private static SqlSessionFactory factory;
 			session.commit();
 			session.close();
 			return re;
-		}	
+		}
+
+		
 	
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 신지영] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	
