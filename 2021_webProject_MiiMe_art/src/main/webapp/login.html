@@ -2,10 +2,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js
-"></script>
+<title>미미 美;Me - 로그인</title>
+  <script src="https://kit.fontawesome.com/5814a32c0e.js" crossorigin="anonymous"></script>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+<style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap');
+	body{
+		font-family: 'Noto Sans KR', sans-serif;
+		padding-top: 81px;
+	}
+</style>
+
 <script type="text/javascript">
+
 // header, footer include
 $(document).ready(function(){
     $("#header").load("/header.html");
@@ -28,9 +43,7 @@ $(document).ready(function(){
 			
 				console.log(m.memId);
 				console.log(m.memName);
-				
-//				let inputId = $("#memId").val();
-//				let inputPwd = $("#memPwd").val();
+
 				
 				// 로그인 성공 시
 				if(m.memId == id && m.memPwd == pwd){
@@ -53,23 +66,31 @@ $(document).ready(function(){
 	});
 </script>
 </head>
-<body>
- <header id="header"></header>	
-	<div class="container" style="height: 100vh; ">
-		<div class="row" align="center">
-			<div class="col-4 p-1 center" style="margin-top: 300px;">
-				<form id="login">
-					<input type="text" name="memId" id="memId" class="form-control" placeholder="아이디"><br>
-					<input type="password" name="memPwd" id="memPwd" class="form-control" placeholder="비밀번호"><br>		
-				</form>
+<body style="background-color: #F6F6F6;">
+<!--  <header id="header"></header>	 -->
+	<div class="container" style="margin-top: 150px;">
+		<form id="login">
+			<div class="pb-4 mx-auto" style="width: 150px;">
+				<a href="main.html"><img src="img/miime_logo.png" style="width:150px;"/></a>
 			</div>
-		</div>
-		<div class="row" align="center">
-			<div class="col-4">
-				<button id="btnLogin" class="btn btn-secondary">로그인</button>
+			<div>
+				<input type="text" name="memId" id="memId" class="form-control mx-auto" placeholder="아이디" style="width: 300px; height: 50px;" autofocus="autofocus">
 			</div>
+			<div>
+				<input type="password" name="memPwd" id="memPwd" class="form-control mx-auto" placeholder="비밀번호" style="width: 300px; height: 50px;">		
+			</div>
+		</form>
+		<div class="pt-4 mx-auto" style="width: 300px;">
+			<button id="btnLogin" class="btn btn-dark" style="width: 300px; height: 60px; background-color: #A59091; border-color: #A59091;">로그인</button>
 		</div>
+		<hr class="mt-5" style="width: 400px;"/>
+		<div class="pt-2 mx-auto" style="width: 315px;">
+			<span style="text-align: center;">미미에서 미술품 경매의 주인공이 되어 보세요!</span>
+		</div>	
+		<div class="pt-3 mx-auto" style="width: 300px;">
+			<button onclick="location.href='join.html'" class="btn btn-dark" style="width: 300px; height: 60px; background-color: #A59091; border-color: #A59091;">회원가입</button>
+		</div>	
 	</div>
- <footer id="footer"></footer>	
+<!-- <footer id="footer"></footer> -->
 </body>
 </html>
