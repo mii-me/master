@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style type="text/css">
+/* 스크립트 시작시 상세보기, 수정버튼, 수정폼 숨기기 */
 .detail, .detail2, .artForm{
 	visibility: hidden;
 	display: none;
@@ -30,22 +31,57 @@ $(function(){
 		
 		let arr;
 		let idx;
-		let totalPage;
+		let totalPage; //전체 페이지 수
 		let artList;
 		let memNo = sessionStorage.getItem("memNo");
+		let updateData; //수정data
 		
 		//남혜진 210320 
 		//listArtSellCheck() : 로그인한 작가회원의 art_sell_check_tb의 목록을 보여주는 함수 
-		function listArtSellCheck(){
+		function listArtSellCheck(pageNUM){
 			// 이전에 불려진 목록을 삭제 : 중복제거
 			$("#artSellCheckList").empty();
-			let data = {"memNo":memNo};
+			let data = {"memNo":memNo, pageNUM:pageNUM};
 			$.ajax({url:"/listArtSellCheck.do",
 				data:data, 
 				success:function(data){
+				
+				console.log("ajax data: "+data);
 				arr = [];
 				data = eval("("+data+")");
 				arr = data.list;
+				totalPage = data.totalPage;
+				
+				$("#page").empty();
+				
+				//페이지 번호 출력
+				for(i=1; i<=totalPage; i++){
+                    let pageBtn;
+                    // 페이지 버튼 구분
+					if (i == pageNUM){ // 현재 페이지(활성화)
+                        pageBtn = $(`<button type="button" class="btn btn-dark"></button>`).text(i);
+                    }else{ // 나머지 페이지(비활성화)
+                        pageBtn = $(`<button type="button" class="btn btn-outline-dark"></button>`).text(i);
+                    }
+					$("#page").append(pageBtn).append(" ");
+					
+					// 페이지 버튼 클릭 이벤트
+					$(pageBtn).click(function(){
+						let pageNUM = $(this).text();
+						
+						//상품 상세보기 _ 버튼들 숨기기
+						$(".detail").css("visibility", "hidden");
+						$(".detail").css("display", "none");
+						//상품상세보기 숨기기
+						/* $(".detail2").css("visibility", "hidden");
+						$(".detail2").css("display", "none"); */
+						
+						listArtSellCheck(pageNUM);
+					});
+					
+				}//for
+				
+				
 				
 				$.each(arr, function(index, art){
 					let div = $("<div class='detailUpdate card-body'></div>").attr("idx", index);
@@ -53,7 +89,7 @@ $(function(){
 					$(div).click(function(){
 						$("#detail").empty();
 						
-						let div = $("<div class='card p-1 m-1'></div>");
+						let div = $("<div class='card p-1 m-1 detail'></div>");
 						//let card = $("<div class='card p-1 m-1' style='width:360px'></div>");
 						
 						
@@ -121,12 +157,15 @@ $(function(){
 		//남혜진 210321
 		//상품수정을 위한 버튼 css처리
 		$("#btnUdateAndDelete").click(function(){
-			$(".artForm").css("visibility", "visible");
+			// artForm : 수정하는 Form 보이기
+			$(".artForm").css("visibility", "visible"); 
 			$(".artForm").css("display", "inline");
+			// detail : 상세보기 작품정보
 			$(".detail").css("visibility", "hidden");
 			$(".detail").css("display", "none");
-			$(".detailUpdate").css("visibility", "hidden");
-			$(".detailUpdate").css("display", "none");
+			/* $(".detailUpdate").css("visibility", "hidden");
+			$(".detailUpdate").css("display", "none"); */
+			// detail2 : 수정 버튼
 			$(".detail2").css("visibility", "visible");
 			$(".detail2").css("display", "inline");
 		})
@@ -134,17 +173,60 @@ $(function(){
 		//남혜진 210320 상품 수정 이벤트
 		//상품수정 이벤트 처리
 		$("#btnUpdate").click(function(){
+			//남혜진 210402 _ 작품수정 유효성검사 추가
+			let flag = false;
+			updateData = new FormData(document.getElementById("artForm"));
+			
+			let artName = ($("#artName").val()).trim();
+			let artMaterial = ($("#artMaterial").val()).trim();
+			let aucStart = Number($("#aucStart").val());//경매시작가격
+			let aucBuy = Number($("#aucBuy").val());//경매종료가격
+			let artSize1 = Number($("#artSize1").val());
+			let artSize2 = Number($("#artSize2").val());
+			
+			
+			if(artName == ""){ //1. 작품이름 설정 : Null불가
+				alert("작품제목을 앞,뒤 공백없이 작성해주세요.");
+				flag = false;
+			}else if(artMaterial == ""){ //2. 작품재료 설정 : 공백불가
+				alert("작품재료를 앞,뒤 공백없이 작성해주세요.");
+				flag = false;
+			}else if(artSize1 < 0){ //3-1. 작품크기1 설정 : 음수 불가
+				alert("작품크기를 양수로 입력해주세요.");
+				flag = false;
+			}else if(artSize2 < 0){ //3-2. 작품크기2 설정 : 음수 불가
+				alert("작품크기를 양수로 입력해주세요.");
+				flag = false;
+			}else if(0 > $("#artYear").val() > 2022){//4. 제작년도 설정
+				alert("제작년도를 올바르게 입력해주세요.");
+				flag = false;
+			}else if(aucStart > aucBuy || aucStart < 10000){ //5. 경매 종료가격 설정
+				alert("경매종료가격은 경매시작가격보다 높아야 합니다. 경매시작가격은 10000원 이상부터 참여가능합니다.");
+				flag = false;
+			}else{//모든 값이 올바를 때, 함수 실행 조건 달성
+				updateData.artName = artName;
+				updateData.artMaterial = artMaterial;
+				flag = true;
+			}
+			
+			if(flag == true){
+				updateArtInfo();
+			}
+			
+		})
+		
+		//남혜진 210402 _ 작품수정 유효성검사 추가
+		function updateArtInfo(){
 			$("#memNo").val(memNo);
 			$("#artNo").val(artList.artNo);
-			let data = new FormData(document.getElementById("artForm"));
 			alert("수정버튼클릭");
 			$.ajax({url:"/updateArtInfo.do", 
-				data:data, 
+				data:updateData, 
 				type:"post",
 				processData:false,
 				contentType:false, 
 				success:function(data){
-					listArtSellCheck();
+					listArtSellCheck(1);
 					$(".detail2").css("visibility", "hidden");
 					$(".detail2").css("display", "none");
 					
@@ -152,28 +234,25 @@ $(function(){
 					$(".detail").css("display", "none");
 					$(".detailUpdate").css("visibility", "visible");
 					$(".detailUpdate").css("display", "inline");
-	/* 				//ajax통신 후에 변경할 이미지를 부르기 위해 지연시간을 추가
-					//setTimeout 함수를 사용
-	 				setTimeout(function(){
-						console.log("변경할이미지: " + arr[idx].artPic);
-						$("#artPic").attr("src", "art_pic/" + arr[idx].artPic);
-					},500);  */
 			}})
-		})
+		}
+		
+		
+		
 		
 		//남혜진 210320
 		//해당작품 판매 시작하기
 		$("#btnArtSell").click(function(){
 			let artNo = artList.artNo;
 			let data = {artNo:artNo, memNo:memNo};
-			console.log("작품판매data: " + data.memNo);
-			console.log("작품판매data: " + data.artNo);
 	 		if(confirm(artList.artName + "작품을 판매하시겠습니까?")){
 				$.ajax({url:"/startArtSell.do", data:data, success:function(){
-					alert("판매성공");			
-					$("#detail").css("visibility", "hidden");
-					$("#detail").css("display", "none");
-					listArtSellCheck();
+					alert("[" + artList.artName + "] 작품에 대한 판매가 시작됩니다.");			
+					/* $("#detail").css("visibility", "hidden");
+					$("#detail").css("display", "none"); */
+					$(".detail").css("visibility", "hidden");
+					$(".detail").css("display", "none");
+					listArtSellCheck(1);
 				}})
 			} 
 		})
@@ -185,15 +264,17 @@ $(function(){
 			let data = {artNo:artNo, memNo:memNo};
 	 		if(confirm(artList.artName + "작품을 삭제하시겠습니까?")){
 				$.ajax({url:"/deleteArtInfo.do", data:data, success:function(){
-					alert("삭제성공");
-					$("#detail").css("visibility", "hidden");
-					$("#detail").css("display", "none");
-					listArtSellCheck();
+					alert("[" + artList.artName + "] 작품에 대한 삭제를 성공하였습니다");
+					/* $("#detail").css("visibility", "hidden");
+					$("#detail").css("display", "none"); */
+					$(".detail").css("visibility", "hidden");
+					$(".detail").css("display", "none");
+					listArtSellCheck(1);
 				}})
 			} 
 		})
 		
-		listArtSellCheck();
+		listArtSellCheck(1);
 		
 		
 	})//getScript
@@ -209,13 +290,17 @@ $(function(){
 	<!-- 이곳에 작품 목록이 생성된다 -->
 	</div>
 </div>
-<div id="page"></div>
+<div class="container">
+	<div id="page"></div>
+</div>
 
 <div class="container">
 	<div id="detail" class="row m-0"><!-- 작품목록 중 해당작품선택시 상세보기 --></div>
-	<button id="btnUdateAndDelete" class="detail btn btn-dark">작품 수정하기</button>
-	<button id="btnArtSell" class="detail artSell btn btn-dark">해당 작품 판매시작하기</button>
-	<button id="btnDelete" class="detail artDelete btn btn-dark">해당 작품정보 삭제하기</button>
+	<div class="updateSet">
+		<button id="btnUdateAndDelete" class="detail btn btn-dark">작품 수정하기</button>
+		<button id="btnArtSell" class="detail artSell btn btn-dark">해당 작품 판매시작하기</button>
+		<button id="btnDelete" class="detail artDelete btn btn-dark">해당 작품정보 삭제하기</button>
+	</div>
 <hr>
 	<form class="artForm detail2 was-validated" id="artForm" method="post" enctype="multipart/form-data">
 		<h5>작품 수정사항을 작성해주세요</h5>
@@ -321,8 +406,6 @@ $(function(){
 			<div class="valid-feedback">올바른입력입니다</div>
       		<div class="invalid-feedback">정수만 입력해 주세요. 경매시작 가격보다 높아야 합니다.</div>
 		</div>
-		경매시작가격 : <input type="number" id="aucStart" name="aucStart" placeholder="숫자만입력합니다">원<br>
-		경매종료가격 : <input type="number" id="aucBuy" name="aucBuy" placeholder="숫자만입력합니다">원<br>
 	</form>
 	<button id="btnUpdate" class="detail2 btn btn-dark">수정</button>
 </div><!-- CSS : class = container -->

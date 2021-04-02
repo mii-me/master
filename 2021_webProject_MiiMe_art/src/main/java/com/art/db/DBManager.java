@@ -720,6 +720,16 @@ private static SqlSessionFactory factory;
 			return list;
 		}
 
+		//by 현익 / floatingbar url 설정에 필요한 artElement 찾기 / 210402
+		public static ArtInfoVo findArtElements(String artPic) {
+			SqlSession session = factory.openSession(); //세션얻어오기
+			ArtInfoVo vo = session.selectOne("wish.findOne", artPic);
+			System.out.println("4. DBManager-findArtElements 작동");
+			System.out.println("5. WishListMapper -> SQL문 실행");
+			session.close();
+			return vo;
+		}
+		
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 서현익] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	
 	
@@ -753,41 +763,18 @@ private static SqlSessionFactory factory;
 		 * @param memNo 회원번호
 		 * @return 회원번호에 맞는 회원의 판매대기중인 작품의 정보
 		 */
-		public static List<ArtInfoVo> findSellCheckList(int memNo) {
-			SqlSession session = factory.openSession();
-			List<ArtInfoVo> list = null;
-			list = session.selectList("artSell.findSellCheckList", memNo);
-			session.close();
-			return list;
-		}
-		/* 페이징 처리 다시 하기
 		public static List<ArtInfoVo> findSellCheckList(int memNo, int start, int end) {
+			System.out.println("3. ");
 			SqlSession session = factory.openSession();
 			List<ArtInfoVo> list = null;
 			HashMap<String, Integer> map = new HashMap<String, Integer>();
+			map.put("memNo", memNo);
 			map.put("start", start);
 			map.put("end", end);
 			list = session.selectList("artSell.findSellCheckList", map);
 			session.close();
 			return list;
 		}
-		*/
-		
-		/**
-		 * 남혜진_로그인기능 예비구현
-		 * @param memId
-		 * @param memPwd
-		 * @return
-		 */
-/*		public static MemberVo findMember(String memId, String memPwd) {
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("memId", memId); 
-			map.put("memPwd", memPwd);
-			SqlSession session = factory.openSession();
-			MemberVo m = session.selectOne("artSell.memberInfo", map);
-			session.close();
-			return m;
-		} /*
 		
 		/**
 		 * 남혜진_작품정보 수정
@@ -1029,8 +1016,18 @@ private static SqlSessionFactory factory;
 			session.commit();
 			session.close();
 			return re;
+		}
+
+		public static int getTotalArtSellCheck(int memNo) {
+			System.out.println("작품목록 DBManager 작동");
+			SqlSession session = factory.openSession();
+			int count = session.selectOne("artSell.totalRecord", memNo);
+			session.close();
+			return count;
 		}	
 	
+		
+		
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 신지영] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	
 	
