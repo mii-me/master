@@ -3,9 +3,7 @@
 		let receive = uri.substr(uri.indexOf("?") + 1) //쿼리스트링에서 ?를 제외한 나머지를 담은 변수
 		let receiveSplit = receive.split("&"); //&를 기준으로 자른 값들을 담은 변수 
 		
-		let cookieName; //전역변수로 쿠키아이디 설정 by 현익
-		let cookieArtNo;
-		let cookieArtPic;	
+		
 
 		for(i=0;i<receiveSplit.length;i++){
 			receiveArr.push(receiveSplit[i].split("=")[1]); //=를 기준으로 자른 값들 중 숫자만 담는다
@@ -38,12 +36,15 @@
 		$(".detail-content-pic-link").attr("src","art_pic/"+selected.artPic);
 		
 		//by 현익 / 쿠키에 artNo, artPic 담아주기
+		let cookieName; //쿠키아이디 설정 by 현익
+		let cookieArtNo;
+		let cookieArtPic;	
 		cookieArtNo = artNo;
 		cookieArtPic = selected.artPic;
 		//alert("cookieArtNo : "+cookieArtNo);
 		//alert("cookieArtPic : "+cookieArtPic);
 		cookieName = "'"+"artNo"+cookieArtNo+"'";
-		alert("쿠키명:"+cookieName);
+		//alert(" 4. 쿠키명:"+cookieName);
 		setCookie(cookieName, cookieArtPic, 1); // 쿠키를 담아주는 메소드
 					
 		$(".name").html(selected.artName);
@@ -117,6 +118,10 @@
 				artistPic.css("width","70","height","70");
 				$(".artistInfo-box-name-pic").append(artistPic)	
 				$(".artExp-box").append(span1,exp,span2);
+				//즉시 구매하기 클릭 이벤트 함수 [by 현규]
+	            $("#btnBuy").click(function(){
+	               clickBtnBuy(artNo,selected.aucBuy);
+	            });
 				}}); //ajax
 		}//loadArtdetail()
 		
@@ -125,7 +130,7 @@
 //by 현익 / 작품눌러서 상세로 이동할때 쿠키에 저장 / 210401
 		//쿠키를 저장하는 함수
 		function setCookie(cookieName, cookieArtPic, days) {
-		  //alert("setCookie 작동");
+		  //alert("5. setCookie 작동");
  			 let exdate = new Date();
   			 exdate.setDate(exdate.getDate() + days);
   			// 설정 일수만큼 현재시간에 만료값으로 지정
@@ -277,7 +282,15 @@
 				//로그인했다면 현재 보고있는 작품의 작품번호를 갖고 페이지를 이동한다.
 				if(userNo!=null) {
 					alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
-					location.href="payment.html?artNo="+artNo;				
+					//현재 입찰가를 즉시구매가로 업데이트 후 결제 진행 [by 현규]
+	               $.ajax({
+	               url:"/updateBid.do",
+	               data:{artNo:artNo,aucBid:aucBuy},
+	               success:function(){
+	                  location.href="payment.html?artNo="+artNo;
+	               }});
+					//location.href="payment.html?artNo="+artNo;		
+							
 				}else{//로그인하지않았다면 로그인페이지로 이동한다.
 					alert("로그인이 필요한 서비스입니다.");
 					location.href="login.html";
@@ -288,12 +301,12 @@
 		$("#btnBid").click(function(){
 				clickBtnBid(artNo);	
 		})
-			
+		/*		
 		//즉시 구매하기 클릭 이벤트 함수
 		$("#btnBuy").click(function(){
 			clickBtnBuy(artNo);
 		})
-		
+		*/
 	//찜하기 insert 함수
 	function wishlistInsert(userNo,artNo) {
 		$.ajax({url:"insertWishList.do/?userNo="+userNo+"&artNo="+artNo,success:function(r){

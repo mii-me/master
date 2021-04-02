@@ -13,4 +13,9 @@
 		on W.ART_NO = A.ART_NO
 		where W.MEM_NO = #{memNo}
 	</select>
+	<select id="findOne" resultType="artinfoVo">
+ 		select MEM_NO memNo, ART_NO artNo,  ART_TAG1 artTag1
+ 		from art_info_tb
+ 		where art_pic = #{artPic}
+ 	</select>
 </mapper>
