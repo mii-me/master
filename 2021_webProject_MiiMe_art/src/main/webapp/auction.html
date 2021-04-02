@@ -11,7 +11,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style type="text/css">
-
 body{
 	font-family: 'Noto Sans KR', sans-serif;
 	padding-top: 81px;
@@ -19,10 +18,8 @@ body{
 
 
 .limit{
-position:relative;
 font-size: 30px;
 color: #4F81BD;
-left:10%;
 }
 
 .img{
@@ -31,16 +28,19 @@ left:10%;
 }
 
 span{
-	border: 1px solid #333;
 	font-size: 30px;
 }
 
-span.timer{
-	position:relative;
-	color: #f1a4b1;
-	left:10%;
+#timerBox{
+	position: relative;
+	left:30%;
+	border: 1px solid #333;
 }
 
+
+span.timer{
+	color: #f1a4b1;
+}
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
@@ -119,15 +119,13 @@ $.getScript("/loginCheck.js",function(){
 		arr = eval(m);	
 				
 		$.each(arr, function(index,auc){
-			let tr = $("<tr></tr>");
-			let art_no = $("<td></td>").html(auc.artNo);
-			let art_pic = $("<td></td>").html($("<img>").attr("src","./art_pic/"+auc.artPic).css("width","200px","height","200px"));
-			let art_name = $("<td></td>").html(auc.artName);
-			let auc_start = $("<td></td>").html(auc.aucStart+"원");
-			let auc_bid = $("<td></td>").html(auc.aucBid+"원");
-			let auc_buy = $("<td></td>").html(auc.aucBuy+"원");
-			$(tr).append(art_no,art_pic,art_name,auc_start,auc_bid,auc_buy);
-			$("#auction_info").append(tr);
+			let art_pic = $("<div></div>").html($("<img>").attr("src","./art_pic/"+auc.artPic).css("width","700px","height","600px"));
+			let art_name = $("<div></div>").html("작품명: "+auc.artName);
+			let auc_start = $("<div></div>").html("시작가: "+auc.aucStart+"원");
+			let auc_bid = $("<div></div>").html("최고 입찰가: "+auc.aucBid+"원");
+			let auc_buy = $("<div></div>").html("즉시구매가: "+auc.aucBuy+"원");
+			$("#auction_info").append(art_pic);
+			$("#auction_price").append(art_name,auc_start,auc_bid,auc_buy);
 						
 	//즉시구매 누를 시 , 즉시구매가로 결제창 이동
 	$("#btnBuy").click(function(){
@@ -204,13 +202,20 @@ $.getScript("/loginCheck.js",function(){
 					location.reload(); 
 				}});
 			}else{
+				
+				//$(`<div class="alert alert-danger"></div>`).html("입찰가는 시작가·최고입찰가보다 높아야하며 즉시구매가보다 낮아야 합니다.");
+  				 	
 				alert("입찰가는 시작가·최고입찰가보다 높아야하며 즉시구매가보다 낮아야 합니다.");
+				
 				$("#aucBid").val("");	//입찰가 입력칸 초기화
 				$("#aucBid").focus();	//입찰가 입력칸에 커서두기
 			}//end else
 		}else{
-			alert("입찰가를 입력하세요!!");
+			$("#auction_top").empty();
+			$("#auction_top").append($(`<div class="alert alert-danger alert-dismissible fade show">
+									<button type="button" class="close" data-dismiss="alert">&times;</button>입찰가를 입력하세요!</div>`));
 		}//end else
+		
 		
 		});
 	});	
@@ -227,33 +232,25 @@ $.getScript("/loginCheck.js",function(){
 <body>
 <header id="header"></header>
 <div class="container">
-	<span class="limit">남은시간=></span>
-	<span class="timer"></span>
-	
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th>작품번호</th>
-				<th>사진</th>
-				<th>작품명</th>
-				<th>시작가</th>
-				<th>최고 입찰가</th>
-				<th>즉시구매가</th>
-			</tr>
-		</thead>
-		<tbody id="auction_info">
-		</tbody>
-	</table>
+	<div id="auction_top"></div>
+		<div id="timerBox">
+			<span class="limit">남은시간</span>&nbsp;&nbsp;&nbsp;
+			<span class="timer"></span>
+		</div>
+	<div id="auction_info"></div>
+	<div id="auction_price"></div>
 	
 	<form id="f">
 		<input type="hidden" class="artNo" name="artNo">
 		 <input type="hidden" class="memNo" name="memNo"> <!-- 누가 입찰 했는지 확인용-->
-		희망 입찰가<input type="text" id="aucBid" name="aucBid">원
+		희망 입찰가: <input type="text" id="aucBid" name="aucBid"> 원
 	</form> 
-	<button id="btnBid">입찰하기</button>
-	<button id="btnBuy">즉시구매</button>
-	<button id="remainFive">남은시간 5초</button>
-	<button id="btnResetBid">입찰가 초기화</button>
+	<div id="auction_bottom">
+		<button id="btnBid" class="btn btn-dark">입찰하기</button>
+		<button id="btnBuy" class="btn btn-dark">즉시구매</button>
+		<button id="remainFive" class="btn btn-dark btn-sm">남은시간 5초</button>
+		<button id="btnResetBid" class="btn btn-dark btn-sm">입찰가 초기화</button>
+	</div>
 </div>
 <footer id="footer"></footer>
 </body>
