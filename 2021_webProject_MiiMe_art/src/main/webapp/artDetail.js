@@ -3,6 +3,10 @@
 		let receive = uri.substr(uri.indexOf("?") + 1) //쿼리스트링에서 ?를 제외한 나머지를 담은 변수
 		let receiveSplit = receive.split("&"); //&를 기준으로 자른 값들을 담은 변수 
 		
+		let cookieName; //전역변수로 쿠키아이디 설정 by 현익
+		let cookieArtNo;
+		let cookieArtPic;	
+
 		for(i=0;i<receiveSplit.length;i++){
 			receiveArr.push(receiveSplit[i].split("=")[1]); //=를 기준으로 자른 값들 중 숫자만 담는다
 			//console.log("receiveArr : " + receiveArr);
@@ -32,6 +36,15 @@
 					
 		//이미지 삽입
 		$(".detail-content-pic-link").attr("src","art_pic/"+selected.artPic);
+		
+		//by 현익 / 쿠키에 artNo, artPic 담아주기
+		cookieArtNo = artNo;
+		cookieArtPic = selected.artPic;
+		//alert("cookieArtNo : "+cookieArtNo);
+		//alert("cookieArtPic : "+cookieArtPic);
+		cookieName = "'"+"artNo"+cookieArtNo+"'";
+		alert("쿠키명:"+cookieName);
+		setCookie(cookieName, cookieArtPic, 1); // 쿠키를 담아주는 메소드
 					
 		$(".name").html(selected.artName);
 		$("#artistName").html(selected.artistName);
@@ -106,6 +119,21 @@
 				$(".artExp-box").append(span1,exp,span2);
 				}}); //ajax
 		}//loadArtdetail()
+		
+		
+////////////////////////////////////////////////////////////////////////////////////////////////		
+//by 현익 / 작품눌러서 상세로 이동할때 쿠키에 저장 / 210401
+		//쿠키를 저장하는 함수
+		function setCookie(cookieName, cookieArtPic, days) {
+		  //alert("setCookie 작동");
+ 			 let exdate = new Date();
+  			 exdate.setDate(exdate.getDate() + days);
+  			// 설정 일수만큼 현재시간에 만료값으로 지정
+  			let cookieValue = escape(cookieArtPic) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+ 		    document.cookie = cookieName + '=' + cookieValue;
+		}//setCookie
+////////////////////////////////////////////////////////////////////////////////////////////////		
+		
 		
 			//이미지 전체 div의 위치를 담을 변수
 			let positionBg = 0;

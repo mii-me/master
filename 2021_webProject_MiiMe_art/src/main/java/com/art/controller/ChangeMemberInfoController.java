@@ -57,7 +57,8 @@ public class ChangeMemberInfoController {
 		System.out.println("_________________________________________");
 		System.out.println("1. Controller-updateArtistInfo 실행");
 		String oldFname= cv.getArtistPic();
-		String path = request.getRealPath("artistPic");
+		String path = request.getRealPath("artist_pic");
+		System.out.println("path : "+path);
 		MultipartFile uploadFile = cv.getUploadFile();
 		String fname = uploadFile.getOriginalFilename();
 		if (fname != null && !fname.equals("")) {

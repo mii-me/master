@@ -23,12 +23,13 @@
 $(document).ready(function(){
     $("#header").load("/header.html");
     $("#footer").load("/footer.html");
+    $("#floatingbar").load("/floatingbar1.html");
 });
 // header, footer include
 //by 현익 / 찜목록 html / 210323 
 	$(function(){
 		//by 현익 / 세션 유지한 채로 맴버넘버 받아오기 / 210326
-		$.getScript("js/loginCheck.js", function() {
+		$.getScript("loginCheck.js", function() {
 			let broughtMemNo;
 			alert("loginCheck.js 작동");
 			broughtMemNo = memNo;
@@ -50,7 +51,7 @@ $(document).ready(function(){
 					$(tr).attr("idx",index);
 					let td_artNo = $("<td></td>").html(w.artNo);
 					let td_artPic = $("<td></td>").html($("<img>")
-						.attr("src","./img/"+w.artPic).css("width","200px","height","150px"));
+						.attr("src","./art_pic/"+w.artPic).css("width","200px","height","150px"));
 					let td_artName = $("<td></td>").html(w.artName);
 					let td_aucBid = $("<td></td>").html(w.aucBid+"원");
 					let td_aucBuy = $("<td></td>").html(w.aucBuy+"원");
@@ -125,6 +126,7 @@ $(document).ready(function(){
 </head>
 <body>
  <header id="header"></header>
+ <div id="floatingbar"></div>
 	<h2>찜목록</h2>
 	<table border="1" width="80%">
 		<thead>

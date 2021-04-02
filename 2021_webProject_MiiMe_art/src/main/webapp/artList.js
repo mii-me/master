@@ -9,7 +9,7 @@ let responsePrice; //조건검색에서 받아온 가격
 function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			
 	let data = {pageNO:pageNO,responseTheme:responseTheme,sizeRange1:sizeRange1,sizeRange2:sizeRange2,responsePrice:responsePrice};
-			
+
 	$.ajax({url:"/listArt.do",data:data,success:function(data){
 				
 			arr = [];
@@ -43,15 +43,13 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 							artTag = '';
 						}
 						//console.log("artTag : " + artTag);
-			 			
-					
+						
+						
 						//앵커태그 걸기 : encodeURI - 한글값을 넘기기 위함(태그:한글)
 						let link = $("<a></a>").attr("href",encodeURI("artDetail.html?memNo="+a.memNo+"&artNo="+a.artNo+"&tag="+artTag))
 						let div_link = $("<div id='divDetail'></div>").append(link); //앵커 div
-						
 						let img_pic = $("<img class='artPic'>").attr("src","art_pic/"+a.artPic);
 						let div_img = $("<div></div>").append(img_pic); //이미지div 
-						
 						
 						let text_name = $("<div></div>").html("<h3>" + a.artName + "</h3>"); //작품제목
 						
@@ -92,16 +90,11 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						$("#searchPriceBar").attr("value","10000000");
 						$("#searchPriceBar").attr("step","100000");
 					
-					
-						
 			 		}); //each
-			 		
-			 		
+
 			 	}}); //ajax
+		
 		}//loadArtList
-		
-		
-		
 		
 		
 		//테마 리스트를 클릭했을 때 

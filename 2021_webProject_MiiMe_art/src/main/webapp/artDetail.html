@@ -8,24 +8,22 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <title>작품 상세보기</title>
 <link rel="stylesheet" type="text/css" href="artDetail.css"> 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="cookie/jquery.cookie.js"></script>
 <script type="text/javascript">
 // header, footer include
 $(document).ready(function(){
     $("#header").load("/header.html");
     $("#footer").load("/footer.html");
+    $("#floatingbar").load("/floatingbar1.html");
 });
 // header, footer include
 $(function(){
 		
-	  
-		
-		
 		$.getScript("artDetail.js",function(){
-					
+			
 			loadArtdetail(memNo,artNo);
 			loadArtHash(tag);
 			btnClick();
@@ -65,6 +63,44 @@ $(function(){
 				
 			});//click
 			
+////////////////////////////////////////////////////////////////////////////////////////////
+			//by현익 / 쿠키를 갱신하기 위한 함수 / 210401
+			let cookieId = "'"+"artNo"+artNo+"'";			
+			//alert(cookieId);	
+			deleteCookie(cookieId);
+			
+		 	function findCookie(cookieId) {
+				  let x;
+				  let val = document.cookie.split(';');
+				  //alert("find쿠키함수 작동");
+				  //alert("val.length : "+val.length);
+				  let cookieArr = [];
+				  for (let i = 0; i < val.length; i++) {
+				    x = val[i].substr(0, val[i].indexOf('='));
+				    //alert("x : "+x);
+				    x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+				    cookieArr.push(x);
+				  }//end for
+				    return cookieArr;
+			}//findCookie
+			
+			//중복쿠키 삭제
+			function deleteCookie(cookieId) {
+			  let items = [];
+			  //alert("deleteCookie 작동");
+			  items =  findCookie(cookieId); // 이미 저장된 값을 쿠키에서 가져오기
+			  
+			  for(i=0 ; i<items.length ; i++){
+			  	if( cookieId == items[i]){
+			  		let object = items[i]; 
+			  		//alert(object);
+					//alert("쿠키가 이미존재함 ->>삭제 - "+object);
+					$.removeCookie(object);
+			  	}//end if
+			  }//end for
+		}//renewCookie
+		
+		
 		
 		});
 
@@ -73,6 +109,7 @@ $(function(){
 </head>
 <body>
 <header id="header"></header>
+<div id="floatingbar"></div>
 	<!-- <div>
 	<a id="goList">목록으로 돌아가기</a>
 	</div> -->
