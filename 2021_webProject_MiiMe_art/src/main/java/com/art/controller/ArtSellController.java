@@ -80,22 +80,24 @@ public class ArtSellController {
 	 * @return
 	 */
 	@RequestMapping("/listArtSellCheck.do")
-	public String findSellCheckList(int memNo) {
-		/*
+	public String findSellCheckList(int memNo, int pageNUM) {
 		//PAGE 페이징 처리 나중에 하기
-		int pageNUM = 1;
-		// System.out.println("pageNum: " + pageNUM);//test
+		System.out.println("1-1 pageNum: " + pageNUM);//test
 		totalRecord = dao.getTotalRecord(memNo);
-		System.out.println("totalRecord : " + totalRecord);
 		totalPage = (int) Math.ceil(totalRecord / (double) pageSIZE);
-		System.out.println("totalPage : " + totalPage);
+		
+		System.out.println("1-2 totalRecord : " + totalRecord);
+		System.out.println("1-3 totalPage : " + totalPage);
+		
 		// 시작 페이지, 끝 페이지 계산
 		int start = (pageNUM - 1) * pageSIZE + 1;
 		int end = start + pageSIZE - 1;
+		
 		List<ArtInfoVo> list = dao.findSellCheckList(memNo, start, end);
-		*/
-		List<ArtInfoVo> list = dao.findSellCheckList(memNo);
+		
+		//List<ArtInfoVo> list = dao.findSellCheckList(memNo);
 		ArtResponse art = new ArtResponse();
+		
 		art.setTotalPage(totalPage);
 		art.setList(list);
 

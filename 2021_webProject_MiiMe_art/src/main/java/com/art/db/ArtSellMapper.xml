@@ -16,30 +16,7 @@
 			art_info_seq.nextval) 
 		select * from dual
 	</insert>
-  	<!-- 코드 통합 후 페이징 처리 완료하기 -->
-<!-- 	<select id="findSellCheckList" resultType="artInfo">
-		select num, MEM_NO as mamNo,
-		ART_NO as artNo,
-		ART_NAME as artName,
-		ART_MATERIAL as artMaterial,
-		ART_THEME as artTheme,
-		ART_SIZE1 as artSize1,
-		ART_SIZE2 as artSize2,
-		ART_YEAR as artYear,
-		ART_PIC as artPic,
-		ART_EXP as artExp,
-		ART_TAG1 as artTag1,
-		ART_TAG2 as artTag2,
-		ART_TAG3 as artTag3,
-		AUC_START as aucStart,
-		AUC_BID as aucBid,
-		AUC_BUY as aucBuy
-		 from
-		 (select rownum as num, mem_no, art_no, art_name, art_material, art_theme, art_size1, art_size2,
-		art_year, art_pic, art_exp, art_tag1, art_tag2, art_tag3, auc_start, auc_bid, auc_buy
-		 from (select * from art_info_tb where art_no in(select art_no from art_sell_check_tb where mem_no = #{memNo} )order by art_no))
-		 where num between #{start} and #{end}
-	</select> -->
+<!-- 	
 	<select id="findSellCheckList" resultType="artinfoVo">
 		select MEM_NO as memNo,
 		ART_NO as artNo,
@@ -61,6 +38,31 @@
 		 (select mem_no, art_no, art_name, art_material, art_theme, art_size1, art_size2,
 		art_year, art_pic, art_exp, art_tag1, art_tag2, art_tag3, auc_start, auc_bid, auc_buy
 		 from (select * from art_info_tb where art_no in(select art_no from art_sell_check_tb where mem_no = #{memNo} )order by art_no))
+	</select> -->
+	
+  	<!-- 코드 통합 후 페이징 처리 완료하기 -->
+	<select id="findSellCheckList" resultType="artInfoVo">
+		select num, MEM_NO as memNo,
+		ART_NO as artNo,
+		ART_NAME as artName,
+		ART_MATERIAL as artMaterial,
+		ART_THEME as artTheme,
+		ART_SIZE1 as artSize1,
+		ART_SIZE2 as artSize2,
+		ART_YEAR as artYear,
+		ART_PIC as artPic,
+		ART_EXP as artExp,
+		ART_TAG1 as artTag1,
+		ART_TAG2 as artTag2,
+		ART_TAG3 as artTag3,
+		AUC_START as aucStart,
+		AUC_BID as aucBid,
+		AUC_BUY as aucBuy
+		 from
+		 (select rownum as num, mem_no, art_no, art_name, art_material, art_theme, art_size1, art_size2,
+		art_year, art_pic, art_exp, art_tag1, art_tag2, art_tag3, auc_start, auc_bid, auc_buy
+		 from (select * from art_info_tb where art_no in(select art_no from art_sell_check_tb where mem_no = #{memNo} )order by art_no))
+		 where num between #{start} and #{end}
 	</select>
 
 	<select id="totalRecord" resultType="java.lang.Integer">

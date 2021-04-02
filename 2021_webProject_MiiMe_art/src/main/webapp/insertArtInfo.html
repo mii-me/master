@@ -18,6 +18,8 @@ $(document).ready(function(){
 // header, footer include
 $(function() {
 	
+	let data;
+	
 	//남혜진 210328 _ 세션유지된 회원번호 전달
 	//210401 통합 후 js파일 위치 변경 수정
 	$.getScript("loginCheck.js", function(){
@@ -29,19 +31,52 @@ $(function() {
 		//남혜진 210318 판매하기_작품정보 등록 
 		//작품정보 등록하기 버튼
 		$("#btnInsert").click(function(){
-			// 작품 정보 유효성검사
-			//------------------------해야할것-------------------------------------
-			/* null값이 들어가면 안되는 것 : 회원번호(세션유지) 작품번호(시퀀스)
-			name, material, theme, pic(사진), auc_start(경매시작가), auc_buy(즉시구매가)
-			*/
+			//남혜진 210402 _ 작품수정 유효성검사 추가
+			let flag = false; // 작품정보 유효성 검사
+			
+			data = new FormData(document.getElementById("artForm"));
+			
+			let artName = ($("#artName").val()).trim();
+			let artMaterial = ($("#artMaterial").val()).trim();
+			let aucStart = Number($("#aucStart").val());//경매시작가격
+			let aucBuy = Number($("#aucBuy").val());//경매종료가격
+			let artSize1 = Number($("#artSize1").val());
+			let artSize2 = Number($("#artSize2").val());
 			
 			
+			if(artName == ""){ //1. 작품이름 설정 : Null불가
+				alert("작품제목을 앞,뒤 공백없이 작성해주세요.");
+				flag = false;
+			}else if(artMaterial == ""){ //2. 작품재료 설정 : 공백불가
+				alert("작품재료를 앞,뒤 공백없이 작성해주세요.");
+				flag = false;
+			}else if(artSize1 < 0){ //3-1. 작품크기1 설정 : 음수 불가
+				alert("작품크기를 양수로 입력해주세요.");
+				flag = false;
+			}else if(artSize2 < 0){ //3-2. 작품크기2 설정 : 음수 불가
+				alert("작품크기를 양수로 입력해주세요.");
+				flag = false;
+			}else if(0 > $("#artYear").val() > 2022){//4. 제작년도 설정
+				alert("제작년도를 올바르게 입력해주세요.");
+				flag = false;
+			}else if(aucStart > aucBuy || aucStart < 10000){ //5. 경매 종료가격 설정
+				alert("경매종료가격은 경매시작가격보다 높아야 합니다. 경매시작가격은 10000원 이상부터 참여가능합니다.");
+				flag = false;
+			}else{//모든 값이 올바를 때, 함수 실행 조건 달성
+				data.artName = artName;
+				data.artMaterial = artMaterial;
+				flag = true;
+			}
 			
+			if(flag == true){
+				insertArtInfo();
+			}
 			
-			
-			/* file데이터를 위해 자바스크립트 객체 생성 */
-			let data = new FormData(document.getElementById("artForm"));
+		})
 		
+		//작품 등록하는 함수
+		function insertArtInfo(){
+			/* file데이터를 위해 자바스크립트 객체 생성 */
 			$.ajax({
 				url:"/insertArtInfo.do", 
 				type: "post",
@@ -52,9 +87,13 @@ $(function() {
 					let msg = "작품정보 등록에 성공하였습니다. 판매를 선택할 페이지로 이동하시겠습니까?";
 					if(confirm(msg) == true){
 						location.href="listArtSellCheck.html";
+					}else{
+						location.href="insertArtInfo.html";
 					};
 			}})
-		})
+		}
+		
+		
 		
 		//등록된 작품 관리하기
 		$("#btnArtSellCheck").click(function(){
@@ -104,10 +143,10 @@ $(function() {
 		<br>
 		<div class="form-group">
 			<label for="artSize">크기 :</label>
-			<input type="text" id="artSize1" class="form-control" name="artSize1" placeholder="세로x가로 형식으로 작성" required>
+			<input type="number" id="artSize1" class="form-control" name="artSize1" placeholder="세로x가로 형식으로 작성" required>
 			<div class="valid-feedback">x</div>
       		<div class="invalid-feedback">작품의 세로 크기를 cm단위의 정수로 입력해 주세요.</div>
-			<input type="text" id="artSize2" name="artSize2"  class="form-control" placeholder="세로x가로 형식으로 작성" required>
+			<input type="number" id="artSize2" name="artSize2"  class="form-control" placeholder="세로x가로 형식으로 작성" required>
 			<div class="valid-feedback">cm</div>
       		<div class="invalid-feedback">작품의 가로 크기를 cm단위의 정수로 입력해 주세요.</div>
 		</div>
