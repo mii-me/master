@@ -19,7 +19,8 @@ $(document).ready(function(){
 $(function() {
 	
 	//남혜진 210328 _ 세션유지된 회원번호 전달
-	$.getScript("js/loginCheck.js", function(){
+	//210401 통합 후 js파일 위치 변경 수정
+	$.getScript("loginCheck.js", function(){
 		
 		//세션유지된 회원번호를 가져오기
 		let memNo = sessionStorage.getItem("memNo"); // 회원번호
