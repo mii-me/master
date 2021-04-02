@@ -28,10 +28,13 @@ $(document).ready(function(){
 });
 // header, footer include
 
-	// 로그인페이지 : 로그인 후 회원번호를 세션스토리지에 set 
+	// 로그인페이지 : 로그인 후 회원번호를 세션스토리지에 setItem
+	// 로그인 시 직전 페이지로 바로 이동
+	// Enter키로 로그인 버튼 클릭이벤트 발생
 	// [by 정소윤]
 
 	$(function(){
+	
 		$("#btnLogin").click(function(){
 			
 			let id = $("#memId").val();
@@ -51,8 +54,17 @@ $(document).ready(function(){
 					// 세션스토리지에 저장하기 ==> 다른 페이지에서 언제든 꺼내 사용 가능
 					sessionStorage.setItem("memNo", m.memNo);
 					sessionStorage.setItem("memIsArtist", m.memIsArtist);
-								
-					location.href="main.html";
+					
+					
+					// 뒤로갈 history가 있는 경우
+					if (document.referrer) {
+					    history.back(); // 이전페이지로
+					    
+					}else{ // 뒤로갈 history가 없는 경우
+					location.href="main.html"; 메인페이지로
+					}				
+
+//					location.href="main.html";
 				
 				// 로그인 실패 시	
 				}else{
@@ -62,6 +74,13 @@ $(document).ready(function(){
 			}});//ajax
 			
 	    });//click
+		
+		// 비밀번호 창에서 Enter키 입력 시 로그인 버튼 클릭 이벤트 발생
+		$("#memPwd").keydown(function(key){
+			if(key.keyCode == 13){	// 엔터키코드:13
+				$("#btnLogin").click();
+			}
+		});
 		
 	});
 </script>

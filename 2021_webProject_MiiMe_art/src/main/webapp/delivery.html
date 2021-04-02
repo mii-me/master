@@ -2,13 +2,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>배송지관리</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+<title>배송정보관리</title>
 <style type="text/css">
 	.high_light{
 		background-color: ivory;
 	}
 	.active{
-		background-color: yellow;
+		background-color: olive;
 	}
 	#btnInsert{
 		visibility: hidden;
@@ -29,6 +30,7 @@
 $(document).ready(function(){
     $("#header").load("/header.html");
     $("#footer").load("/footer.html");
+      $("#floatingbar").load("/floatingbar1.html");
 });
 // header, footer include
 //by 현익 / 배송지관리 html / 210319 
@@ -36,9 +38,9 @@ $(document).ready(function(){
 		//by 현익 / 세션 유지한 채로 맴버넘버 받아오기 / 210326
 		$.getScript("loginCheck.js", function() {
 			let broughtMemNo;
-			alert("loginCheck.js 작동");
+			//alert("loginCheck.js 작동");
 			broughtMemNo = memNo;
-			alert("broughtMemNo = "+broughtMemNo);
+			//alert("broughtMemNo = "+broughtMemNo);
 			//회원번호 숨겨서 전달
 			$("#memNo").val(broughtMemNo);
 /////////////////////////////////////////////////////////////////////////////////////////////////		
@@ -190,8 +192,10 @@ $(document).ready(function(){
 </head>
 <body>
  <header id="header"></header>
-	<h2>기본 배송 정보</h2>
-	<table border="1" width="80%">
+ <div id="floatingbar"></div>
+	<div style="margin-left: 150px; margin-right: 250px">
+	<h2 class="display-5">기본 배송 정보</h2>
+	<table border="1" width="80%" class="table table-hover" style="text-align: center; font-size: 20px">
 		<thead>
 			<tr>
 				<th>성함</th>
@@ -211,10 +215,10 @@ $(document).ready(function(){
 	</table>
 	
 	<h2>배송 정보 목록</h2>
-	<button id="btnNew">신규 배송정보 등록</button>
-	<button id="btnNewDefault">기본 배송 정보로 변경</button>
-	<button id="btnDelete">배송 정보 삭제</button>
-	<table border="1" width="80%">
+	<button id="btnNew" type="button" class="btn btn-dark">신규 배송정보 등록</button>
+	<button id="btnNewDefault" type="button" class="btn btn-dark">기본 배송 정보로 변경</button>
+	<button id="btnDelete" type="button" class="btn btn-dark">배송 정보 삭제</button>
+	<table border="1" width="80%" class="table table-hover" style="text-align: center; font-size: 20px">
 		<thead>
 			<tr>
 				<th>성함</th>
@@ -226,23 +230,35 @@ $(document).ready(function(){
 		<tbody id = "delivery_list">
 		</tbody>
 	</table>
-	<div id="delivery_insert">
+	<div id="delivery_insert" style="padding-left: 150px; padding-right: 250px">
 		<form id="form">
 			<input type="hidden" id="memNo" name="memNo"><br>
-			성함 : <input type="text" id="delName" name="delName" >
-							<span id="name_msg"></span><br>
-			연락처 : <input type="text" id="delTel" name="delTel" >
-							<span id="tel_msg"></span><br>
-			주소 : <input type="text" id="delAddr" name="delAddr" >
-							<span id="addr_msg"></span><br>
-			배송요청사항 <br>
-			<textarea rows="3" cols="20" id="delMsg" name="delMsg"></textarea>
-							<span id="delivery_msg"></span><br>
+			<div class="mb-3">
+				<label class="form-label">성함</label>
+				<input type="text" id="delName" name="delName" class="form-control">
+				<span id="name_msg"></span><br>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">연락처</label>
+				<input type="text" id="delTel" name="delTel" class="form-control">
+				<span id="tel_msg"></span><br>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">주소</label>
+				<input type="text" id="delAddr" name="delAddr" class="form-control">
+				<span id="addr_msg"></span><br>
+			</div>
+			<div class="mb-3">
+				<label class="form-label">배송 요청사항</label>
+				<textarea rows="3" cols="20" id="delMsg" name="delMsg" class="form-control"></textarea>
+				<span id="delivery_msg"></span><br>
+			</div>
 		</form>
 			<input type="hidden" class="delNo" name="delNo"><br>
+		<button id="btnInsert" type="button" class="btn btn-dark">등록</button>
+		<button id="btnCancel" type="button" class="btn btn-dark">취소</button>
 	</div>
-		<button id="btnInsert">등록</button>
-		<button id="btnCancel">취소</button>
+	</div>	
 		<footer id="footer"></footer>
 </body>
 </html>

@@ -72,7 +72,7 @@
 				
 
 					output = '';
-					output += '<div class="container" style="width:100%" ><div class="d-grid gap-2 d-sm-flex justify-content-sm-center">'
+					output += '<div class="container" style="width:100%" ><div class="d-grid gap-2 d-sm-flex justify-content-sm-center" style="width:100%">'
 					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('likeDesc')">좋아요 높은 순서</button>`
 					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceAsc')">가격 낮은 순서</button>`
 					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceDesc')">가격 높은 순서</button>`
@@ -80,44 +80,52 @@
 					output += '</div>'
 
 					if (clickCnt * 9 > data.list.length) {
-
-						for (var i = 0; i < data.list.length; i++) {
-							output += '<div class="col">'
+						for (var i = 0; i < data.list.length; i++) {	
+														output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
-							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].REVIEW_IMAGE + '"/></svg>'
+							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
 							output += '<div class="card-body">';
-							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].MEM_NO + '&artNo=' + data.list[i].ART_NO + '&tag=' + data.list[i].ART_TAG1
-								+ '" class="link-dark"><font size="4em">'
-								+ data.list[i].ART_NAME + '</font></a></p>'
-							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].AT_MEM_NO + '">'
-								+ data.list[i].ARTIST_NAME + '</a>&emsp;</p>'
-							output += '<p class="card-text">' + data.list[i].REVIEW_TEXT + '</p>'
-
-
-							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].PAY_AMOUNT + '&emsp;</p>'
-
-							output += '<ul class="nav justify-content-end">'
-							if (data.list[i].ART_TAG1 != null) {
-								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].ART_TAG1 + '</font></a></li>'
+							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
+							if (data.list[i].artTag1 != null) {
+								output += data.list[i].artTag1
+							} else {
+								output += '선택안함'
 							}
-							if (data.list[i].ART_TAG2 != null) {
-								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-									+ data.list[i].ART_TAG2 + '</font></a></li>'
-							}
-							if (data.list[i].ART_TAG3 != null) {
-								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-									+ data.list[i].ART_TAG3 + '</font></a></li>'
-							}
+							output += '" class="link-dark"><font size="4em">'
+								+ data.list[i].artName + '</font></a></p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
+								+ data.list[i].artistName + '</a>&emsp;</p>'
+							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
+							
+
+							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].payAmount + '&emsp;</p>'
+
+						output += '<ul class="nav justify-content-end">'
+						if (data.list[i].artTag1 != null) {
+							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
+						}
+						if (data.list[i].artTag2 != null) {
+							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								+ data.list[i].artTag2 + '</font></a></li>'
+						}
+						if (data.list[i].artTag3 != null) {
+							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								+ data.list[i].artTag3 + '</font></a></li>'
+						}
+
+						if(data.list[i].artTag1 == null){
+							output +='<br><br>'
+						}
 							output += '</ul>'
 							output += '<br>'
 
 							output += '<div class="d-flex justify-content-between align-items-center">'
 							output += ' <div class="btn-group">'
-							output += ' <button type="button"  onClick="clickAction(' + data.list[i].REVIEW_NO + ')" class="like" id="'
-								+ data.list[i].REVIEW_NO + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
+							output += ' <button type="button"  onClick="clickAction(' + data.list[i].reviewNo + ')" class="like" id="'
+								+ data.list[i].reviewNo + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
 
 							output += ' </div>'
-							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].REVIEW_LIKE + '</small>'
+							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].reviewLike + '</small>'
 							output += ' </div>'
 							output += ' </div>'
 							output += ' </div>'
@@ -127,42 +135,51 @@
 
 					} else {
 						for (var i = 0; i < clickCnt * 9; i++) {
-							output += '<div class="col">'
+													output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
-							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].REVIEW_IMAGE + '"/></svg>'
+							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
 							output += '<div class="card-body">';
-							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].MEM_NO + '&artNo=' + data.list[i].ART_NO + '&tag=' + data.list[i].ART_TAG1
-								+ '" class="link-dark"><font size="4em">'
-								+ data.list[i].ART_NAME + '</font></a></p>'
-							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].AT_MEM_NO + '">'
-								+ data.list[i].ARTIST_NAME + '</a>&emsp;</p>'
-							output += '<p class="card-text">' + data.list[i].REVIEW_TEXT + '</p>'
-
-
-							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].PAY_AMOUNT + '&emsp;</p>'
-
-							output += '<ul class="nav justify-content-end">'
-							if (data.list[i].ART_TAG1 != null) {
-								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].ART_TAG1 + '</font></a></li>'
+							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
+							if (data.list[i].artTag1 != null) {
+								output += data.list[i].artTag1
+							} else {
+								output += '선택안함'
 							}
-							if (data.list[i].ART_TAG2 != null) {
-								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-									+ data.list[i].ART_TAG2 + '</font></a></li>'
-							}
-							if (data.list[i].ART_TAG3 != null) {
-								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-									+ data.list[i].ART_TAG3 + '</font></a></li>'
-							}
+							output += '" class="link-dark"><font size="4em">'
+								+ data.list[i].artName + '</font></a></p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
+								+ data.list[i].artistName + '</a>&emsp;</p>'
+							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
+							
+
+							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].payAmount + '&emsp;</p>'
+
+						output += '<ul class="nav justify-content-end">'
+						if (data.list[i].artTag1 != null) {
+							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
+						}
+						if (data.list[i].artTag2 != null) {
+							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								+ data.list[i].artTag2 + '</font></a></li>'
+						}
+						if (data.list[i].artTag3 != null) {
+							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								+ data.list[i].artTag3 + '</font></a></li>'
+						}
+
+						if(data.list[i].artTag1 == null){
+							output +='<br><br>'
+						}
 							output += '</ul>'
 							output += '<br>'
 
 							output += '<div class="d-flex justify-content-between align-items-center">'
 							output += ' <div class="btn-group">'
-							output += ' <button type="button"  onClick="clickAction(' + data.list[i].REVIEW_NO + ')" class="like" id="'
-								+ data.list[i].REVIEW_NO + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
+							output += ' <button type="button"  onClick="clickAction(' + data.list[i].reviewNo + ')" class="like" id="'
+								+ data.list[i].reviewNo + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
 
 							output += ' </div>'
-							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].REVIEW_LIKE + '</small>'
+							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].reviewLike + '</small>'
 							output += ' </div>'
 							output += ' </div>'
 							output += ' </div>'
@@ -186,7 +203,7 @@
 		};
 
 
-		function clickAction(review_no) {
+		function clickAction(reviewNo) {
 			console.log("like ready activate")
 			alert("좋아요!");
 
@@ -195,16 +212,16 @@
 			$('.like').toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
 
 			if ($('.like').attr('class') == 'like on') {
-				console.log(review_no)
-				insertLike(review_no)
+				console.log(reviewNo)
+				insertLike(reviewNo)
 			} else { //null
-				deleteLike(review_no)
+				deleteLike(reviewNo)
 			}
 		}
 
 
-		function insertLike(review_no) {
-			let data = { REVIEW_NO: review_no };
+		function insertLike(reviewNo) {
+			let data = { reviewNo: reviewNo };
 			console.log(data)
 			$.ajax({
 				type: "POST", //POST 타입
@@ -218,8 +235,8 @@
 			})
 		};
 
-		function deleteLike(review_no) {
-			let data = { REVIEW_NO: review_no };
+		function deleteLike(reviewNo) {
+			let data = { reviewNo: reviewNo };
 
 			$.ajax({
 				type: "POST", //POST 타입
@@ -248,8 +265,8 @@
 					<h1 class="fw-light">테마로 리뷰 모아보기</h1>
 					<p class="lead text-muted">작가가 pick한 테마로 리뷰 모아보기</p>
 					<p>
-						<a href="artDetail.html" class="btn btn-primary my-2">작품 목록</a>
-						<a href="artistDetail.html" class="btn btn-secondary my-2">작가 목록</a>
+						<a href="artList.html" class="btn btn-primary my-2">작품 목록</a>
+						<a href="artistList.html" class="btn btn-secondary my-2">작가 목록</a>
 					</p>
 				</div>
 			</div>

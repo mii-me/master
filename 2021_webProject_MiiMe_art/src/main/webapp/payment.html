@@ -148,9 +148,9 @@ function getMemberInfo(){
 	data:data,
 	success:function(mem){
 		$("#memNo").val(mem.memNo);	 
-		$("#memName").val(mem.memName);	 
-		$("#memTel").val(mem.memTel);
-		$("#memAddr").val(mem.memAddr);
+		$("#memName").val(mem.memName.trim());	 
+		$("#memTel").val(mem.memTel.trim());
+		$("#memAddr").val(mem.memAddr.trim());
 	}});
 }//getMemberInfo
 	

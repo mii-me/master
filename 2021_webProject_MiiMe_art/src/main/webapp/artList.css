@@ -35,6 +35,9 @@
 	    width: 1000px;
 	    margin: 0 auto;
 	}
+	.art_list{
+		text-align: right;
+	}
 	.art_list-artbox{
 		border:1px solid gray;
 		width:300px;
