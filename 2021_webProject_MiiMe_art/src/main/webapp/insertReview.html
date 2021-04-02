@@ -17,38 +17,35 @@
 		});
 		// header, footer include
 
-		//		$(function () { //즉시 실행 함수 (2번 과정), 익명 함수(잠깐 사용하고 바로 사라짐)
+		$(function () { //즉시 실행 함수 (2번 과정), 익명 함수(잠깐 사용하고 바로 사라짐)
 
-		//			$.getScript("/loginCheck.js", function () {
-		//				let getMemNo;
-		//				let arr;
+			$.getScript("/loginCheck.js", function () {
+				let memNo = sessionStorage.getItem("memNo"); // 회원번호
 
-		//				getMemNo = memNo;
+				let data = { "memNo": memNo };
 
-		//				let data = { MEM_NO: getMemNo };
-
-		//				$.ajax({
-		//					url: "/getMember.do",//요청명 확인해보기 
-		//					data: data,
-		//					success: function () {
-		//						location.href = "insertReview.html";
-		//						let artNoVal = window.location.search.split("=");
-		//						$('#MEM_NO').val(getMemNo);
-		//						$('#ART_NO').val(artNoVal[1]);
-
-		//				},
-		//	error: function () {
-		//			alert("로그인 후 후기 작성 가능, 로그인 페이지로 이동합니다");
-		//				location.href = "login.html";
-		//					}
-		//				});
-		//			});
-		//		});
+				$.ajax({
+					url: "/getMember.do",//요청명 확인해보기 
+					data: data,
+					success: function () {
+						location.href = "insertReview.html";
+						let artNoVal = window.location.search.split("=");
+						$('#memNo').val(memNo);
+						$('#artNo').val(artNoVal[1]);
+					},
+					error: function () {
+						alert("로그인 후 후기 작성 가능, 로그인 페이지로 이동합니다");
+						location.href = "login.html";
+					}
+				});
+			});
+		});
 
 		function clickAction() {
 			alert("리뷰 추가 시도..!");
 			// FormData 객체 생성
 			let data = new FormData(document.getElementById("form")); //form 안에 들어있는 데이터들 모두 가져오기
+			//alert(data.FormData)
 
 			$.ajax({
 				url: "/insertReviewProto.do",
@@ -58,7 +55,7 @@
 				contentType: false,
 				data: data,
 				success: function () {
-					alert("리뷰가 등록되었습니다")
+					alert("리뷰가 등록되었습니다! 다른 후기들을 구경해보세요!")
 					location.href = "detailRealTimeReview.html";
 				},
 				error: function () {
