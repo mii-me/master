@@ -19,6 +19,10 @@
 	#btns2{
 		visibility: hidden;
 	}
+	#changeForm{
+		margin-top: 100px;
+		margin-left: 50px;
+	}
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
@@ -31,7 +35,7 @@ $(document).ready(function(){
 //by 현익 / 회원정보변경 html / 210321 
 	$(function(){
 		//by 현익 / 세션 유지한 채로 맴버넘버 받아오기 / 210326
-		$.getScript("js/loginCheck.js", function() {
+		$.getScript("loginCheck.js", function() {
 			let broughtMemNo;
 			alert("loginCheck.js 작동");
 			broughtMemNo = memNo;
@@ -74,7 +78,7 @@ $(document).ready(function(){
 								$("#artistDetail").val(d.artistDetail);
 								$("#artistCareer").val(d.artistCareer);
 								$("#artistPic").val(d.artistPic);					
-								$("#picture").attr("src","artistPic/"+d.artistPic);
+								$("#picture").attr("src","artist_pic/"+d.artistPic);
 							}//end if
 						}else{
 							alert("비밀번호를 확인해주세요.");			
@@ -116,8 +120,8 @@ $(document).ready(function(){
 						data:data2,
 				 		success:function(artistPic){
 							setTimeout(function(){
-								$("#picture").attr("src","artistPic/"+artistPic);
-							}, 300);
+								$("#picture").attr("src","artist_pic/"+artistPic);
+							}, 100);
 						alert("회원정보를 변경하였습니다.");
 						location.href="/mypage.html";
 				}});
@@ -134,6 +138,7 @@ $(document).ready(function(){
 </head>
 <body>
  <header id="header"></header>
+ <div id ="changeForm">
 	<div id="checkPwd">
 	<input type="password" id="pwd" placeholder="비밀번호입력">
 	<button id="pwdOk">확인</button>
@@ -185,6 +190,7 @@ $(document).ready(function(){
 		<button id="btnInsert2">변경</button>
 		<button class="btnCancel">취소</button>
 	</div>
+ </div>
 	<footer id="footer"></footer>
 </body>
 </html>

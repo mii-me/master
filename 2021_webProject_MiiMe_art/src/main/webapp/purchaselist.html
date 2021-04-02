@@ -25,7 +25,7 @@ $(document).ready(function(){
 //by 현익 / 구매목록 html / 210323 
 	$(function(){
 		//by 현익 / 세션 유지한 채로 맴버넘버 받아오기 / 210326
-		$.getScript("js/loginCheck.js", function() {
+		$.getScript("loginCheck.js", function() {
 			let broughtMemNo=null;
 			alert("loginCheck.js 작동");
 			broughtMemNo = memNo;
@@ -47,7 +47,7 @@ $(document).ready(function(){
 					$(tr).attr("idx",index);
 					let td_artNo = $("<td></td>").html(p.artNo);
 					let td_artPic = $("<td></td>").html($("<img>")
-										.attr("src","./img/"+p.artPic).css("width","200px","height","150px"));
+										.attr("src","./art_pic/"+p.artPic).css("width","200px","height","150px"));
 					let td_artName = $("<td></td>").html(p.artName);
 					let td_payAmount = $("<td></td>").html(p.payAmount+"원");
 					let td_payTime = $("<td></td>").html(p.payTime);

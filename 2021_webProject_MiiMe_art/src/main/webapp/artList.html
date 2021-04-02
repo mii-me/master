@@ -8,7 +8,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
 <title>작품 보기</title>
 <link rel="stylesheet" type="text/css" href="artList.css">
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
@@ -17,6 +16,7 @@
 $(document).ready(function(){
     $("#header").load("/header.html");
     $("#footer").load("/footer.html");
+    $("#floatingbar").load("/floatingbar1.html");
 });
 // header, footer include
 
@@ -48,6 +48,7 @@ $(function(){
 </head>
 <body> 
 <header id="header"></header>
+	<div id="floatingbar"></div>
 	<div id="searchDiv">
 		<div class="searchCss" id="searchTheme">
 			<div class="searchTitle searchTheme-title"><span class="searchTheme-title">테마</span></div>
@@ -102,7 +103,6 @@ $(function(){
 	</div>
 	<div id="page">
 	</div>
-	
 	<footer id="footer"></footer>
 </body>
 </html>
