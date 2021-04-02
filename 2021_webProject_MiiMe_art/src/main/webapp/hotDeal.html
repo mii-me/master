@@ -16,8 +16,10 @@
 		display: inline-block;
 		font-size: 20px;
 	}
-	span{
-		margin:60px;
+	
+	body{
+	font-family: 'Noto Sans KR', sans-serif;
+	padding-top: 81px;
 	}
 	
 	#hotDeal_header span{
@@ -38,158 +40,118 @@ $(document).ready(function(){
 });
 
 $(function(){
-	let url = location.href;	//url 요청
-	getArtNo = parseInt(url.charAt(url.length-1));	//쿼리스트링에서 작품번호만 잘라오기
-	let getTime;
-
+	
 	//milliseconds를 시:분:초로 바꾸기
 	let SecondsTohhmmss = function(totalSeconds) {
   	let hours   = Math.floor(totalSeconds / 3600);
   	let minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
   	let seconds = totalSeconds - (hours * 3600) - (minutes * 60);
-
-	  // round seconds
-  	seconds = Math.round(seconds * 100) / 100
-
+	  	seconds = Math.round(seconds * 100) / 100
+	  	
   	let result = (hours < 10 ? "0" + hours : hours);
-    result += ":" + (minutes < 10 ? "0" + minutes : minutes);
-    result += ":" + (seconds  < 10 ? "0" + seconds : seconds);
-  	return result;
-}
+	    result += ":" + (minutes < 10 ? "0" + minutes : minutes);
+	    result += ":" + (seconds  < 10 ? "0" + seconds : seconds);
+	return result;
+	}//SecondsTohhmmss
 
-
-	 $.ajax({url:"/remainTime.do",
-		 	data:{artNo:getArtNo},				 	
-		 	success:function(t){
-		 		let r = eval("("+t+")");			 		
-	 			getTime = r.artTime;	//db에서 가져온 시간
-	 			
-				$(".timer").html(SecondsTohhmmss(getTime));	//남은 시간 출력 (형식: 시:분:초)
-				
-				if(getTime<=0){ //보여지는 시간이 0초면
-				 	console.log("OK");		
-				 	//location.href="payment.html?artNo="+auc.artNo; //입찰가로 결제진행 이동
-				}	
-	}});
-
-
-
-	$("#hotDeal_info").empty();	//중첩되서 보여지는거 방지
-		
-	//핫딜 조건별 조회1, 찜 횟수(wishList_tb에서 최다 작품번호를 조회 후 목록 출력)
+	
+	/*-----핫딜 조건별 조회1, 찜 횟수(wishList_tb에서 최다 작품번호를 조회 후 목록 출력)-----*/
 	$.ajax({url:"/listHot_1.do",
-		data:{artNo:getArtNo},
 		success:function(data){
-		//let arr = eval("("+data+")");	//문자를 코드로 인식
-		let arr = eval(data);	//문자를 코드로 인식
+			let arr = eval(data);
 			$.each(arr,function(index,hot){
-				
 			let artPic = $("<div></div>").html($("<img>").attr("src","./art_pic/"+hot.artPic).css("width","200px","height","200px"));
 			let artName = $("<div></div>").html("작품명: "+hot.artName);
 			let artMaterial = $("<div></div>").html("재료: "+hot.artMaterial);
-			let artSize1 = $("<div></div>").html("사이즈: "+hot.artSize1+"x");
-			let artSize2 = $("<div></div>").html("사이즈: "+hot.artSize2+"(cm)");
+			let artSize1 = $("<span></span>").html("사이즈: "+hot.artSize1+" x ");
+			let artSize2 = $("<span></span>").html(hot.artSize2+"(cm)");
 			let aucBid = $("<div></div>").html("현재입찰가: "+hot.aucBid+"원");
 			let aucBuy = $("<div></div>").html("즉시구매가: "+hot.aucBuy+"원");
 			let auction = $("<a></a>").html("경매장으로").attr("href","auction.html?artNo="+hot.artNo);
-			
 			$(".div1").append(artPic,artName,artMaterial,artSize1,artSize2,aucBid,aucBuy,auction);
 		});
 	}});
-
 	
-	//핫딜 조건별 조회2, 입찰횟수가 많은 작품정보
+	/*-----핫딜 조건별 조회1 (남은시간 출력)*/
+	let reTime1 = setInterval(function() {	
+		$.ajax({url:"/listHot_1.do",
+			success:function(data){
+				let arr = eval(data);
+				$.each(arr,function(index,hot){
+				let timer = $(".timer1").html(SecondsTohhmmss(hot.artTime));
+			});
+		}});
+	},1000)	
+	
+	
+	
+	/*-----핫딜 조건별 조회2, 입찰횟수가 많은 작품정보-----*/
 	$.ajax({url:"/listHot_2.do",
-		data:{artNo:getArtNo},
 		success:function(data){
-		//let arr = eval("("+data+")");	//문자를 코드로 인식
-		let arr = eval(data);	//문자를 코드로 인식
+			let arr = eval(data);	
 			$.each(arr,function(index,hot){
-				
 			let artPic = $("<div></div>").html($("<img>").attr("src","./art_pic/"+hot.artPic).css("width","200px","height","200px"));
 			let artName = $("<div></div>").html("작품명: "+hot.artName);
 			let artMaterial = $("<div></div>").html("재료: "+hot.artMaterial);
-			let artSize = $("<div></div>").html("사이즈: "+hot.artSize+"(cm)");
+			let artSize1 = $("<span></span>").html("사이즈: "+hot.artSize1+" x ");
+			let artSize2 = $("<span></span>").html(hot.artSize2+"(cm)");
 			let aucBid = $("<div></div>").html("현재입찰가: "+hot.aucBid+"원");
 			let aucBuy = $("<div></div>").html("즉시구매가: "+hot.aucBuy+"원");
 			let auction = $("<a></a>").html("경매장으로").attr("href","auction.html?artNo="+hot.artNo);
-			
-			$(".div2").append(artPic,artName,artMaterial,artSize,aucBid,aucBuy,auction);
+			let timer = $(".timer2").html(SecondsTohhmmss(hot.artTime));
+			$(".div2").append(artPic,artName,artMaterial,artSize1,artSize2,aucBid,aucBuy,auction);
 		});
 	}});
 	
+	/*-----핫딜 조건별 조회2 (남은시간 출력)-----*/
+	let reTime2 = setInterval(function() {	
+		$.ajax({url:"/listHot_2.do",
+			success:function(data){
+				let arr = eval(data);
+				$.each(arr,function(index,hot){
+				let timer = $(".timer2").html(SecondsTohhmmss(hot.artTime));
+			});
+		}});
+	},1000)	
 	
-	//세번째 작품	마감시간 임박
+	
+	
+	/*-----핫딜 조건별 조회3, 마감시간 임박-----*/
 	$.ajax({url:"/listHot_3.do",
-		data:{artNo:getArtNo},
 		success:function(data){
-		//let arr = eval("("+data+")");	//문자를 코드로 인식
-		let arr = eval(data);	//문자를 코드로 인식
+			let arr = eval(data);	
 			$.each(arr,function(index,hot){
-				
 			let artPic = $("<div></div>").html($("<img>").attr("src","./art_pic/"+hot.artPic).css("width","200px","height","200px"));
 			let artName = $("<div></div>").html("작품명: "+hot.artName);
 			let artMaterial = $("<div></div>").html("재료: "+hot.artMaterial);
-			let artSize = $("<div></div>").html("사이즈: "+hot.artSize+"(cm)");
+			let artSize1 = $("<span></span>").html("사이즈: "+hot.artSize1+" x ");
+			let artSize2 = $("<span></span>").html(hot.artSize2+"(cm)");
 			let aucBid = $("<div></div>").html("현재입찰가: "+hot.aucBid+"원");
 			let aucBuy = $("<div></div>").html("즉시구매가: "+hot.aucBuy+"원");
 			let auction = $("<a></a>").html("경매장으로").attr("href","auction.html?artNo="+hot.artNo);
-			
-			//$('#github').attr("href", "https://www.naver.com");
-			
-			$(".div3").append(artPic,artName,artMaterial,artSize,aucBid,aucBuy,auction);
+			let timer = $(".timer3").html(SecondsTohhmmss(hot.artTime));
+			$(".div3").append(artPic,artName,artMaterial,artSize1,artSize2,aucBid,aucBuy,auction);
 		});
 	}});
 	
-	
-	
-//-------------------시간--------------------------------------------------	
-		//입찰을 처음 시도했을때에 작동할 것
-			setInterval(function(){
-				//seconds-= 1; //1초씩 감소
-				dbTimeMil -= 1; //1초씩 감소
-				
-				if(seconds == 0 && minute == 0 && hour == 0 && day==0 ){
-					alert("낙찰");
-					location.href="payment.html?artNo="+getArtNo;		//href대신 replace를 쓰면 전 페이지로 돌아갈 수 없다.
-				}//end if
-				if(seconds==0 && minute==00 && hour==0){	
-					hour = 23;
-					minute = 59;
-					seconds = 60;
-					day -= 1;
-				}//end if
-				if(seconds==0 && minute ==0){	
-					seconds = 60; 
-					minute = 59;
-					hour -= 1;
-				}//end if
-				if(seconds == 0 && minute>0){ 
-					seconds = 60; 
-					minute -= 1;
-				}//end if
-				
-				if(seconds>=60){
-				 seconds=60;
-				}
-				
-				if(resultTime==0){	//마감이 될 경우
-					alert("낙찰!");
-				}
-				
-				$(".timer1").html(dbTimeMil);	//초기 남은시간 출력
-				$(".timer2").html(dbTimeMil);	//초기 남은시간 출력
-				$(".timer3").html(dbTimeMil);	//초기 남은시간 출력
-				//console.log(resultTime-dbTimeMil);
-			},1000);
+	/*-----핫딜 조건별 조회3 (남은시간 출력)-----*/
+	let reTime3 = setInterval(function() {
+ 		$.ajax({url:"/listHot_3.do",
+			success:function(data){
+				let arr = eval(data);
+				$.each(arr,function(index,hot){
+				let timer = $(".timer3").html(SecondsTohhmmss(hot.artTime));
+			});
+		}});
+	},1000)
 
 
 });
 </script>
 </head>
 <body>
-<div class="container">
 <header id="header"></header>
+<div class="container">
 <h3>오늘의 핫한 작품을 여기서 만나보세요!</h3>
 
 <span class="limit">남은시간=></span>
@@ -201,16 +163,16 @@ $(function(){
 <br>
 <hr>
 	<div id="hotDeal_header">
-			<span>인기순(찜 횟수↑)</span>
-			<span>입찰이 가장 많은 작품</span>
-			<span>마감임박 작품</span>
+		<span>인기순(찜 횟수↑)</span>
+		<span>입찰이 가장 많은 작품</span>
+		<span>마감임박 작품</span>
 	</div>
 	<div id="hotDeal_footer">
 		<div class="div1"></div>
 		<div class="div2"></div>
 		<div class="div3"></div>
+	</div>
+</div>
 <footer id="footer"></footer>
-</div>
-</div>
 </body>
 </html>
