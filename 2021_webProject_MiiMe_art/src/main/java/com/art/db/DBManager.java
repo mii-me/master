@@ -302,7 +302,6 @@ private static SqlSessionFactory factory;
 		List<AuctionVo> list = null;
 		SqlSession session = factory.openSession();
 		list = session.selectList("auction.listHot_1"); 
-		System.out.println("DBManager에서 listHot_1 동작");
 		session.close();
 		return list;
 	}//hotArtsInfo
@@ -312,7 +311,6 @@ private static SqlSessionFactory factory;
 		List<AuctionVo> list = null;
 		SqlSession session = factory.openSession();
 		list = session.selectList("auction.listHot_2"); 
-		System.out.println("DBManager에서 listHot_2 동작");
 		session.close();
 		return list;
 	}
@@ -322,7 +320,6 @@ private static SqlSessionFactory factory;
 		List<AuctionVo> list = null;
 		SqlSession session = factory.openSession();
 		list = session.selectList("auction.listHot_3"); 
-		System.out.println("DBManager에서 listHot_3 동작");
 		session.close();
 		return list;
 	}
@@ -334,7 +331,6 @@ private static SqlSessionFactory factory;
 		List<PaymentVo> list =null;
 		SqlSession session = factory.openSession();
 		list = session.selectList("payment.findInfo",artNo);
-		System.out.println("DBManager에서 findInfo 동작");
 		session.close();
 		return list;
 	}//findAll
@@ -345,8 +341,6 @@ private static SqlSessionFactory factory;
 		List<AuctionVo> list =null;
 		SqlSession session = factory.openSession();
 		list = session.selectList("auction.detailAuction",artNo);
-		System.out.println("DBManager에서 detailAuction 동작");
-		System.out.println("DBManager detailAuction에서 AuctionVo: "+list);
 		session.close();
 		return list;
 	}//findAll
@@ -359,7 +353,6 @@ private static SqlSessionFactory factory;
 		int re = session.update("auction.updateBid",a);
 		session.commit();
 		session.close();
-		System.out.println("DBManager에서 updateBid 동작");
 		return re;
 	}//updatePrice
 	
@@ -370,7 +363,6 @@ private static SqlSessionFactory factory;
 		int re = session.update("auction.countBid",artNo);
 		session.commit();
 		session.close();
-		System.out.println("DBManager에서 countBid 동작");
 		return re;
 	}//countBid
 	
@@ -390,7 +382,6 @@ private static SqlSessionFactory factory;
 		int re= session.insert("payment.insertPayment",p);
 		session.commit();
 		session.close();
-		System.out.println("5.DBManager에서 insertPayment re: "+re);
 		return re;
 	}//insertPayment
 
@@ -401,7 +392,6 @@ private static SqlSessionFactory factory;
 		List<AuctionVo> list =null;
 		SqlSession session = factory.openSession();
 		list = session.selectList("auction.listArts");
-		System.out.println("DBManager에서 findAll 동작");
 		session.close();
 		return list;
 	}//findAll
@@ -413,7 +403,6 @@ private static SqlSessionFactory factory;
 	//로그인한 회원정보 가져오기 // by.현규
 	public static PaymentVo getMember(int memNo) {
 		SqlSession session = factory.openSession();
-		System.out.println("4.DBManager에 getMember 동작");
 		PaymentVo pv = session.selectOne("payment.getMember",memNo);
 		session.close();
 		return pv;
@@ -422,10 +411,8 @@ private static SqlSessionFactory factory;
 	
 	//art_sell_tb에서 판매 상태를 바꿔준다.   // by.현규
 	public static int updateStatus(PaymentVo p) {
-		System.out.println("DBManager으로 보내준 값: "+p);
 		SqlSession session =factory.openSession();
 		int re= session.update("payment.updateStatus",p);
-		System.out.println("DBMangager에 updateStatus 성공여부: "+re);
 		session.commit();
 		session.close();
 		return re;
@@ -435,9 +422,7 @@ private static SqlSessionFactory factory;
 	//경매장에서 작품 남은시간 보여주기     // by.현규
 	public static AuctionVo remainTime(int artNo) {
 		SqlSession session = factory.openSession();
-		System.out.println("DBManager에 remainTime 동작");
 		AuctionVo av = session.selectOne("auction.remainTime",artNo);
-		System.out.println("DBManager remainTime에서 AuctionVo 값: "+av);
 		session.close();
 		return av;
 	}
@@ -449,7 +434,6 @@ private static SqlSessionFactory factory;
 		map.put("memNo", memNo);
 		SqlSession session = factory.openSession();
 		int re = session.insert("auction.insertWish",map);
-		System.out.println("DBManager insertWish 성공여부 : "+re);
 		session.commit();
 		session.close();
 		return re;
@@ -462,7 +446,6 @@ private static SqlSessionFactory factory;
 		map.put("memNo", memNo);
 		SqlSession session = factory.openSession();
 		int re = session.insert("auction.deleteWish",map);
-		System.out.println("DBManager deleteWish 성공여부 : "+re);
 		session.commit();
 		session.close();
 		return re;
@@ -475,17 +458,14 @@ private static SqlSessionFactory factory;
 		int re = session.update("payment.updatePoint",p);
 		session.commit();
 		session.close();
-		System.out.println("DBManager에서 updatePoint 동작");
 		return re;
 	}//updatePoint
 
 
 	//art_sell_tb에서 남은시간을 5초로 바꿔준다.		// by.현규
 	public static int remainFive(AuctionVo a) {
-		System.out.println("DBManager으로 보내준 값: "+a);
 		SqlSession session =factory.openSession();
 		int re= session.update("auction.remainFive",a);
-		System.out.println("DBMangager에 remainFive 성공여부: "+re);
 		session.commit();
 		session.close();
 		return re;
