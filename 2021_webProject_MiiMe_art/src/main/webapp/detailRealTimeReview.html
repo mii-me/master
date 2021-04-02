@@ -8,22 +8,22 @@
 	<title>실시간 리뷰</title>
 
 	<style>
+	
 
-		img{
+/*		img{
 			margin-left:auto;
 			margin-right: auto;
 			width: 400px;
 			height: 400px;
 		}
+		*/
 	</style>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
 
-		$(document).ready(function () {
-			$("#header").load("/header.html");
-			$("#footer").load("/footer.html");
-		});
+		//$(document).ready(function () {
+		//});
 		// header, footer include
 
 		//1. 페이지 구성 (html to DOM)
@@ -34,6 +34,8 @@
 
 		$(function () { //즉시 실행 함수 (2번 과정), 익명 함수(잠깐 사용하고 바로 사라짐)
 
+			$("#header").load("/header.html");
+			$("#footer").load("/footer.html");
 			loadDefaultList();
 			readDefaultReviewMostLike3();
 
@@ -44,7 +46,7 @@
 		function clickAddAction() {
 			clickCnt += 1;
 			console.log(clickCnt)
-			$("#reviewList").empty(); // 목록이 중첩되지않게 초기화
+			$("#reviewList").empty(); // 목록이 중첩되지않게 초기화 
 			loadDefaultList();
 		}
 
@@ -60,6 +62,9 @@
 					//오브젝트는 each 반복 안되니까 일반 for문 사용 
 					if (clickCnt * 9 > data.list.length) {
 						for (var i = 0; i < data.list.length; i++) {
+							console.log(data.list);
+
+							
 							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
 							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].REVIEW_IMAGE + '"/></svg>'
