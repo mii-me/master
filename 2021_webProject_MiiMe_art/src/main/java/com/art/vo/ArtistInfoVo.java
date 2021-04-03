@@ -40,5 +40,6 @@ public class ArtistInfoVo {
 	private int artNo;
 	private String artPic;
 	private String artName;
+	private String artTag1;
 	
 }
