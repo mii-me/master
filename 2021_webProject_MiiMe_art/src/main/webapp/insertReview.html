@@ -14,30 +14,28 @@
 		$(document).ready(function () {
 			$("#header").load("/header.html");
 			$("#footer").load("/footer.html");
+			$("#floatingbar").load("/floatingbar1.html");
+
 		});
 		// header, footer include
 
 		$(function () { //즉시 실행 함수 (2번 과정), 익명 함수(잠깐 사용하고 바로 사라짐)
 
 			$.getScript("/loginCheck.js", function () {
-				let memNo = sessionStorage.getItem("memNo"); // 회원번호
 
-				let data = { "memNo": memNo };
+				if (memNo != null) {
+					let getMemNo = memNo; //로그인한 회원번호	
+					let data = {"memNo": getMemNo};
 
-				$.ajax({
-					url: "/getMember.do",//요청명 확인해보기 
-					data: data,
-					success: function () {
-						location.href = "insertReview.html";
-						let artNoVal = window.location.search.split("=");
-						$('#memNo').val(memNo);
-						$('#artNo').val(artNoVal[1]);
-					},
-					error: function () {
-						alert("로그인 후 후기 작성 가능, 로그인 페이지로 이동합니다");
-						location.href = "login.html";
-					}
-				});
+					let artNoVal = window.location.search.split("artNo=");
+				//	alert(artNoVal[1]);
+				//	alert(memNo);
+					$('#memNo').val(memNo);
+					$('#artNo').val(artNoVal[1]);
+				} else {
+					alert("로그인 후 후기 작성 가능, 로그인 페이지로 이동합니다");
+					location.href = "login.html";
+				}
 			});
 		});
 
@@ -87,8 +85,8 @@
 
 
 	<form id="form" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="MEM_NO" id="MEM_NO">
-		<input type="hidden" name="ART_NO" id="ART_NO">
+		<input type="hidden" name="memNo" id="memNo">
+		<input type="hidden" name="artNo" id="artNo">
 		<!-- 구매목록에서 아트넘버, 맴버넘버가 넘어올거라서 hidden처리 할 예정   -->
 		<br>
 
@@ -101,8 +99,8 @@
 
 
 		<div class="form-floating">
-			<textarea class="form-control" placeholder="Leave a comment here" id="REVIEW_TEXT"
-				name="REVIEW_TEXT"></textarea>
+			<textarea class="form-control" placeholder="Leave a comment here" id="reviewText"
+				name="reviewText"></textarea>
 			<label for="floatingTextarea">리뷰를 작성해주세요!</label>
 	</form>
 
@@ -111,6 +109,8 @@
 
 
 	<footer id="footer"></footer>
+		<div id="floatingbar"></div>
+
 
 </body>
 
