@@ -12,34 +12,36 @@
 	body{
 		font-family: 'Noto Sans KR', sans-serif;
 		padding-top: 81px;
-		margin: 20px;
 	}
-	
-	
-	.limit{
-		border: 1px solid #A7C9A7;
-		font-size: 30px;
-		color: #49AAF5; 
-	}
+	.limit{font-size: 20px;}
 	
 	.timer1,.timer2,.timer3{
-		width:90px;
-		height: 30px;
+		border:1px solid #fff;
+		background-color: #EBEBF0;
+		width:120px;
+		height: 36px;
 		display: inline-block;
-		color: #F50038;
-		font-size: 30px;
+		color: #FF9FA1;
+		font-size: 25px;
+	}
+	
+	.price{
+		font-size:27px;
+		font-weight:bold;
+		color:red;
 	}
 	
 	.card{
 		display: inline-block;
-		width: 350px;
+		width: 380px;
 		height: 640px;
 		font-size: 20px;
 	}
 	
-	#title{
-		font-size: 40px;
-	}
+	.ment{font-size:30px;}
+	#ment{font-size:45px;}
+	.name{font-size:30px;}
+	.material,.size{font-size:17px;}
 	
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -48,6 +50,7 @@
 $(document).ready(function(){
     $("#header").load("/header.html");
     $("#footer").load("/footer.html");
+    $("#floatingbar").load("/floatingbar1.html");
 });
 
 $(function(){
@@ -72,14 +75,21 @@ $(function(){
 			let arr = eval(data);
 			$.each(arr,function(index,hot){
 			
-				let artPic = $(`<div class="card-body"></div>`).html($("<img>").attr("src","./art_pic/"+hot.artPic).css("width","320px","height","95px"));
-				let artName = $(`<div class="card-body"></div>`).html("작품명: "+hot.artName);
-				let artMaterial = $(`<div class="card-body"></div>`).html("재료: "+hot.artMaterial);
-				let artSize = $(`<div class="card-body"></div>`).html("사이즈: "+hot.artSize1+" x "+hot.artSize2+"(cm)");
-				let aucBid = $(`<div class="card-body"></div>`).html("현재입찰가: "+hot.aucBid+"원");
-				let aucBuy = $(`<div class="card-body"></div>`).html("즉시구매가: "+hot.aucBuy+"원");
-				let auction = $(`<a class="btn btn-success"></a>`).attr("href","auction.html?artNo="+hot.artNo).html("경매장으로");
-				$("#div1").append(artPic,artName,artMaterial,artSize,aucBid,aucBuy,auction);
+			//가격에 쉼표 [by 최은혜]
+			let aucBidString = (hot.aucBid).toString(); 
+			let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			let aucBuyString = (hot.aucBuy).toString();
+			let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+			
+				let art_pic = $(`<div class="card-body p-0 m-0"></div>`).html($(`<img width="378px" height="250px">`).attr("src","./art_pic/"+hot.artPic));
+				let art_name = $(`<div class="name card-body"></div>`).html(`<b>`+hot.artName+`</b>`);
+				let art_material = $(`<div class="material card-body"></div>`).html(hot.artMaterial);
+				let art_size = $(`<div class="size card-body"></div>`).html(hot.artSize1+" x "+hot.artSize2+"(cm)");
+				let art_year = $(`<div class="year card-body"></div>`).html(hot.artYear);
+				let auc_bid = $(`<div class="card-body"></div>`).html("현재입찰가:  "+"<span class='price'>"+aucBid+"</span>"+" 원");
+				let auc_buy = $(`<div class="card-body"></div>`).html("즉시구매가:  "+aucBuy+" 원");
+				let auction = $(`<a class="btn btn-dark"></a>`).attr("href","auction.html?artNo="+hot.artNo).html("경매장으로");
+				$("#div1").append(art_pic,art_name,art_material,art_size,art_year,auc_bid,auc_buy,auction);
 		});
 	}});
 	
@@ -101,14 +111,22 @@ $(function(){
 		success:function(data){
 			let arr = eval(data);	
 			$.each(arr,function(index,hot){
-			let artPic = $(`<div class="card-body"></div>`).html($("<img>").attr("src","./art_pic/"+hot.artPic).css("width","320px","height","95px"));
-			let artName = $(`<div class="card-body"></div>`).html("작품명: "+hot.artName);
-			let artMaterial = $(`<div class="card-body"></div>`).html("재료: "+hot.artMaterial);
-			let artSize = $(`<div class="card-body"></div>`).html("사이즈: "+hot.artSize1+" x "+hot.artSize2+"(cm)");
-			let aucBid = $(`<div class="card-body"></div>`).html("현재입찰가: "+hot.aucBid+"원");
-			let aucBuy = $(`<div class="card-body"></div>`).html("즉시구매가: "+hot.aucBuy+"원");
-			let auction = $(`<a class="btn btn-success"></a>`).attr("href","auction.html?artNo="+hot.artNo).html("경매장으로");
-			$("#div2").append(artPic,artName,artMaterial,artSize,aucBid,aucBuy,auction);
+			
+			//가격에 쉼표 [by 최은혜]
+			let aucBidString = (hot.aucBid).toString(); 
+			let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			let aucBuyString = (hot.aucBuy).toString();
+			let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+
+			let art_pic = $(`<div class="card-body p-0 m-0"></div>`).html($(`<img width="378px" height="250px">`).attr("src","./art_pic/"+hot.artPic));
+			let art_name = $(`<div class="name card-body"></div>`).html(`<b>`+hot.artName+`</b>`);
+			let art_material = $(`<div class="material card-body"></div>`).html(hot.artMaterial);
+			let art_size = $(`<div class="size card-body"></div>`).html(hot.artSize1+" x "+hot.artSize2+"(cm)");
+			let art_year = $(`<div class="year card-body"></div>`).html(hot.artYear);
+			let auc_bid = $(`<div class="card-body"></div>`).html("현재입찰가:  "+"<span class='price'>"+aucBid+"</span>"+" 원");
+			let auc_buy = $(`<div class="card-body"></div>`).html("즉시구매가:  "+aucBuy+" 원");
+			let auction = $(`<a class="btn btn-dark"></a>`).attr("href","auction.html?artNo="+hot.artNo).html("경매장으로");
+			$("#div2").append(art_pic,art_name,art_material,art_size,art_year,auc_bid,auc_buy,auction);
 		});
 	}});
 	
@@ -130,14 +148,22 @@ $(function(){
 		success:function(data){
 			let arr = eval(data);	
 			$.each(arr,function(index,hot){
-			let artPic = $(`<div class="card-body"></div>`).html($("<img>").attr("src","./art_pic/"+hot.artPic).css("width","320px","height","115px"));
-			let artName = $(`<div class="card-body"></div>`).html("작품명: "+hot.artName);
-			let artMaterial = $(`<div class="card-body"></div>`).html("재료: "+hot.artMaterial);
-			let artSize = $(`<div class="card-body"></div>`).html("사이즈: "+hot.artSize1+" x "+hot.artSize2+"(cm)");
-			let aucBid = $(`<div class="card-body"></div>`).html("현재입찰가: "+hot.aucBid+"원");
-			let aucBuy = $(`<div class="card-body"></div>`).html("즉시구매가: "+hot.aucBuy+"원");
-			let auction = $(`<a class="btn btn-success"></a>`).attr("href","auction.html?artNo="+hot.artNo).html("경매장으로");
-			$("#div3").append(artPic,artName,artMaterial,artSize,aucBid,aucBuy,auction);
+			
+			//가격에 쉼표 [by 최은혜]
+			let aucBidString = (hot.aucBid).toString(); 
+			let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			let aucBuyString = (hot.aucBuy).toString();
+			let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+			
+			let art_pic = $(`<div class="card-body p-0 m-0"></div>`).html($(`<img width="378px" height="250px">`).attr("src","./art_pic/"+hot.artPic));
+			let art_name = $(`<div class="name card-body"></div>`).html(`<b>`+hot.artName+`<b>`);
+			let art_material = $(`<div class="material card-body"></div>`).html(hot.artMaterial);
+			let art_size = $(`<div class="size card-body"></div>`).html(hot.artSize1+" x "+hot.artSize2+"(cm)");
+			let art_year = $(`<div class="year card-body"></div>`).html(hot.artYear);
+			let auc_bid = $(`<div class="card-body"></div>`).html("현재입찰가:  "+"<span class='price'>"+aucBid+"</span>"+" 원");
+			let auc_buy = $(`<div class="card-body"></div>`).html("즉시구매가:  "+aucBuy+" 원");
+			let auction = $(`<a class="btn btn-dark"></a>`).attr("href","auction.html?artNo="+hot.artNo).html("경매장으로");
+			$("#div3").append(art_pic,art_name,art_material,art_size,art_year,auc_bid,auc_buy,auction);
 		});
 	}});
 	
@@ -156,24 +182,31 @@ $(function(){
 </head>
 <body>
 <header id="header"></header>
+<div id="floatingbar"></div>
+<div id=ment class="text-center">오늘의 핫한 작품을 여기서 만나보세요!</div>
 <div class="container" style="margin-bottom: 60px; margin-top: 60px;">
-<span id=title>오늘의 핫한 작품을 여기서 만나보세요!</span><br>
  	<div class="row">
 		<div class="col-sm-4">
-			<h3>인기순 <span class="badge badge-pill badge-danger">HOT</span></h3>
-			<div class="limit">남은시간<span class="timer1"></span></div>
+			<div class="text-center">		
+				<span class="ment">인기순(찜 횟수↑)</span><span class="badge badge-pill badge-danger">HOT</span><br><br>
+				<span class="limit">남은 시간:</span>&nbsp;&nbsp;<span class="timer1"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
 			<div id="div1" class="card"></div>
 		</div>
 		
 		<div class="col-sm-4">
-			<h3>입찰 No.<b color="red">1</b> <span class="badge badge-pill badge-warning">NEW</span></h3>
-			<div class="limit">남은시간<span class="timer2"></span></div>
+			<div class="text-center">
+				<span class="ment">입찰순</span> <span class="badge badge-pill badge-warning">NEW</span><br><br>
+				<span class="limit">남은 시간:</span>&nbsp;&nbsp;<span class="timer2"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
 			<div id="div2" class="card"></div>
 		</div>
 		
 		<div class="col-sm-4">
-			<h3>마감 임박 <span class="badge badge-pill badge-warning">NEW</span></h3>
-			<div class="limit">남은시간<span class="timer3"></span></div>
+			<div class="text-center">
+				<span class="ment">마감 임박</span> <span class="badge badge-pill badge-warning">NEW</span><br><br>
+				<span class="limit">남은 시간:</span>&nbsp;&nbsp;<span class="timer3"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</div>
 			<div id="div3" class="card"></div>
 		</div>
 	</div>

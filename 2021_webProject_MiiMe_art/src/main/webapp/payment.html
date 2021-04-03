@@ -4,7 +4,11 @@
 <meta charset="UTF-8">
 <title>결제창</title>
 <style type="text/css">
-div.delivery{
+body{
+		font-family: 'Noto Sans KR', sans-serif;
+		padding-top: 81px;
+	}
+.delivery{
 	border: 1px solid #333;
 	background-color: #ddd;
 }
@@ -22,18 +26,18 @@ table{
 	background-color: #ddd;
 }
 
-.payment{
-	border: 1px solid #333;
-	background-color: #FCE8AA;
+.th{
+	width: 150px;
 }
 
-.detailAddr{
-	width: 300px;
-}
+td{font-size: 20px;}
 
-h3{
-	color: #d52;
-}
+.payment{font-size: 30px;}
+
+.input-name{width: 100px;}
+.input-tel{width: 115px;}
+.input-addr{width: 350px;}
+
 
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -65,23 +69,30 @@ $(function(){
 		success:function(data){
 			arr = eval(data);
 			$.each(arr, function(index, pay){
+			
+			//가격에 쉼표 [by 최은혜]
+			let aucBidString = (pay.aucBid).toString(); 
+			let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			let aucBuyString = (pay.aucBuy).toString();
+			let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+			
 				let tr = $("<tr></tr>");
-				let img = $("<td></td>").html($("<img>").attr("src","./art_pic/"+pay.artPic).css("width","200px","height","200px"));
-				let artNo = $("<td></td>").html(pay.artNo);
-				let artName = $("<td></td>").html(pay.artName);
-				let aucBuy = $("<td></td>").html(pay.aucBuy);
-				let aucBid = $("<td></td>").html(pay.aucBid);
+				let img = $("<td></td>").html($(`<img width="300px" height="200px">`).attr("src","./art_pic/"+pay.artPic));
+				let art_no = $("<td></td>").html(pay.artNo);
+				let art_name = $("<td></td>").html(pay.artName);
+				let auc_buy = $("<td></td>").html(aucBid);
+				let auc_bid = $("<td></td>").html(aucBuy);
 					
 		//입찰 금액은 시작가보다 높아야한다.
 		//입찰가가 즉시구매가보다 높으면 즉시구매가로 결제 진행
 		//입찰가가 즉시구매가보다 낮으며 입찰 시간이 종료되면 입찰가로 결제 진행
 		if(pay.aucBuy<=pay.aucBid){
-			payAmount = $("<td></td>").html(pay.aucBuy);
+			payAmount = $("<td></td>").html(aucBuy);
 		}else{
-			payAmount = $("<td></td>").html(pay.aucBid);
+			payAmount = $("<td></td>").html(aucBid);
 		}
 					
-		$(tr).append(img,artName,aucBuy,aucBid);
+		$(tr).append(img,art_name,auc_buy,auc_bid);
 		$("#arts_list").append(tr);
 		$("#amount").append(payAmount);
 	
@@ -164,36 +175,36 @@ loadArts();		//작품정보 불러오기
 <body>
 <header id="header"></header>
 <div class="container">
-<div class="delivery">
-<h3>배송지 확인</h3>
-수령인 <input type="text" id="memName" name="memName"><br>
-휴대전화 <input type="text" id="memTel" name="memTel"><br> 
-주소 <input type="text" id="memAddr" name="memAddr">
+	<div class="delivery m-4">
+	<h3>배송지 확인</h3>
+	수령인 <input type="text" id="memName" name="memName" class="input-name" maxlength="8"><br>
+	휴대전화 <input type="text" id="memTel" name="memTel" class="input-tel" maxlength="11"><br> 
+	주소 <input type="text" id="memAddr" name="memAddr" class="input-addr">
+	<hr>
+	<span class="payment">결제 수단</span>
+	<div id="payment">
+		<form id="f">
+			<input type="hidden" id="memNo" name="memNo">
+			<input type="hidden" class="artNo" name="artNo">
+			<input type="hidden" class="payAmount" name="payAmount">
+			<input type="radio" class="payValue" name="payValue" value="신용카드" checked="checked">신용카드
+			<input type="radio" class="payValue" name="payValue" value="카카오페이">카카오페이
+			<input type="radio" class="payValue" name="payValue" value="실시간 계좌이체">실시간 계좌이체<br>
+			<input type="radio" class="payValue" name="payValue" value="무통장입금">무통장입금
+			<input type="radio" class="payValue" name="payValue" value="네이버페이">네이버페이
+			<input type="radio" class="payValue" name="payValue" value="휴대전화">휴대전화
+		</form>
+	</div>	
+	</div>
 <hr>
-<h3>결제 수단</h3>
-<span class="payment">결제수단</span>
-<div id="payment">
-	<form id="f">
-		<input type="hidden" id="memNo" name="memNo">
-		<input type="hidden" class="artNo" name="artNo">
-		<input type="hidden" class="payAmount" name="payAmount">
-		<input type="radio" class="payValue" name="payValue" value="신용카드" checked="checked">신용카드
-		<input type="radio" class="payValue" name="payValue" value="카카오페이">카카오페이
-		<input type="radio" class="payValue" name="payValue" value="실시간 계좌이체">실시간 계좌이체<br>
-		<input type="radio" class="payValue" name="payValue" value="무통장입금">무통장입금
-		<input type="radio" class="payValue" name="payValue" value="네이버페이">네이버페이
-		<input type="radio" class="payValue" name="payValue" value="휴대전화">휴대전화
-	</form>
-</div>	
-</div>
-<hr>
+<div class="box m-4">
 <table>
 	<thead>
 		<tr>
-			<th>작품</th>
-			<th>작품명</th>
-			<th>즉시구매가</th>
-			<th>낙찰가</th>
+			<th class="th">작품</th>
+			<th class="th">작품명</th>
+			<th class="th">즉시구매가</th>
+			<th class="th">낙찰가</th>
 		</tr>
 	</thead>
 	<tbody id="arts_list">
@@ -202,8 +213,9 @@ loadArts();		//작품정보 불러오기
 	<div class="div_pay">
 		<span class="payment">결제금액</span>
 		<span id="amount"></span>원
-		<button id="btnPayOK">결제하기</button>
+		<button id="btnPayOK" class="btn btn-dark">결제하기</button>
 	</div>
+</div>
 </div>
 <footer id="footer"></footer>
 </body>
