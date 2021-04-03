@@ -214,9 +214,9 @@
   
   <!-- 작가별 상세프로필 중단 : 이 작가의 작품목록(최신순 기본 고정) -->
   <select id="listArtistInfoArt" resultType="ArtistInfoVo">
-  	select MEM_NO, ART_NO, ART_PIC, ART_NAME
-  	 from (select rownum num, MEM_NO, ART_NO, ART_PIC, ART_NAME
-  	 		 from (select MEM_NO, ART_NO, ART_PIC, ART_NAME 
+  	select MEM_NO, ART_NO, ART_PIC, ART_NAME, ART_TAG1
+  	 from (select rownum num, MEM_NO, ART_NO, ART_PIC, ART_NAME, ART_TAG1
+  	 		 from (select MEM_NO, ART_NO, ART_PIC, ART_NAME, ART_TAG1
   	 		 		 from ART_INFO_TB 
   	 		 		where MEM_NO = #{memNo}
  					order by ART_NO desc))

@@ -28,6 +28,7 @@ ul.nav{
 $(document).ready(function(){
     $("#header").load("/header.html");
     $("#footer").load("/footer.html");
+    $("#floatingbar").load("/floatingbar1.html");    
 });
 // header, footer include
 
@@ -75,7 +76,7 @@ $(document).ready(function(){
                     // 그리드 좌측: 작가 프로필사진, 작가명, 한줄소개        
                     $("#artistPic").append($(`<img class="rounded-circle" style="min-width: 350px; height: 350px;"></img>`)
                     	.attr('src', 'artist_pic/' + data.artistPic));
-                    $("#artistName").append($(`<h1></h1>`).text(data.artistName));
+                    $("#artistName").append($(`<h1></h1>`).html(data.artistName));
                     $("#artistIntro").append($(`<span></span>`).text(data.artistIntro));
                     
                     
@@ -159,7 +160,7 @@ $(document).ready(function(){
                     
                     // listInfo에 작품 상세페이지 링크걸기
                     let listLink = $(`<a style="text-decoration: none; color: black;"></a>`)
-                    				.attr('href', "/artDetail.html?memNo=" + a.memNo + "&artNo=" + a.artNo);
+                    				.attr('href', "/artDetail.html?memNo=" + a.memNo + "&artNo=" + a.artNo + "&tag=" + a.artTag1);
                     
                     // card에 작품정보 넣고 상세페이지 링크걸기
                     $(listCard).append(listInfo);
@@ -203,7 +204,7 @@ $(document).ready(function(){
 				// 해당 작가에 대한 기대평이 존재하지 않을 경우
 				if(!arr.length){
 					let trNullCmt = $(`<tr></tr>`);
-					$(trNullCmt).append(`<td colspan="4" align="center"><br>작가에 대한 기대평이 존재하지 않습니다.<br>이 작가에 대한 첫 기대평을 남겨보는 건 어떨까요?</td>`);
+					$(trNullCmt).append(`<td colspan="4" align="center"><br>작가에 대한 기대평이 존재하지 않습니다.<br>이 작가에 대한 첫 기대평을 남겨보는 건 어떨까요?<br><br/></td>`);
 					$("#artistCommentList").append(trNullCmt);
 				}
                 
@@ -399,7 +400,9 @@ $(document).ready(function(){
 </head>
 <body>
  <header id="header"></header>
-
+ <!-- 플로팅바 -->
+ <div id="floatingbar"></div>
+ 
     <!-- ========== 작가정보 그리드 ========== -->
     <div class="container" style="margin-bottom: 60px; margin-top: 60px;">
     

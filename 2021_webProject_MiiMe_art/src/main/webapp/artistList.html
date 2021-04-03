@@ -17,6 +17,7 @@
 $(document).ready(function(){
     $("#header").load("/header.html");
     $("#footer").load("/footer.html");
+    $("#floatingbar").load("/floatingbar1.html");    
 });
 // header, footer include
 
@@ -149,7 +150,7 @@ $(document).ready(function(){
                     
                     // 작가목록 작가정보                
                     let listInfo = $(`<div class="card-body">`);
-                    $(listInfo).append($(`<h4 class="card-title"></h4>`).text(a.artistName));
+                    $(listInfo).append($(`<h4 class="card-title"></h4>`).html(`<i class="fas fa-user"></i> `+a.artistName));
                     $(listInfo).append($(`<p class="card-text"></p>`).text(a.artistIntro));
                     
                     // listInfo에 작가별 상세페이지 링크걸기
@@ -265,6 +266,8 @@ $(document).ready(function(){
 </head>
 <body>
  <header id="header"></header>
+ <!-- 플로팅바 -->
+ <div id="floatingbar"></div>
  
     <div class="container">
     	
