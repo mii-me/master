@@ -46,12 +46,12 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						
 						
 						//앵커태그 걸기 : encodeURI - 한글값을 넘기기 위함(태그:한글)
-						let link = $("<a></a>").attr("href",encodeURI("artDetail.html?memNo="+a.memNo+"&artNo="+a.artNo+"&tag="+artTag))
+						let link = $("<a class='artLink'></a>").attr("href",encodeURI("artDetail.html?memNo="+a.memNo+"&artNo="+a.artNo+"&tag="+artTag))
 						let div_link = $("<div id='divDetail'></div>").append(link); //앵커 div
 						let img_pic = $("<img class='artPic'>").attr("src","art_pic/"+a.artPic);
-						let div_img = $("<div></div>").append(img_pic); //이미지div 
+						let div_img = $("<div class='artPicHover'></div>").append(img_pic); //이미지div 
 						
-						let text_name = $("<div></div>").html("<h3>" + a.artName + "</h3>"); //작품제목
+						let text_name = $("<div></div>").html("<h3 class='listArtName'>" + a.artName + "</h3>"); //작품제목
 						
 						//태그가 선택안함이라면 작품 리스트에서 보여줄 때 공백으로 보여준다.
 						if(a.artTag1 == '#선택안함'){
@@ -72,6 +72,13 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 						let aucBuyString = (a.aucBuy).toString();
 						let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+						
+						//현재 경매가와 즉시구매가가 같다면 sold out으로 표기한다.
+						if(aucBid == aucBuy) {
+							aucBid = 'Sold out';
+							aucBuy = 'Sold out';
+						}
+						
 						
 						let text_bid = $("<div></div>").html("<b>"+"현재 입찰가 &nbsp;&nbsp;&nbsp;"+"</b>" + aucBid); 
 						let text_buy = $("<div></div>").html("<b>"+"즉시 구매가 &nbsp;&nbsp;&nbsp;"+"</b>"+ aucBuy); 
@@ -205,6 +212,7 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			loadArtList(1,responseTheme,sizeRange1,sizeRange2,responsePrice);
 		})//#searchPriceBar.change : function()
 		
+			
 					
 		//초기화 버튼을 누르면 선택한 조건들이 모두 초기화된다.
 		$(".btnReset").click(function(){
@@ -213,9 +221,8 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			$(".searchThemeli").css("color","");
 			$(".searchSizeli").css("background-color","");
 			$(".searchSizeli").css("color","");
-			//$("#searchPriceBar").attr("value","10000000");
-			
-			//range바 초기화?
+			$("#searchPriceBar-value").html("");
+						
 			loadArtList(1,"",0,101,1000000000);
 		})//.btnReset.click : function()
 		

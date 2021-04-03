@@ -1,6 +1,6 @@
-.btn{
+/* .btn{
 		visibility:hidden
-	}
+	} */
 	#page{
 		    clear: both;
 		    ALIGN-ITEMS: center;
@@ -19,11 +19,12 @@
 	#container,#page{
 		clear:both;
 	}
-	hr{
+	.separation{
 		clear:both;
-		width:80%;
+		width:70%;
+		margin: 2rem auto;
 	}
-	h3{
+	.listArtName{
 		font-weight: bold;
 		margin-top: 7px;
 	}
@@ -39,7 +40,7 @@
 		text-align: right;
 	}
 	.art_list-artbox{
-		border:1px solid gray;
+		border:1px solid #dfdfdf;
 		width:300px;
 		height:450px;
 		margin-right:30px;
@@ -56,7 +57,19 @@
 		width:100%;
 		height:330px;
 	}
-	a{
+	.artPicHover{
+		opacity:1;
+		background-color: #fff;
+	}
+	.artPicHover:hover{
+		opacity:0.6;
+	}
+	.artLink{
+		text-decoration: none;
+		color:black;
+		text-align: right;
+	}
+	.artLink:hover{
 		text-decoration: none;
 		color:black;
 		text-align: right;
@@ -100,8 +113,33 @@
 	
 	
 	
-	input[type=range]{ 
-		width:40%; 
-		background: transparent;
+	input[type='range'] {
+	  width:40%;
+      overflow: hidden;
+      -webkit-appearance: none;
+      background-color: #f2f2f2;
+      border:1px;
+    }
+    
+    input[type='range']::-webkit-slider-runnable-track {
+      height: 10px;
+      -webkit-appearance: none;
+      color: #343a40;
+      margin-top: 0px;
+      border:1px;
+       border-radius: 3px;
+    }
+    
+    input[type='range']::-webkit-slider-thumb {
+      width: 20px;
+      -webkit-appearance: none;
+      height: 25px;
+      background: #d4d4d4;
+       margin-top:-6px;
+      box-shadow: -150px 0 0 150px #343a40;
+      border:30px;
+    }
+    
+    input[type=range]:focus {
+    outline: none;
 	}
-	
