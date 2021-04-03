@@ -1,13 +1,12 @@
-/* .detail-content {
-		width:1000px;
-		height:800px;
-	} */
 	.box {
 		float:left;
 	}
 	.smBox{	
 		float:left;
 		margin-right: 40px;
+	}
+	.name{
+		font-weight:bold;
 	}
 	.detail-content-box{
 		width: 80%;
@@ -40,18 +39,19 @@
     vertical-align: top;
     text-decoration: none;
 	}
+	.artistInfo-box-btn-moreArtist:hover{
+		text-decoration: none;
+		color: white;
+	}
 	.detail-content-pic-link {
 		max-width:500px;
 		max-height:500px;
 	}
-	#artistName,#bidstart {
+	#artistName{
+		font-size:15px;
+	}
+	#bidstart {
 		font-size: 8px;
-	}
-	h1,h2,h3 {
-		margin-bottom: 0px;
-	}
-	h3{
-		margin-top: 0px;
 	}
 	.simulation-box{
 		clear:both;
@@ -93,8 +93,10 @@
 	}
 	
 	
-	hr{
+	 .separation{
 		clear:both;
+		width:70%;
+		margin: 2rem auto;
 	}
 	.artistInfo-box{
 		border:1px solid #F1F2F4;
@@ -110,18 +112,34 @@
 	.artistInfo-box-btn{
 		margin-top:15px;
 	}
+	.artistInfo-box-name-pic-img{
+		width: 50px;
+	    border-radius: 180px;
+	    height: 50px;
+	    margin-right: 10px;
+	}
 	#divBtnBid, #divBtnBuy{
 		margin-top: 10px;
 	}
 	#infoArtistCareer {
-		font-size: 9px;
+		border:none;
+		font-size: 12px;
+		background-color:transparent;
+		resize:none;
+		overflow:hidden;
+	}
+	#infoArtistCareer:visited {
+		border:none;
 	}
 	.artistInfo-box-career{
 		margin-bottom: 10px;
 		padding-bottom: 10px;
 	}
+	#infoArtistName{
+		font-weight:bold;
+	}
 	#infoArtistName,#infoArtistIntro{
-		font-size: 15px;
+		font-size: 18px;
 	}
 	.detail-content-box{
 		margin:0px auto;	
@@ -169,7 +187,7 @@
 	    height: 300px;
 	    display: flex;
 	    align-items: center;
-	    background-color: #e6e6e6;
+	    background-color: #f2f2f2;
     }
     .artHashTag-img-div-link:last-child{
     	margin-right:0;
@@ -227,12 +245,20 @@
     	padding:20px;
     }
     .artExp-box{
+	   	width: 60%;
 	    display: flex;
-    	justify-content: center;
 	    align-items: center;
+	    justify-content: center;
+	    margin: 0px auto;
+    }
+    .artExp-box-expText{
+    	font-size:18px;
     }
     .artHashTag-box{
         display: flex;
  	 	align-items: center;
  	    justify-content: center;
+    }
+    .hashTitle{
+    	margin-left:120px;
     }

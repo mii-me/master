@@ -19,7 +19,9 @@
 			let tag = receiveArr[2]; //선택된 작품의 artTag1태그 
 			let wishList = true; // 찜하기 : true(찜한상태) , false(찜하지 않은 상태)
 		
-			
+			let aucBid;
+			let aucBuy;
+		
 			let selected; //선택된 작품 정보를 담는변수 (현재보고있는 작품)
 			let tagName; //선택된 작품의 태그이름
 
@@ -55,16 +57,29 @@
 	
 		//가격에 쉼표찍기
 		let aucBidString = (selected.aucBid).toString(); //경매가격
-		let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 		let aucBuyString = (selected.aucBuy).toString();
-		let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+		aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+		
+		//현재 경매가와 즉시구매 가격이 같으면 Sold out으로 표시한다.
+		if(aucBid == aucBuy) {
+			aucBid = 'Sold out';
+			aucBuy = 'Sold out';
+		}
+		
+		
 		$("#bid").html(aucBid);
 		$("#buy").html(aucBuy);
 					
 		$("#pic").html(selected.artPic);
 		$("#infoArtistName").html(selected.artistName);
 		$("#infoArtistIntro").html(selected.artistIntro);
-		$("#infoArtistCareer").html(selected.artistCareer);
+		
+		
+		//career 컬럼에 들어있는 줄바꿈 적용하여 span에 출력하기 
+		let temp = selected.artistCareer;
+		temp = temp.replaceAll("\n\r","<br>");
+		$("#infoArtistCareer").html(temp);
 				
 	
 		$(".simulation-art").attr("src","art_pic/"+selected.artPic);
@@ -78,7 +93,7 @@
 				let bgItem = bgArr[index];
 				let bgNameItem = bgName[index]; //bgArr과 배열의 크기가 같으므로 같은 인덱스를 받아온다.
 				//오른쪽에 출력 될 다른 배경사진들
-				let imgOther = $("<img class='simulation-bg-other'></img>").attr("src","serverPic/"+bgItem);
+				let imgOther = $("<img class='simulation-bg-other'></img>").attr("src","img/"+bgItem);
 				$(imgOther).attr("idx",index);
 				//방 배경들의 아래에 붙을 이름
 				let spanImgOtherName = $("<span id='nameTag'></span>").html(bgNameItem);
@@ -109,17 +124,24 @@
 				$(".artistInfo-box-btn-moreArtist").attr("href","artistDetail.html?memNo="+selected.memNo);
 					
 				//작품 설명
-				let span1 = $("<span></span>").html("“");
-				$(span1).css("text-size","30px");
-				let span2 = $("<span></span>").html("”");
-				let exp = $("<div></div>").html(selected.artExp);
-				let artistPic = $("<img></img>").attr("src","artist_pic/"+selected.artistPic);
-				console.log(selected.artistPic)
-				artistPic.css("width","70","height","70");
+				let span1 = $("<span></span>").html("“&nbsp;&nbsp;");
+				$(span1).css("font-size","70px");
+				let span2 = $("<span></span>").html("&nbsp;&nbsp;”");
+				$(span2).css("font-size","70px");
+				let exp = $("<div class='artExp-box-expText'></div>").html(selected.artExp);
+				let artistPic = $("<img class='artistInfo-box-name-pic-img'></img>").attr("src","artist_pic/"+selected.artistPic);
+				//console.log(selected.artistPic)
+				//artistPic.css("width","70","height","70");
 				$(".artistInfo-box-name-pic").append(artistPic)	
 				$(".artExp-box").append(span1,exp,span2);
 				//즉시 구매하기 클릭 이벤트 함수 [by 현규]
+				
+				
 	            $("#btnBuy").click(function(){
+				let temp = selected.aucBuy;
+				let selectedAucBuy = temp.replace(/,/,"");
+				console.log(selectedAucBuy);	
+				
 	               clickBtnBuy(artNo,selected.aucBuy);
 	            });
 				}}); //ajax
@@ -176,9 +198,9 @@
 				}
 				//위치가 arr(같은 태그를 가진 사진들의 배열)의 길이에서 3을 뺀 수(한번에 3개를 보여주므로) * (-310px)의 위치와 같다면 
 				//오른쪽 버튼을 누를 수 없다. (더 보여줄 이미지가 없으므로)
-				if(positionHash == (-310*(arr.length-3))) {
+				if(positionHash == (-315*(arr.length-3))) {
 					$(".artHashTag-img-btnRight-right").attr("disabled", true);
-				}else if(positionHash > (-310*(arr.length-3))){//위치가 그 수보다 크다면 오른쪽 버튼을 다시 누를 수 있다. 
+				}else if(positionHash > (-315*(arr.length-3))){//위치가 그 수보다 크다면 오른쪽 버튼을 다시 누를 수 있다. 
 					$(".artHashTag-img-btnRight-right").removeAttr("disabled");
 				}
 			}//canClick
@@ -211,7 +233,7 @@
 			//해시태그단 왼쪽 버튼을 클릭했을 때
 			$(".artHashTag-img-btnLeft").click(function(){
 				//누를때마다 x축의 방향으로 310px만큼 움직인다.(이미지크기)
-				$(".artHashTag-img").css("transform","translateX("+ (positionHash+=310) + "px)");
+				$(".artHashTag-img").css("transform","translateX("+ (positionHash+=315) + "px)");
 				
 					clickBtnTag();
 			});
@@ -219,7 +241,7 @@
 			//해시태그단 오른쪽 버튼을 클릭했을 때
 			$(".artHashTag-img-btnRight").click(function(){
 				//누를때마다 x축의 방향으로 -310px만큼 움직인다.(이미지크기)
-				$(".artHashTag-img").css("transform","translateX("+ (positionHash-=310) + "px)");
+				$(".artHashTag-img").css("transform","translateX("+ (positionHash-=315) + "px)");
 					clickBtnTag();
 			});
 			
@@ -247,7 +269,6 @@
 					
 					//배열에 같은 태그를 가진 사진들을 담는다.
 					arr.push(item.artPic);
-					
 					//작품 상세보기로 이동할 수 있는 링크를 설정한다. (encodeURI는 tag가 한글이므로 이를 인코딩하기 위함)
 					let link = $("<a></a>").attr("href",encodeURI("artDetail.html?memNo="+item.memNo+"&artNo="+item.artNo+"&tag="+item.artTag1));
 					//같은 해시태그를 가진 사진들을 배열에서 꺼내서 출력한다.
@@ -269,7 +290,14 @@
 		function clickBtnBid(artNo) {
 				//로그인했다면 현재 보고있는 작품의 작품번호를 갖고 페이지를 이동한다.
 				if(userNo!=null) {
-					alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
+					
+					//솔드아웃이면 경매페이지로 이동하지 않는다.
+					if(aucBid == 'Sold out') {
+						alert("판매 완료된 작품입니다.");
+						return;
+					}
+					
+					//alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
 					location.href="auction.html?artNo="+artNo;				
 				}else{ //로그인하지않았다면 로그인페이지로 이동한다.
 					alert("로그인이 필요한 서비스입니다.");
@@ -281,7 +309,14 @@
 		function clickBtnBuy(artNo) {
 				//로그인했다면 현재 보고있는 작품의 작품번호를 갖고 페이지를 이동한다.
 				if(userNo!=null) {
-					alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
+					
+					//솔드아웃이면 구매페이지로 이동하지 않는다.
+					if(aucBuy == 'Sold out') {
+						alert("판매 완료된 작품입니다.");
+						return;
+					}
+					
+					//alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
 					//현재 입찰가를 즉시구매가로 업데이트 후 결제 진행 [by 현규]
 	               $.ajax({
 	               url:"/updateBid.do",
@@ -301,14 +336,23 @@
 		$("#btnBid").click(function(){
 				clickBtnBid(artNo);	
 		})
+		
 		/*		
 		//즉시 구매하기 클릭 이벤트 함수
 		$("#btnBuy").click(function(){
 			clickBtnBuy(artNo);
 		})
 		*/
+		
 	//찜하기 insert 함수
 	function wishlistInsert(userNo,artNo) {
+		
+		//솔드아웃이면 찜목록에 insert하지 않는다.
+		if(aucBid == 'Sold out') {
+				alert("판매 완료된 작품으로, 해당 기능을 사용할 수 없습니다.");
+				return;
+			}
+		
 		$.ajax({url:"insertWishList.do/?userNo="+userNo+"&artNo="+artNo,success:function(r){
 			alert(r);
 		}}); //ajax
@@ -316,6 +360,13 @@
 	
 	//찜하기 delete 함수
 	function wishlistDelete(userNo,artNo) {
+		
+		//솔드아웃이면 delete하지 않는다.
+		if(aucBid == 'Sold out') {
+				alert("판매 완료된 작품으로, 해당 기능을 사용할 수 없습니다.");
+				return;
+			}
+		
 		$.ajax({url:"deleteWishList.do/?userNo="+userNo+"&artNo="+artNo,success:function(r){
 			alert(r);
 		}}); //ajax

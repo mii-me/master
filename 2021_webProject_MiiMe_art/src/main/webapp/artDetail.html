@@ -22,6 +22,8 @@ $(document).ready(function(){
 // header, footer include
 $(function(){
 		
+		
+		
 		$.getScript("artDetail.js",function(){
 			
 			loadArtdetail(memNo,artNo);
@@ -134,14 +136,14 @@ $(function(){
 			</div>
 			
 			 
-					<hr>
+					<hr class="separation">
 			<!-- 작품 걸어보기 --> 
 			<div class="simulation">
 				<div class="simulation-box">
 					<h3>작품 걸어보기</h3>
 					<div class="simulation-img">
 						<div class="simulation-img-box">
-							<img class="simulation-bg" src="serverPic/studyRoom.jpg" width="200px">
+							<img class="simulation-bg" src="img/studyRoom.jpg" width="200px">
 							<img class="simulation-art">
 						</div>			
 						<div class="simulation-img-box">
@@ -153,7 +155,7 @@ $(function(){
 					</div>
 				</div>
 			</div>
-					<hr>
+					<hr class="separation">
 			
 			<!-- 작가 정보 -->
 			<div class="artistInfo">
@@ -169,8 +171,9 @@ $(function(){
 								 - "<span id="infoArtistIntro"></span>"<br>
 								</div>
 							</div>
+							<br>
 							<div class="artistInfo-box-career">
-								<span id="infoArtistCareer"></span><br>
+								<span id="infoArtistCareer" ></span><br>
 							</div>
 						</div>
 						<div class="artistInfo-box-btn">
@@ -198,10 +201,10 @@ $(function(){
 			
 		</div>
 	</div>	
-	<hr>
+	<hr class="separation">
 	<div class="artHashTag"> 
 		<div class="artHashTag-title">
-			<h3>#<span class="artHashTag-Name"></span>Tag와 관련있는 작품들</h3>
+			<h3 class="hashTitle">#<span class="artHashTag-Name"></span>Tag와 관련있는 작품들</h3>
 		</div> 
 		<div class="artHashTag-box">
 			<div class="artHashTag-img-btnLeft"><button class="artHashTag-img-btnLeft-left">&lt;</button></div>

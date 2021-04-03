@@ -25,7 +25,7 @@
  
  	<select id="detail" resultType="artinfoVo">
  		select art_info_tb.mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
-			art_tag1, art_tag2, art_tag3, auc_start, nvl(auc_start,auc_bid) auc_bid, auc_buy,
+			art_tag1, art_tag2, art_tag3, auc_start, nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,
 			artist_info_tb.artist_name,artist_info_tb.artist_pic, artist_info_tb.artist_intro,artist_info_tb.artist_career
 		from art_info_tb
 		inner join artist_info_tb
@@ -76,9 +76,10 @@
  
  	<select id="selectAll" resultType="artinfoVo">
 	 	select num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
-		nvl2(art_tag1,(concat('#',art_tag1)),' ') art_tag1, nvl2(art_tag2,(concat('#',art_tag2)),' ') art_tag2, nvl2(art_tag3,(concat('#',art_tag3)),' ') art_tag3, auc_start, nvl(auc_start,auc_bid) auc_bid, auc_buy
+		nvl2(art_tag1,(concat('#',art_tag1)),' ') art_tag1, nvl2(art_tag2,(concat('#',art_tag2)),' ') art_tag2, nvl2(art_tag3,(concat('#',art_tag3)),' ') art_tag3, auc_start,
+		 nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy
 		from (select rownum num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
-		art_tag1, art_tag2, art_tag3, auc_start, nvl(auc_start,auc_bid) auc_bid, auc_buy
+		art_tag1, art_tag2, art_tag3, auc_start, nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy
 			from (select *
 			 	from art_info_tb
 			 	<choose>
