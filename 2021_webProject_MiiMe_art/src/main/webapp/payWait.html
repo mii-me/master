@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>결제대기 페이지</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style type="text/css">
+
+table{
+	border: 1px solid #333;
+	background-color: #FAFAFF;
+}
+
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+// header, footer include
+$(document).ready(function(){
+    $("#header").load("/header.html");
+    $("#footer").load("/footer.html");
+});
+
+
+$(function(){
+	//로그인한 회원번호 가져오기 전부 포함시켜야한다.	
+$.getScript("/loginCheck.js",function(){
+	let	getMemNo = memNo; //로그인한 회원번호	
+	
+//로그인 했을 시에만 진입가능
+if(getMemNo != null){	
+
+	let url = location.href;	//url 요청
+	let getReceive = url.substr(url.indexOf("?")+1)
+	let getReceiveSplit = getReceive.split("=");
+	let getArtNo = getReceiveSplit[1];		//쿼리스트링에서 가져온 작품번호
+	let bitTop; //최고입찰자
+	
+	$.ajax({url:"/payWait.do",
+		data:{memNo:getMemNo},
+		success:function(data){
+		arr=eval(data);
+	
+	$.each(arr, function(index,pay){
+	
+	//가격에 쉼표 [by 최은혜]
+	let aucBidString = (pay.aucBid).toString(); 
+	let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	let aucStartString = (pay.aucStart).toString(); 
+	let aucStart = aucStartString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	let aucBuyString = (pay.aucBuy).toString();
+	let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+	bitTop = pay.bidTop;
+	
+	let tr = $(`<tr>`);
+	let art_no = $(`<td>`).html(pay.artNo);
+	let art_pic = $(`<td>`).html($(`<img width="200px" height="100px">`).attr("src","./art_pic/"+pay.artPic));
+	let art_name = $(`<td>`).html(pay.artName);
+	let auc_bid = $(`<td>`).html(aucBid+`원`);
+	let mem_name = $(`<h3>`).html(pay.memName+" 님의 낙찰 내역입니다.");
+	
+	$(tr).append(art_no,art_pic,art_name,auc_bid);
+	$(".top").append(mem_name);
+	$("#wait_list").append(tr);
+	
+	
+	$(tr).click(function(){
+		location.href="payment.html?artNo="+getArtNo;	//결제페이지 이동
+	});
+	
+	
+	
+	
+	});
+}});
+
+//로그인하지 않은 경우		
+}else{
+alert("로그인 후 이용 가능합니다.");
+location.href="login.html";
+}
+	});	//getScript
+}); //function
+</script>
+</head>
+<body>
+<header id="header"></header>
+<div class="container">
+	<div class="top m-4">
+	</div>
+	<table class="m-4">
+		<thead>	
+			<tr>
+				<th class="th">작품번호</th>
+				<th class="th">이미지</th>
+				<th class="th">작품명</th>
+				<th class="th">낙찰가</th>
+			</tr>
+		</thead>
+		<tbody id="wait_list"></tbody>
+	</table>
+</div>
+<footer id="footer"></footer>
+</body>
+</html>

@@ -24,8 +24,18 @@ body{
 	font-weight:bold;
 	color:red;
 }
+.bidTop{
+	border: 1px solid #333;
+	width: 60px;
+}
 
-#auction_bid{font-size: 20px;}
+#auction_bid{
+text-align: center;
+font-size: 20px;}
+
+.box-center{
+	text-align: center;
+}
 
 .limit{
 font-size: 30px;
@@ -56,18 +66,19 @@ $(function(){
 $.getScript("/loginCheck.js",function(){
 	let	getMemNo = memNo; //로그인한 회원번호	
 	
-	//로그인 했을 시에만 진입가능
-	if(getMemNo != null){	
+//로그인 했을 시에만 진입가능
+if(getMemNo != null){	
 	
 	let url = location.href;	//url 요청
-	let getArtNo = parseInt(url.charAt(url.length-1));	//쿼리스트링에서 작품번호만 잘라오기 , //여러개 받아온다면 다르게 구성해야한다
+	let getReceive = url.substr(url.indexOf("?")+1)
+	let getReceiveSplit = getReceive.split("=");
+	let getArtNo = getReceiveSplit[1];
+	
 		
 	let enterKey=13; //엔터키 지정번호
 	let getTime;  //db에서 불러오는 마감시간
+	let bitTop; //최고입찰자
 	
-	let wishOK = true; //찜 여부(true:찜,false:찜취소)
-
-
 	//milliseconds를 시:분:초로 바꾸기
 	let SecondsTohhmmss = function(totalSeconds) {
 	  let hours   = Math.floor(totalSeconds / 3600);
@@ -95,8 +106,9 @@ $.getScript("/loginCheck.js",function(){
 			if(getTime <= 0){	
 				clearInterval(reTime);
 				console.log("타이머 종료");
-				alert("작품이 낙찰되었습니다!");
-				location.href="payment.html?artNo="+getArtNo;	//결제페이지 이동
+				alert("해당 작품이 낙찰되어 이전페이지로 돌아갑니다.");
+				//location.href="payment.html?artNo="+getArtNo;	//결제페이지 이동
+				location.href="artList.html";	//작품 페이지로 이동
 			}
 		
 		}});		
@@ -112,12 +124,13 @@ $.getScript("/loginCheck.js",function(){
 	//중복 출력 방지
 	$(".auction_info").empty();	
 	
+		
 		//작품정보 불러오기
 		$.ajax({url:"/detailAuction.do",
 		type:"get",
 		data:{artNo:getArtNo,memNo:memNo},
-		success:function(m){
-		arr = eval(m);	
+		success:function(art){
+		arr = eval(art);	
 				
 		$.each(arr, function(index,auc){
 		
@@ -128,33 +141,34 @@ $.getScript("/loginCheck.js",function(){
 		let aucStart = aucStartString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 		let aucBuyString = (auc.aucBuy).toString();
 		let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
+		bitTop = auc.bidTop;
 		
-			let art_pic = $(`<div></div>`).html($(`<img width="650px" height="500px">`).attr("src","./art_pic/"+auc.artPic));
-			let art_name = $(`<div class="name card-body"></div>`).html(auc.artName);
-			let art_material = $(`<div class="material card-body"></div>`).html(auc.artMaterial);
-			let art_size = $(`<div class="size card-body"></div>`).html(auc.artSize1+" x "+auc.artSize2+"(cm)");
-			let art_year = $(`<div class="card-body"></div>`).html(auc.artYear);
-			let auc_start = $(`<div></div>`).html("시작가: "+aucStart+"원");
-			let auc_bid = $(`<div></div>`).html("최고 입찰가: "+"<span class='price'>"+aucBid+"</span>"+"원");
-			let auc_buy = $(`<div></div>`).html("즉시구매가: "+aucBuy+"원");
+		//입찰자가 없을 경우
+		if(bitTop==null){
+			bitTop = `<small>`+"입찰자가 없어요 ㅠ.ㅠ";
+		}
+		
+			let art_pic = $(`<div>`).html($(`<img width="100%" height="500px">`).attr("src","./art_pic/"+auc.artPic));
+			let art_name = $(`<div class="name"></div>`).html(auc.artName);
+			let art_material = $(`<div class="material"></div>`).html(auc.artMaterial);
+			let art_size = $(`<div class="size"></div>`).html(auc.artSize1+" x "+auc.artSize2+"(cm)");
+			let art_year = $(`<div>`).html(auc.artYear);
+			let auc_start = $(`<div>`).html("시작가"+`<br><`+aucStart+`원><br><br>`);
+			let auc_bid = $(`<div>`).html("최고 입찰가"+`<br><`+"<span class='price'>"+aucBid+"</span>"+`원><br>`);
+			let bit_top = $(`<div>`).html("최고 입찰자"+`<br><div class="top">`+bitTop);
+			let auc_buy = $(`<div>`).html("<br>즉시구매가"+`<br><`+aucBuy+`원>`);
 			
 			$("#auction_info").append(art_pic,art_name,art_material,art_size,art_year);
-			$("#auction_bid").append(auc_start,auc_bid,auc_buy);
+			$("#auction_bid").append(auc_start,auc_bid,bit_top,auc_buy);
 						
 	//즉시구매 누를 시 , 즉시구매가로 결제창 이동
 	$("#btnBuy").click(function(){
-		let artNo = $(".artNo").val(getArtNo);	//val(작품번호=getArtNo) //변수명은 자유롭게 가능
-		let memNo = $(".memNo").val(getMemNo);
-		$("#aucBid").val(auc.aucBuy);
-								
-		let data = $("#f").serializeArray();
-								
 		//현재 입찰가 업데이트
 		$.ajax({
 		url:"/updateBid.do",
-		data:data,
+		data:{artNo:getArtNo,memNo:getMemNo,aucBid:auc.aucBuy},
 		success:function(data){
-			location.href="payment.html?artNo="+auc.artNo;		//href대신 replace를 쓰면 전 페이지로 돌아갈 수 없다.
+			location.href="payment.html?artNo="+auc.artNo;	
 		}});
 	});
 						
@@ -167,43 +181,30 @@ $.getScript("/loginCheck.js",function(){
 			alert("남은시간 5초로 변경"); 
 		}});
 	});						
-									
 						
-	//입찰가 0원으로 초기화 (테스트용)
-	$("#btnResetBid").click(function(){
-		$.ajax({
-		url:"/resetBid.do",		
-		data:{artNo:getArtNo,memNo:getMemNo,aucBid:0},
-		success:function(data){
-			location.reload(); //업데이트된 입찰가로 새로고침
-		}});
-	});
-						
-							
+/*---------------------------입찰하기 start------------------------------------*/
 	//입찰 금액을 입력하고 입찰하기를 눌렀을 경우
 	$("#btnBid").click(function(){
-		let artNo = $(".artNo").val(getArtNo);	//val(작품번호=url) //변수명은 자유롭게 가능
-		let memNo = $(".memNo").val(getMemNo); //로그인한 회원번호
+	
 		let inputBid = $("#aucBid").val();	//입력할 입찰가
-							
+		
 		//입찰가가 즉시구매가와 같거나 많을 경우 즉시구매가로 금액 변경 후 결제진행
 		if(inputBid>=auc.aucBuy){
 		  alert("입찰금액이 즉시구매가 이상이므로 결제페이지로 안내합니다.");
 		  $("#aucBid").val(auc.aucBuy);
-		  location.href="payment.html?artNo="+auc.artNo;		//href대신 replace를 쓰면 전 페이지로 돌아갈 수 없다.
+		  location.href="payment.html?artNo="+auc.artNo;		
 		}//end if
 							
-			let data = $("#f").serializeArray();	//form안에 있는 값들을 넘겨준다.
 							
 		//입찰가 입력 후 입찰하기 누를 경우	
-		if(inputBid!=""){	//빈칸 입력 방지
+		if(inputBid != ""){	//빈칸 입력 방지
 		
 			//입찰가가 시작가보다 같거나 높을 때 & 입찰가가 최고입찰가보다 높을 때, 최고입찰가를 update해준다.
-			if(inputBid >= auc.aucStart && inputBid > auc.aucBid){
+			if((inputBid >= auc.aucStart) && (inputBid > auc.aucBid)){
 				//현재 입찰가 업데이트
 				$.ajax({
 				url:"/updateBid.do",		
-				data:data,
+				data:{artNo:getArtNo,memNo:getMemNo,aucBid:inputBid},
 				success:function(data){
 					console.log("입찰성공");
 				}});
@@ -211,16 +212,12 @@ $.getScript("/loginCheck.js",function(){
 				//입찰 횟수 증가
 				$.ajax({
 				url:"/countBid.do",		
-				data:{artNo:getArtNo},
+				data:{artNo:getArtNo,memNo:getMemNo},
 				success:function(data){
 					location.reload(); 
 				}});
 			}else{
-				
-				//$(`<div class="alert alert-danger"></div>`).html("입찰가는 시작가·최고입찰가보다 높아야하며 즉시구매가보다 낮아야 합니다.");
-  				 	
 				alert("입찰가는 시작가·최고입찰가보다 높아야하며 즉시구매가보다 낮아야 합니다.");
-				
 				$("#aucBid").val("");	//입찰가 입력칸 초기화
 				$("#aucBid").focus();	//입찰가 입력칸에 커서두기
 			}//end else
@@ -229,9 +226,11 @@ $.getScript("/loginCheck.js",function(){
 			$("#auction_top").append($(`<div class="alert alert-danger alert-dismissible fade show">
 									<button type="button" class="close" data-dismiss="alert">&times;</button>입찰가를 입력하세요!</div>`));
 		}//end else
-		
-		
 		});
+/*---------------------------입찰하기 end------------------------------------*/	
+		
+		
+		
 	});	
 }});
 		//로그인하지 않은 경우		
@@ -252,51 +251,18 @@ $.getScript("/loginCheck.js",function(){
 			<span class="limit">남은 시간: </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<span class="timer"></span>
 		</div><br>
-		
-		
 	<div class="row">
 		<div id="auction_info" class="box-left col-sm-7">
 		</div>
-			<div class="box-right col-sm-5">
+			<div class="box-center col-sm-4">
 				<div id="auction_bid" class="m-2"></div><br>
-				<form id="f">
-					<input class="artNo" type="hidden"  name="artNo">
-					<input class="memNo" type="hidden" name="memNo"> 
-						<span class="m-2" style="font-size: 20px; text-align: left;">희망 입찰가</span><br>
-						<input class="m-2" type="text" placeholder="정수만 입력" id="aucBid" name="aucBid" style="width: 120px; height: 40px;"> 원
-					<div class="auction_button">
-						<button id="btnBid" class="btn btn-dark">입찰하기</button>
-						<button id="btnBuy" class="btn btn-dark">즉시구매</button><br>
-						<button id="remainFive" class="btn btn-dark btn-sm">남은시간 5초</button><br>
-						<button id="btnResetBid" class="btn btn-dark btn-sm">입찰가 초기화</button>
-					</div>
-				</form>
+				<span style="font-size: 20px;">희망 입찰가</span><br>
+				<input type="text" id="aucBid" name="aucBid" placeholder="정수만 입력"  style="width: 120px; height: 40px;">원<br>
+				<button id="btnBid" class="btn btn-dark">입찰하기</button>
+				<button id="btnBuy" class="btn btn-dark">즉시구매</button><br>
+				<button id="remainFive" class="btn btn-dark btn-sm">남은시간 5초</button><br>
 			</div>
 	</div>
-	
-	
-	
-<!-- 
-	<div class="row">	
-		<div id="auction_info" class="card col-sm-6 p-0 m-5"></div>
-		<div class="card col-sm-3">
-			<div id="auction_bid"></div>
-				<form id="f">
-					<input class="card-body artNo" type="hidden"  name="artNo">
-					<input class="card-body memNo" type="hidden" name="memNo"> 
-					<div class="card-body" style="text-align: right;">
-						<p style="text-align: left;">희망 입찰가</p>
-						<input type="text" id="aucBid" name="aucBid"  style="width:120px;"> 원
-						<button id="btnBid" class="btn btn-dark">입찰하기</button>
-					</div>
-					<div class="card-body" style="text-align: right;"><button id="btnBuy" class="btn btn-dark">즉시구매</button></div>
-					<div class="card-body" style="text-align: right;"><button id="remainFive" class="btn btn-dark btn-sm">남은시간 5초</button></div>
-					<div class="card-body" style="text-align: right;"><button id="btnResetBid" class="btn btn-dark btn-sm">입찰가 초기화</button></div>
-				</form>
-		</div>
-	</div>
--->	
-		
 </div>
 <footer id="footer"></footer>
 </body>

@@ -78,28 +78,11 @@ public class AuctionController {
 	
 	//입찰 성공할 때 입찰 횟수 증가
 	@RequestMapping("/countBid.do")
-	public String countBid(int artNo) {
-		int re = dao.countBid(artNo);
+	public String countBid(int artNo,int memNo) {
+		int re = dao.countBid(artNo,memNo);
 		return re+"";
 	}
 
-	//입찰가 초기화 (임시 생성)
-	@RequestMapping("/resetBid.do")
-	public String resetBid(AuctionVo a) {
-		int re = dao.resetBid(a);
-		return re+"";
-	}
-	
-	//작품정보 불러오는 임시 메소드	//03.18 by 현규
-	@RequestMapping("/listArts.do")
-	public String listArts(){	
-		String r="";
-		List<AuctionVo> list = dao.listArts();
-		Gson gson = new Gson();
-		r= gson.toJson(list);
-		return r;
-	}
-	
 	//남은시간 출력
 	@RequestMapping("/remainTime.do")
 	public String remainTime(int artNo) {
@@ -107,22 +90,6 @@ public class AuctionController {
 		Gson gson = new Gson();
 		return gson.toJson(av);
 	}
-	
-	//찜하기
-	@RequestMapping("/insertWish.do")
-	public String insertWish(int artNo,int memNo) {
-		int re = dao.insertWish(artNo,memNo);
-		return re+"";
-	}
-	
-	//찜 취소
-	@RequestMapping("/deleteWish.do")
-	public String deleteWish(int artNo,int memNo) {
-		int re = dao.deleteWish(artNo,memNo);
-		return re+"";
-	}
-	
-	
 	
 	
 }

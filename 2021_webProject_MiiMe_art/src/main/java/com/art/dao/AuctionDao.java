@@ -22,14 +22,10 @@ public class AuctionDao {
 	}
 
 	//입찰 성공할 때 입찰 횟수 증가		
-	public int countBid(int artNo) {
-		return DBManager.countBid(artNo);
+	public int countBid(int artNo,int memNo) {
+		return DBManager.countBid(artNo,memNo);
 	}
 	
-	//입찰가 초기화 (테스트용)		
-	public int resetBid(AuctionVo a) {
-		return DBManager.resetBid(a);
-	}
 	
 	//핫딜 조건별 조회1, 찜 횟수(wishList_tb에서 count로 참조)	
 	public List<AuctionVo> listHot_1() {
@@ -46,31 +42,16 @@ public class AuctionDao {
 		return DBManager.listHot_3();
 	}
 	
-	//작품보기 임시 구현 (artList.html)	
-	public List<AuctionVo> listArts() {
-		return DBManager.listArts();
-	}
 	
 	//경매장에서 작품에 대한 마감시간 표시
 	public AuctionVo remainTime(int artNo) {
 		return DBManager.remainTime(artNo);
 	}
 
-	//찜하기
-	public int insertWish(int artNo,int memNo) {
-		return DBManager.insertWish(artNo,memNo);
-	}
-	
-	//찜취소
-	public int deleteWish(int artNo,int memNo) {
-		return DBManager.deleteWish(artNo,memNo);
-	}
-
 	//남은시간 5초로 초기화 (테스트용)
 	public int remainFive(AuctionVo a) {
 		return DBManager.remainFive(a);
 	}
-
-
+	
 	
 }
