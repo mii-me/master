@@ -38,4 +38,9 @@ public class PaymentDao {
 		return DBManager.payWait(memNo);
 	}
 	
+	//로그인한 회원정보를 가져온다.
+	public PaymentVo getMember(int memNo) {
+	return DBManager.getMember(memNo);
+	}
+	
 }

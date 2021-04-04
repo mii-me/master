@@ -39,7 +39,19 @@ private static SqlSessionFactory factory;
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< [by 정소윤] Start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
+	/**
+	 * 최상단 메인페이지 진입 시 최신 작품 3개
+	 * @author 정소윤
+	 * @return 해당 작품 정보
+	 */
+	public static List<ArtistInfoVo> mainArt() {
+		SqlSession session = factory.openSession();
+		List<ArtistInfoVo> list = session.selectList("artistInfo.mainArt");
+		session.close();
+		return list;
+	}
 	// ========================= 작가소개 페이징처리를 위한 총 개수 반환 메소드 =========================
+	
 	
 	// 작가목록 개수
 	public static int getTotalArtist(String keyword, String consonant, String sort) {
@@ -422,7 +434,15 @@ private static SqlSessionFactory factory;
 		list = session.selectList("payment.payWait",memNo);
 		session.close();
 		return list;
-	}	
+	}
+	
+	//로그인한 회원정보 가져오기 // by.현규
+	public static PaymentVo getMember(int memNo) {
+		SqlSession session = factory.openSession();
+		PaymentVo pv = session.selectOne("payment.getMember",memNo);
+		session.close();
+		return pv;
+	}
 	
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 김현규] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

@@ -102,12 +102,12 @@ if(getMemNo != null){
 				let r = eval("("+t+")");			 		
 		 		getTime = r.artTime;	//db에서 가져온 시간
 				$(".timer").html(SecondsTohhmmss(getTime));	//남은 시간 출력 (형식: 시:분:초)
+				
 			//남은시간이 없을 경우	
 			if(getTime <= 0){	
 				clearInterval(reTime);
 				console.log("타이머 종료");
 				alert("해당 작품이 낙찰되어 이전페이지로 돌아갑니다.");
-				//location.href="payment.html?artNo="+getArtNo;	//결제페이지 이동
 				location.href="artList.html";	//작품 페이지로 이동
 			}
 		
@@ -128,7 +128,7 @@ if(getMemNo != null){
 		//작품정보 불러오기
 		$.ajax({url:"/detailAuction.do",
 		type:"get",
-		data:{artNo:getArtNo,memNo:memNo},
+		data:{artNo:getArtNo},
 		success:function(art){
 		arr = eval(art);	
 				
@@ -217,7 +217,9 @@ if(getMemNo != null){
 					location.reload(); 
 				}});
 			}else{
-				alert("입찰가는 시작가·최고입찰가보다 높아야하며 즉시구매가보다 낮아야 합니다.");
+				$("#auction_top").empty();
+			$("#auction_top").append($(`<div class="alert alert-danger alert-dismissible fade show">
+									<button type="button" class="close" data-dismiss="alert">&times;</button>입찰가는 시작가·최고입찰가보다 높아야하며 즉시구매가보다 낮아야 합니다.</div>`));
 				$("#aucBid").val("");	//입찰가 입력칸 초기화
 				$("#aucBid").focus();	//입찰가 입력칸에 커서두기
 			}//end else
