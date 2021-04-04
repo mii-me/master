@@ -5,12 +5,17 @@
 <mapper namespace="artSell">
 	<!-- 남혜진 210318 판매하기_작품정보 등록 -->
 	<insert id="insertArtInfo">
-	  	insert all into ART_INFO_TB values(
+	  	insert all into ART_INFO_TB (
+		mem_no, art_no, art_name,
+		art_material, art_theme, art_Size1, art_Size2,
+		art_Year, art_pic, art_Exp,
+		art_Tag1, art_Tag2, art_Tag3,
+		auc_Start, auc_Buy) values (
 			#{memNo}, art_info_seq.nextval, #{artName}, 
 			#{artMaterial}, #{artTheme}, #{artSize1}, #{artSize2},
 			#{artYear}, #{artPic}, #{artExp}, 
 			#{artTag1}, #{artTag2}, #{artTag3}, 
-			#{aucStart}, #{aucBid}, #{aucBuy})
+			#{aucStart}, #{aucBuy})
 			 into ART_SELL_CHECK_TB values(
 			#{memNo},
 			art_info_seq.nextval) 
@@ -138,5 +143,9 @@
 		select MEM_NAME as memName from MEMBER_TB where MEM_NO = #{memNo}
 	</select>
 	
+	<update id="updateArtistPoint">
+		update ARTIST_POINT_TB set PAY_POINT = #{resultPoint} where MEM_NO = #{memNo}
+	</update>
+
 
 </mapper>

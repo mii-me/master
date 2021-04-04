@@ -115,7 +115,8 @@ $(function() {
  <header id="header"></header>
  <div class = "container p-3 my-3"><!-- 페이지 전체 감싸기 -->
 	 <h1 style="text-align:center;">판매하기</h1>
-	 <h3 style="text-align:center; color: gray;">작품 등록하기</h3>
+	 <h3 style="text-align:center; color: gray;">작품 등록하기&nbsp;<i class="far fa-edit"></i></h3>
+	 <hr width="300px">
 </div>
 <div class="container p-9 my-5 border" style="width:30%">
 	<form id="artForm" method="post" enctype="multipart/form-data" class="was-validated">
@@ -210,13 +211,13 @@ $(function() {
 		<hr>
 		<div class="form-group">
 			<label for="aucStart">경매시작가격 : </label>
-			<input type="number" id="aucStart" name="aucStart" placeholder="숫자만 입력합니다" required>원<br>
+			<input type="number" id="aucStart" class="form-control" name="aucStart" placeholder="숫자만 입력합니다" required>원<br>
 			<div class="valid-feedback">올바른입력입니다</div>
       		<div class="invalid-feedback">경매시작 가격을 정수로 입력해 주세요.</div>
 		</div>
 		<div class="form-group">
 			<label for="aucBuy">경매종료가격 : </label>
-			<input type="number" id="aucBuy" name="aucBuy" placeholder="숫자만 입력합니다" required>원<br>
+			<input type="number" id="aucBuy" class="form-control" name="aucBuy" placeholder="숫자만 입력합니다" required>원<br>
 			<div class="valid-feedback">올바른입력입니다</div>
       		<div class="invalid-feedback">정수만 입력해 주세요. 경매시작 가격보다 높아야 합니다.</div>
 		</div>

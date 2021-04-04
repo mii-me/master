@@ -89,7 +89,7 @@ $(function(){
 					$(div).click(function(){
 						$("#detail").empty();
 						
-						let div = $("<div class='card p-1 m-1 detail'></div>");
+						let div = $("<div class='card p-1 m-1 detail' style='text-align:center'></div>");
 						//let card = $("<div class='card p-1 m-1' style='width:360px'></div>");
 						
 						
@@ -97,19 +97,17 @@ $(function(){
 						idx = $(this).attr("idx");
 						artList = arr[idx];
 						//alert(artList.artName);
-						let pic = $("<img" + " src='art_pic/"+ art.artPic +"' width=100%>");
-						let name = $("<h3></h3>").html(artList.artName);
-						let material = $("<p></p>").html(artList.artMaterial);
-						let theme = $("<p></p>").html(artList.artTheme);
+						let pic = $("<img class='card_img_top m-1'" + " src='art_pic/"+ art.artPic +"' width=500px>");
+						let name = $("<h3 class='card-title'></h3>").html(artList.artName);
+						let material = $("<p class='card-text' style='color:gray'></p>").html(artList.artMaterial);
+						let theme = $("<p class='card-text'></p>").html(artList.artTheme);
 						let size = $("<p class='card-text'></p>").html(artList.artSize1 + " x " + artList.artSize2 + "cm");
-						let year = $("<p></p>").html(artList.artYear);
-						let tag = $("<p></p>").html("#" + artList.artTag1 + " #" + artList.artTag2 + " #" + artList.artTag3);
-						let start = $("<p></p>").html("경매시작가 [" + artList.aucStart + "] 원");
-						let buy = $("<p></p>").html("즉시낙찰가 [" + artList.aucBuy + "] 원");
-						let exp = $("<p></p>").html("작품설명<br>" + artList.artExp);
+						let year = $("<p class='card-text'></p>").html(artList.artYear);
+						let tag = $("<p class='card-text' style='color:#6a89cc'></p>").html("<i>#" + artList.artTag1 + " #" + artList.artTag2 + " #" + artList.artTag3 + "</i>");
+						let start = $("<p class='card-text'></p>").html("경매시작가 [<b>" + artList.aucStart + "</b>] 원");
+						let buy = $("<p class='card-text'></p>").html("즉시낙찰가 [<b>" + artList.aucBuy + "</b>] 원");
+						let exp = $("<p class='card-text' style='font-weight:bold'></p>").html("<span style='color:gray'>작품설명<br></span>" + "<i class='fas fa-quote-left'></i>&nbsp;" +artList.artExp + "&nbsp;<i class='fas fa-quote-right'></i>" );
 						$(div).append(pic, name, material, theme, size, year, tag, start, buy, exp);
-						//여기 수정
-						//$(card2).append($(div2));
 						$("#detail").append($(div));
 						
 						// 상세보기 했을 때, 수정 & 삭제 버튼 보이게 하기
@@ -139,13 +137,13 @@ $(function(){
 					})
 					
 					// 작품 목록 간단하게 보여주기 _ 선택하면 상세보기 가능
-					let pic = $("<img" + " src='art_pic/"+ art.artPic +"' width=100% class='card_img_top m-1'>");
+					let pic = $("<img" + " src='art_pic/"+ art.artPic +"' width=100% height=330px class='card_img_top m-1'>");
 					let name = $("<h3 class='card-title'></h3>").html(art.artName);
-					let material = $("<p class='card-text'></p>").html(art.artMaterial);
+					let material = $("<p class='card-text' style='color:gray'></p>").html(art.artMaterial);
 					let year = $("<p class='card-text'></p>").html(art.artYear);
 					$(div).append(pic,name, material, year);
 					//남혜진 _ 210331 _ BootStrap 적용
-					let card = $("<div class='card p-1 m-1' style='width:360px'></div>");
+					let card = $("<div class='card p-1 m-1' style='width:360px; text-align:right'></div>");
 					
 					$(div).appendTo($(card));
 					$("#artSellCheckList").append($(card));
@@ -285,16 +283,22 @@ $(function(){
  <header id="header"></header>
 <div class = "container p-3 my-3"><!-- 페이지 전체 감싸기 -->
 	 <h1 style="text-align:center;">판매하기</h1>
-	 <h3 style="text-align:center; color: gray;">판매가능한 작품 목록</h3>
+	 <h3 style="text-align:center; color: gray;">판매가능한 작품 목록&nbsp;<i class="fas fa-tasks"></i></h3>
+	 <hr width="300px">
 </div>
 <div class="container">
-<h5>이 목록의 작품들을 판매하려면 판매시작하기를 진행해야 합니다.</h5>
+	<h5>이 목록의 작품들을 판매하려면 판매시작하기를 진행해야 합니다.</h5>
+	<p style="color: gray">
+		판매를 원하는 작품을 누르고 판매를 시작하세요!<br>
+		작품을 선택하여 수정과 삭제를 진행할 수도 있습니다.
+	</p>
 	<div id="artSellCheckList" class="row m-0 detailUpdate">
-	<!-- 이곳에 작품 목록이 생성된다 -->
+		<!-- 이곳에 작품 목록이 생성된다 -->
 	</div>
+<hr>
 </div>
 <div class="container">
-	<div id="page"></div>
+	<div id="page" style="text-align: center"></div>
 </div>
 
 <div class="container">
@@ -304,7 +308,6 @@ $(function(){
 		<button id="btnArtSell" class="detail artSell btn btn-dark">해당 작품 판매시작하기</button>
 		<button id="btnDelete" class="detail artDelete btn btn-dark">해당 작품정보 삭제하기</button>
 	</div>
-<hr>
 	<form class="artForm detail2 was-validated" id="artForm" method="post" enctype="multipart/form-data">
 		<h5>작품 수정사항을 작성해주세요</h5>
 		<!-- @@로그인 기능 구현후 memNo의 value 수정 -->
