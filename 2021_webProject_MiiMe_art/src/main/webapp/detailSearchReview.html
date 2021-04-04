@@ -80,14 +80,14 @@
 
 							output += '<ul class="nav justify-content-end">'
 							if (data.list[i].artTag1 != null) {
-								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
+								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">#' + data.list[i].artTag1 + '</font></a></li>'
 							}
 							if (data.list[i].artTag2 != null) {
-								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">#'
 									+ data.list[i].artTag2 + '</font></a></li>'
 							}
 							if (data.list[i].artTag3 != null) {
-								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">#'
 									+ data.list[i].artTag3 + '</font></a></li>'
 							}
 
@@ -134,14 +134,14 @@
 
 							output += '<ul class="nav justify-content-end">'
 							if (data.list[i].artTag1 != null) {
-								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
+								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">#' + data.list[i].artTag1 + '</font></a></li>'
 							}
 							if (data.list[i].artTag2 != null) {
-								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">#'
 									+ data.list[i].artTag2 + '</font></a></li>'
 							}
 							if (data.list[i].artTag3 != null) {
-								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">#'
 									+ data.list[i].artTag3 + '</font></a></li>'
 							}
 
@@ -188,8 +188,12 @@
 			console.log(orderField);
 			if (keyword == null) {
 				loadReviewList("", "", orderField);
+				$('#buttonAdd').empty();
+
 			} else {
 				loadReviewList(keyword, searchField, orderField);
+				$('#buttonAdd').empty();
+
 			}
 		};
 
@@ -250,7 +254,7 @@
 			<div class="row py-lg-5">
 				<div class="col-lg-6 col-md-8 mx-auto">
 					<h1 class="fw-light">후기 검색</h1>
-					<p class="lead text-muted">작가명, 작품명으로 후기를 검색</p>
+					<p class="lead text-muted">작가명, 작품명으로 후기를 검색해보세요</p>
 					<p>
 						<a href="artList.html" class="btn btn-dark">작품 목록</a>
 						<a href="artistList.html" class="btn btn-secondary my-2">작가 목록</a>
@@ -296,8 +300,8 @@
 		</div>
 	</main>
 
-	<footer id="footer"></footer>
 	<div id="floatingbar"></div>
+	<footer id="footer"></footer>
 
 </body>
 
