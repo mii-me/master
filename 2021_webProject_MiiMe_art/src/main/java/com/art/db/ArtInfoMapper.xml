@@ -108,9 +108,8 @@
 							      
 					</otherwise>
 				</choose>
-			 	))
+			 	order by art_no desc))
 		where num between #{start} and #{end}
-		order by art_no desc
  	</select>
   
 </mapper>

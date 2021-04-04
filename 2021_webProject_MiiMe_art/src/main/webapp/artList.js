@@ -5,6 +5,8 @@ let sizeRange1; //조건검색에서 받아온 사이즈1 (art_size1)
 let sizeRange2; //조건검색에서 받아온 사이즈2 (art_size2)
 let responsePrice; //조건검색에서 받아온 가격
 
+
+
 //작품보기 페이지 함수(페이징,조건검색테마,조건검색사이즈1,조건검색사이즈2,조건검색가격)
 function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			
@@ -22,14 +24,17 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			 		
 			 		//페이지번호 출력하기
 					for(i=1;i<=totalPage;i++) {
-						let span = $("<span class='pageNO'></span>").html(i);
-						$("#page").append(span);
+						let pageAnchor = $("<a class='pageNO page"+i+"'></a>").html(i);
+						$("#page").append(pageAnchor);
 						
-						$(span).click(function(){
+						$(".pageNO").click(function(){
 							let pageNO = $(this).text();
+							
 							loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice);
 						});//span.click
-					}
+						
+					};
+					
 				
 			 		$.each(arr,function(index,a){ //
 			 			let div = $("<div class='art_list-artbox'></div>"); //전체div
@@ -52,6 +57,7 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						let div_img = $("<div class='artPicHover'></div>").append(img_pic); //이미지div 
 						
 						let text_name = $("<div></div>").html("<h3 class='listArtName'>" + a.artName + "</h3>"); //작품제목
+						
 						
 						//태그가 선택안함이라면 작품 리스트에서 보여줄 때 공백으로 보여준다.
 						if(a.artTag1 == '#선택안함'){
@@ -101,6 +107,7 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 
 			 	}}); //ajax
 		
+		
 		}//loadArtList
 		
 		
@@ -128,9 +135,8 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			}else if(responsePrice == null){
 				responsePrice = 1000000000;
 			}
-			console.log("responseTheme : "+ responseTheme);
+			//console.log("responseTheme : "+ responseTheme);
 			// 나중에 누른것에 첫번째 누른것이 상태유지 되어야함
-							
 			loadArtList(1,responseTheme,sizeRange1,sizeRange2,responsePrice);
 			//console.log("Themeli 클릭됨");
 		});
@@ -207,7 +213,8 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 				sizeRange2 = 101;
 			}
 			
-			//console.log("responsePrice : " + responsePrice);
+			
+			
 			
 			loadArtList(1,responseTheme,sizeRange1,sizeRange2,responsePrice);
 		})//#searchPriceBar.change : function()
@@ -222,6 +229,10 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			$(".searchSizeli").css("background-color","");
 			$(".searchSizeli").css("color","");
 			$("#searchPriceBar-value").html("");
+			
+			responseTheme = '';
+			sizeRange1 = 0;
+			sizeRange2 = 101;
 						
 			loadArtList(1,"",0,101,1000000000);
 		})//.btnReset.click : function()

@@ -1,6 +1,3 @@
-/* .btn{
-		visibility:hidden
-	} */
 	#page{
 		    clear: both;
 		    ALIGN-ITEMS: center;
@@ -15,6 +12,11 @@
     color:#fff;
 	margin:15px;
 	cursor: pointer;
+	}
+	.pageNO:focus{
+		color:#fff;
+		border:1px solid #f40;
+		background-color:#f40;
 	}
 	#container,#page{
 		clear:both;
@@ -93,6 +95,9 @@
 	}
 	#searchDiv ul{
 		display:flex;
+	}
+	#searchDiv{
+		margin-top: 30px;
 	}
 	.searchPrice-list{
 	    width: 700px;
