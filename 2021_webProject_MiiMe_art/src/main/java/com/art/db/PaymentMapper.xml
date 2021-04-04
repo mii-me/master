@@ -39,11 +39,13 @@
 	 
 	 <!-- 낙찰완료된 작품에 대한 결제대기 목록 -->
 	<select id="payWait" resultType="paymentVo">
-		select art_no,art_pic,art_name,auc_bid, (select mem_name from member_tb where mem_no=#{memNo}) mem_name
-		from art_info_tb
-		where art_no= (select art_no from auction_tb where bid_top =
-						(select bid_top from auction_tb where bid_top=
-							(select mem_name from member_tb	where mem_no=#{memNo})))
+		select art.art_no,art.art_name,art.art_pic,art.auc_bid,(select mem_name from member_tb where mem_no=#{memNo}) mem_name
+		from art_info_tb art
+		inner join auction_tb auc
+		on art.art_no=auc.art_no
+		inner join art_sell_tb sell
+		on auc.art_no=sell.art_no
+		where bid_top=(select mem_name from member_tb where mem_no=#{memNo}) and sell.art_time &lt; sysdate
 	</select>
 	 
 	 

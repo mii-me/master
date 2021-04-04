@@ -10,10 +10,13 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style type="text/css">
 
-table{
-	border: 1px solid #333;
+.table{
 	background-color: #FAFAFF;
 }
+#wait_list{
+	font-size: 27px;
+}
+
 
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -33,10 +36,10 @@ $.getScript("/loginCheck.js",function(){
 //로그인 했을 시에만 진입가능
 if(getMemNo != null){	
 
-	let url = location.href;	//url 요청
-	let getReceive = url.substr(url.indexOf("?")+1)
-	let getReceiveSplit = getReceive.split("=");
-	let getArtNo = getReceiveSplit[1];		//쿼리스트링에서 가져온 작품번호
+	//let url = location.href;	//url 요청
+	//let getReceive = url.substr(url.indexOf("?")+1)
+	//let getReceiveSplit = getReceive.split("=");
+	//let getArtNo = getReceiveSplit[1];		//쿼리스트링에서 가져온 작품번호
 	let bitTop; //최고입찰자
 	
 	$.ajax({url:"/payWait.do",
@@ -57,18 +60,19 @@ if(getMemNo != null){
 	
 	let tr = $(`<tr>`);
 	let art_no = $(`<td>`).html(pay.artNo);
-	let art_pic = $(`<td>`).html($(`<img width="200px" height="100px">`).attr("src","./art_pic/"+pay.artPic));
+	let art_pic = $(`<td>`).html($(`<img width="260px" height="210px">`).attr("src","./art_pic/"+pay.artPic));
 	let art_name = $(`<td>`).html(pay.artName);
 	let auc_bid = $(`<td>`).html(aucBid+`원`);
-	let mem_name = $(`<h3>`).html(pay.memName+" 님의 낙찰 내역입니다.");
+	let mem_name = $(`<h3>`).html(`<b>`+pay.memName+`</b>`+" 님의 낙찰 내역입니다.");
 	
 	$(tr).append(art_no,art_pic,art_name,auc_bid);
+	$(".top").empty();
 	$(".top").append(mem_name);
 	$("#wait_list").append(tr);
-	
-	
+
+	//작품을 클릭할 경우
 	$(tr).click(function(){
-		location.href="payment.html?artNo="+getArtNo;	//결제페이지 이동
+		location.href="payment.html?artNo="+pay.artNo;	//결제페이지 이동
 	});
 	
 	
@@ -89,13 +93,13 @@ location.href="login.html";
 <body>
 <header id="header"></header>
 <div class="container">
-	<div class="top m-4">
+	<div class="top m-5" style="text-align: center;">
 	</div>
-	<table class="m-4">
+	<table class="table table-hover m-5">
 		<thead>	
 			<tr>
 				<th class="th">작품번호</th>
-				<th class="th">이미지</th>
+				<th class="th">작품</th>
 				<th class="th">작품명</th>
 				<th class="th">낙찰가</th>
 			</tr>

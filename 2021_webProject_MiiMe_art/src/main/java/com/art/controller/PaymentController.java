@@ -47,6 +47,13 @@ public class PaymentController {
 		return re+"";
 	}
 
+	//로그인한 회원정보 가져오기
+	@RequestMapping(value="/getMember.do")
+	public PaymentVo getMember(int memNo) {
+	PaymentVo pv=dao.getMember(memNo);
+	return pv;
+	}
+	
 	
 	//낙찰완료된 작품에 대한 결제대기 목록   //04.04 by 현규
 	@RequestMapping("/payWait.do")
