@@ -24,13 +24,17 @@
  	</delete>
  
  	<select id="detail" resultType="artinfoVo">
- 		select art_info_tb.mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
+ 	select ait.mem_no, ait.art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
 			art_tag1, art_tag2, art_tag3, auc_start, nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,
-			artist_info_tb.artist_name,artist_info_tb.artist_pic, artist_info_tb.artist_intro,artist_info_tb.artist_career
-		from art_info_tb
-		inner join artist_info_tb
-		on art_info_tb.mem_no = artist_info_tb.mem_no
-		where art_info_tb.mem_no=#{memNo} and art_no=#{artNo}
+			atit.artist_name,atit.artist_pic, atit.artist_intro,atit.artist_career, art_sell
+	from art_info_tb ait,
+		artist_info_tb atit,
+		art_sell_tb ast,
+		art_sell_check_tb asct
+	where ait.mem_no = atit.mem_no(+)
+	and ait.art_no = ast.art_no(+)
+	and ait.art_no = asct.art_no(+)
+	and ait.mem_no=#{memNo} and ait.art_no=#{artNo}
  	</select>
  
  	<select id="detailArtHash" resultType="artinfoVo">
@@ -77,32 +81,39 @@
  	<select id="selectAll" resultType="artinfoVo">
 	 	select num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
 		nvl2(art_tag1,(concat('#',art_tag1)),' ') art_tag1, nvl2(art_tag2,(concat('#',art_tag2)),' ') art_tag2, nvl2(art_tag3,(concat('#',art_tag3)),' ') art_tag3, auc_start,
-		 nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy
-		from (select rownum num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
-		art_tag1, art_tag2, art_tag3, auc_start, nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy
-			from (select *
-			 	from art_info_tb
+		 nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,art_sell
+		 from(
+			select rownum num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
+			art_tag1, art_tag2, art_tag3, auc_start, nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,art_sell
+			from(
+				select ait.mem_no, ait.art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
+				art_tag1, art_tag2, art_tag3, auc_start, nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,art_sell
+				from art_info_tb ait,
+					art_sell_tb ast,
+					art_sell_check_tb asct
+				where ait.art_no = asct.art_no(+)
+					and ait.art_no = ast.art_no(+)
 			 	<choose>
 				     <when test="responseTheme != '' and sizeRange1 != '0' and sizeRange2 != '101' and responsePrice != '1000000000'">
-				     where art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
+				     and art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
 				    </when>
 					<when test="responseTheme != '' and sizeRange1 != '0' and sizeRange2 != '101'">
-				      where art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2}
+				      and art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2}
 				    </when>
 					<when test="responseTheme != '' and responsePrice != '1000000000'">
-				      where art_theme = #{responseTheme} and auc_buy &lt;= #{responsePrice}
+				      and art_theme = #{responseTheme} and auc_buy &lt;= #{responsePrice}
 				    </when>
 					<when test="sizeRange1 != '0' and sizeRange2 != '101' and responsePrice != '1000000000'">
-				      where art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
+				      and art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
 				    </when>
 					<when test="responseTheme != ''">
-				      where art_theme = #{responseTheme}
+				      and art_theme = #{responseTheme}
 				    </when>
 				   <when test="sizeRange1 != '0' and sizeRange2 != '101'">
-				      where art_size1 between #{sizeRange1} and #{sizeRange2}
+				      and art_size1 between #{sizeRange1} and #{sizeRange2}
 					</when>
 				   <when test="responsePrice != '1000000000'">
-				      where auc_buy &lt;= #{responsePrice}
+				      and auc_buy &lt;= #{responsePrice}
 					</when>
 					<otherwise>
 							      

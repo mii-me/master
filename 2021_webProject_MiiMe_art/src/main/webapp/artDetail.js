@@ -3,18 +3,6 @@
 		let receive = uri.substr(uri.indexOf("?") + 1) //쿼리스트링에서 ?를 제외한 나머지를 담은 변수
 		let receiveSplit = receive.split("&"); //&를 기준으로 자른 값들을 담은 변수 
 		
-		//receive : 쿼리스트링에서 ?를 제외한 나머지를 담은 변수
-		let tempReceive = uri.substr(uri.indexOf("?") + 1) 
-		// artNo=(작품번호)로 나올것으로 예상함
-		console.log(tempReceive);
-		//쿼리스트링에서 =를 기준으로 자른다. 
-		let tempReceiveSplit = tempReceive.split("=");
-		//콘솔에 찍어보면 ["artNo","(작품번호)"]로 나올 것으로 예상
-		console.log(tempReceiveSplit);
-		//위 receiveSplit은 배열로 반환되므로 작품번호 숫자가 담겨있는 1번째 인덱스를 변수에 담는다.
-		let tempArtNo = tempReceiveSplit[1];
-		console.log("작품번호 : " + tempArtNo);
-		
 
 		for(i=0;i<receiveSplit.length;i++){
 			receiveArr.push(receiveSplit[i].split("=")[1]); //=를 기준으로 자른 값들 중 숫자만 담는다
@@ -61,7 +49,11 @@
 		cookieName = "'"+"artNo"+cookieArtNo+"'";
 		//alert(" 4. 쿠키명:"+cookieName);
 		setCookie(cookieName, cookieArtPic, 1); // 쿠키를 담아주는 메소드
-					
+		
+		
+		
+		
+		
 		$(".name").html(selected.artName);
 		$("#artistName").html(selected.artistName);
 		$(".material").html(selected.artMaterial);
@@ -74,10 +66,19 @@
 		let aucBuyString = (selected.aucBuy).toString();
 		aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
 		
-		//현재 경매가와 즉시구매 가격이 같으면 Sold out으로 표시한다.
-		if(aucBid == aucBuy) {
-			aucBid = 'Sold out';
-			aucBuy = 'Sold out';
+		//판매 상황을 반영한다.
+		let selectedSell = selected.artSell;
+		console.log("selectedSell : " + selectedSell);
+		if(selectedSell == null) {
+			aucBid = '-';
+			aucBuy = '-';
+			$(".sellStatusArea").html("※ 판매예정인 작품입니다.");
+		}
+		if(selectedSell == 'sold') {
+			aucBid = 'Sold Out';
+			aucBuy = 'Sold Out';
+			$(".sellStatusArea").addClass("badge badge-pill badge-danger");
+			$(".sellStatusArea").html("Sold Out");
 		}
 		
 		
@@ -304,12 +305,14 @@
 				if(userNo!=null) {
 					
 					//솔드아웃이면 경매페이지로 이동하지 않는다.
-					if(aucBid == 'Sold out') {
+					if(aucBid == 'Sold Out') {
 						alert("판매 완료된 작품입니다.");
+						return;
+					}else if(aucBuy == '-'){//판매예정인 작품이면 경매페이지로 이동하지 않는다.
+						alert("판매 예정인 작품입니다.");
 						return;
 					}
 					
-					alert("작품번호 : " + artNo);			
 					//alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
 					location.href="auction.html?artNo="+artNo;	
 				}else{ //로그인하지않았다면 로그인페이지로 이동한다.
@@ -324,8 +327,11 @@
 				if(userNo!=null) {
 					
 					//솔드아웃이면 구매페이지로 이동하지 않는다.
-					if(aucBuy == 'Sold out') {
+					if(aucBuy == 'Sold Out') {
 						alert("판매 완료된 작품입니다.");
+						return;
+					}else if(aucBuy == '-'){ //판매예정인 작품이면 구매페이지로 이동하지 않는다.
+						alert("판매 예정인 작품입니다.");
 						return;
 					}
 					
@@ -361,10 +367,13 @@
 	function wishlistInsert(userNo,artNo) {
 		
 		//솔드아웃이면 찜목록에 insert하지 않는다.
-		if(aucBid == 'Sold out') {
+		if(aucBid == 'Sold Out') {
 				alert("판매 완료된 작품으로, 해당 기능을 사용할 수 없습니다.");
 				return;
-			}
+		}else if(aucBid == '-'){ //판매예정인 작품이면 찜목록에 insert하지 않는다.
+				alert("판매 예정인 작품입니다.");
+				return;
+		}
 		
 		$.ajax({url:"insertWishList.do/?userNo="+userNo+"&artNo="+artNo,success:function(r){
 			alert(r);
@@ -378,7 +387,10 @@
 		if(aucBid == 'Sold out') {
 				alert("판매 완료된 작품으로, 해당 기능을 사용할 수 없습니다.");
 				return;
-			}
+		}else if(aucBid == '-'){ //판매예정인 작품이면 delete하지 않는다.
+				alert("판매 예정인 작품입니다.");
+				return;
+		}
 		
 		$.ajax({url:"deleteWishList.do/?userNo="+userNo+"&artNo="+artNo,success:function(r){
 			alert(r);

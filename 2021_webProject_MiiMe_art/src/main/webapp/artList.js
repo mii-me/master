@@ -6,7 +6,6 @@ let sizeRange2; //조건검색에서 받아온 사이즈2 (art_size2)
 let responsePrice; //조건검색에서 받아온 가격
 
 
-
 //작품보기 페이지 함수(페이징,조건검색테마,조건검색사이즈1,조건검색사이즈2,조건검색가격)
 function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			
@@ -21,7 +20,7 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			$("#page").empty();
 			$(".art_list").empty();
 				
-			 		
+				
 			 		//페이지번호 출력하기
 					for(i=1;i<=totalPage;i++) {
 						let pageAnchor = $("<a class='pageNO page"+i+"'></a>").html(i);
@@ -39,6 +38,7 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			 		$.each(arr,function(index,a){ //
 			 			let div = $("<div class='art_list-artbox'></div>"); //전체div
 			 			$(div).attr("idx",index);
+				 	
 			 			
 			 			let artTag = a.artTag1;
 			 			artTag = artTag.substring(1);
@@ -47,7 +47,10 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						if(artTag=='선택안함') {
 							artTag = '';
 						}
-						//console.log("artTag : " + artTag);
+						
+						let isSoldOut = a.artSell;
+						console.log("isSoldOut : " + isSoldOut);
+						
 						
 						
 						//앵커태그 걸기 : encodeURI - 한글값을 넘기기 위함(태그:한글)
@@ -57,6 +60,8 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						let div_img = $("<div class='artPicHover'></div>").append(img_pic); //이미지div 
 						
 						let text_name = $("<div></div>").html("<h3 class='listArtName'>" + a.artName + "</h3>"); //작품제목
+						
+						
 						
 						
 						//태그가 선택안함이라면 작품 리스트에서 보여줄 때 공백으로 보여준다.
@@ -86,13 +91,43 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						}
 						
 						
-						let text_bid = $("<div></div>").html("<b>"+"현재 입찰가 &nbsp;&nbsp;&nbsp;"+"</b>" + aucBid); 
-						let text_buy = $("<div></div>").html("<b>"+"즉시 구매가 &nbsp;&nbsp;&nbsp;"+"</b>"+ aucBuy); 
-						let div_text = $("<div id='div_text'></div>").append(text_name,text_tag,text_bid,text_buy);
-						$(link).append(div_img,div_text);
+						let text_bid; 
+						let text_buy; 
+						let div_text;
+					
+						let isSoldOutIcon;
+						if(isSoldOut == null) {
+							isSoldOutIcon = $("<div class='isSoldout isSoldout-none'></div>").html("<i class='fa fa-hourglass-end' aria-hidden='true'><span class='fa-hourglass-end-text'>&nbsp;판매예정&nbsp;</span></i>");
+							text_bid =  $("<div></div>").html("<b>"+"현재 입찰가 &nbsp;&nbsp;&nbsp;"+"</b>" + "-"); 
+							text_buy = $("<div></div>").html("<b>"+"즉시 구매가 &nbsp;&nbsp;&nbsp;"+"</b>"+ "-"); 
+							div_text = $("<div id='div_text'></div>").append(text_name,text_tag,text_bid,text_buy,isSoldOutIcon);
+							$(link).append(div_img,div_text);
 						
-						$(div).append(div_link);
-						 
+							$(div).append(div_link);
+							$(".fa-hourglass-end-text").css("color","#333745");
+						}
+						if(isSoldOut == 'sale'){
+							isSoldOutIcon = $("<div class='isSoldout isSoldout-ing'></div>").html("<i class='fa fa-hourglass-2' aria-hidden='true'><span class='fa-hourglass-2-text'>&nbsp;판매중&nbsp;</span></i>");
+							text_bid = $("<div></div>").html("<b>"+"현재 입찰가 &nbsp;&nbsp;&nbsp;"+"</b>" + aucBid); 
+							text_buy = $("<div></div>").html("<b>"+"즉시 구매가 &nbsp;&nbsp;&nbsp;"+"</b>"+ aucBuy);
+							div_text = $("<div id='div_text'></div>").append(text_name,text_tag,text_bid,text_buy,isSoldOutIcon);
+							$(link).append(div_img,div_text);
+						
+							$(div).append(div_link);
+							$(".fa-hourglass-2-text").css("color","#4085df");
+						}
+						if(isSoldOut == 'sold'){
+							isSoldOutIcon = $("<div class='isSoldout isSoldout-sold'></div>").html("<i class='fa fa-hourglass' aria-hidden='true'><span class='fa-hourglass-text'>&nbsp;Sold out&nbsp;</span></i>");
+							text_bid = $("<div></div>").html("<b>"+"현재 입찰가 &nbsp;&nbsp;&nbsp;"+"</b>" + "Sold out"); 
+							text_buy = $("<div></div>").html("<b>"+"즉시 구매가 &nbsp;&nbsp;&nbsp;"+"</b>"+ "Sold out");
+							div_text = $("<div id='div_text'></div>").append(text_name,text_tag,text_bid,text_buy,isSoldOutIcon);
+							$(link).append(div_img,div_text);
+						
+							$(div).append(div_link);
+							$(".fa-hourglass-text").css("color","#EA2E49");
+						}
+						
+						
 						$(".art_list").append(div);
 						$(".listTag").css("font-size","9px");
 					

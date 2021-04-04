@@ -32,6 +32,8 @@ public class ArtInfoVo {
 	private String artistCareer;
 	private String artistPic;
 	
+	private String artSell;
+	
 	
 	private String memId;
 	private String memPwd;
