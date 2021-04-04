@@ -390,15 +390,32 @@ private static SqlSessionFactory factory;
 	}//insertPayment
 
 	
-	//art_sell_tb에서 판매 상태를 바꿔준다.   // by.현규
-	public static int updateStatus(PaymentVo p) {
+	//작품 판매 상태를 'sold'로 바꿔준다.   // by.현규
+	public static int updateSold(PaymentVo p) {
 		SqlSession session =factory.openSession();
-		int re= session.update("payment.updateStatus",p);
+		int re= session.update("payment.updateSold",p);
 		session.commit();
 		session.close();
 		return re;
 	}
 
+	//작품 판매 상태를 'sale'로 바꿔준다.   // by.현규
+	public static int updateSale(PaymentVo p) {
+		SqlSession session =factory.openSession();
+		int re= session.update("payment.updateSale",p);
+		session.commit();
+		session.close();
+		return re;
+	}
+	
+	//최고입찰자 초기화  // by.현규
+	public static int resetTop(PaymentVo p) {
+		SqlSession session =factory.openSession();
+		int re= session.update("payment.resetTop",p);
+		session.commit();
+		session.close();
+		return re;
+	}
 	
 	//경매장에서 작품 남은시간 보여주기     // by.현규
 	public static AuctionVo remainTime(int artNo) {
@@ -422,6 +439,15 @@ private static SqlSessionFactory factory;
 	public static int remainFive(AuctionVo a) {
 		SqlSession session =factory.openSession();
 		int re= session.update("auction.remainFive",a);
+		session.commit();
+		session.close();
+		return re;
+	}
+	
+	//남은시간 +5시간 추가(결제취소용)
+	public static int upTimeFive(AuctionVo a) {
+		SqlSession session =factory.openSession();
+		int re= session.update("payment.upTimeFive",a);
 		session.commit();
 		session.close();
 		return re;

@@ -11,7 +11,7 @@
 		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
 				info.art_theme art_theme,info.art_size1 art_size1,info.art_size2 art_size2, info.art_year art_year,info.art_pic art_pic,
 				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
-				info.auc_start auc_start,info.auc_bid auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
+				info.auc_start auc_start,nvl2(info.auc_bid,info.auc_bid,info.auc_start) auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
 				(select round((art_time-sysdate)*24*60*60)
 				from art_sell_tb
 				where art_no=	(select art_no
@@ -35,7 +35,7 @@
 		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
 				info.art_theme art_theme,info.art_size1 art_size1,info.art_size2 art_size2, info.art_year art_year,info.art_pic art_pic,
 				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
-				info.auc_start auc_start,info.auc_bid auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
+				info.auc_start auc_start,nvl2(info.auc_bid,info.auc_bid,info.auc_start) auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
 				(select round((art_time-sysdate)*24*60*60)
 				from art_sell_tb
 				where art_no=(select art_no
@@ -58,7 +58,7 @@
 		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
 				info.art_theme art_theme,info.art_size1 art_size1,info.art_size2 art_size2,info.art_year art_year,info.art_pic art_pic,
 				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
-				info.auc_start auc_start,info.auc_bid auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
+				info.auc_start auc_start,nvl2(info.auc_bid,info.auc_bid,info.auc_start) auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
 				(select round((art_time-sysdate)*24*60*60)
 				from art_sell_tb
 				where art_no=	(select art_no
