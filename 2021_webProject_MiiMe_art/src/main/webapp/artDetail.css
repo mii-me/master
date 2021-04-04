@@ -23,9 +23,14 @@
 	}
 	.detail-content-box-info{
 		width:500px;
-		height:400px;
+		height:450px;
 		text-align: right;
 		padding:20px;
+	}
+	.sellStatusArea{
+		font-weight: bold;
+		background-color: #2d3648;
+		color:#fff;
 	}
 	#btnBuy,#btnBid,.artistInfo-box-btn-moreArtist {
 	display: inline-block;
