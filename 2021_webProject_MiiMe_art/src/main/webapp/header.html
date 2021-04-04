@@ -42,53 +42,58 @@
 	$(function(){
 	
 		// 메뉴바 로그인세션 가져오기
-		let memNoL = sessionStorage.getItem("memNo");
-		let memIsArtistL = sessionStorage.getItem("memIsArtist");
-		console.log("회원번호: "+memNoL);
-		console.log("회원유형: "+memIsArtistL);
+		let memNoL = sessionStorage.getItem('memNo');
+		let memIsArtistL = sessionStorage.getItem('memIsArtist');
+		console.log('회원번호: '+memNoL);
+		console.log('회원유형: '+memIsArtistL);
 
 
 		// 사용자가 로그인하지 않은 상태면 "Login"을 보여주고, 로그인한 상태면 "Logout"을 보여줌.
 		if(!memNoL){ // 사용자가 로그인하지 않았다면
-			$("#login").append(`<a class="nav-link" href="login.html" id="login"><i class="fas fa-sign-in-alt"></i> Login</a>`);
+			$('#login').append(`<a class="nav-link" href="login.html" id="login"><i class="fas fa-sign-in-alt"></i> Login</a>`);
 			
 		}else{ // 사용자가 로그인했다면
-		    $("#login").append(`<a class="nav-link" id="logout" style="cursor: pointer"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
+		    $('#login').append(`<a class="nav-link" id="logout" style="cursor: pointer"><i class="fas fa-sign-out-alt"></i> Logout</a>`);
 		}
 		
 		
 		// 로그아웃 기능
-		$("#logout").click(function(){
+		$('#logout').click(function(){
 			//세션 삭제
 			sessionStorage.clear();
 			
-			//새로고침
-			location.reload();
+			//메인페이지로 이동
+			location.href="main.html";
 		});
 		
 		
 		// 마이페이지 진입
-		$("#myPage").click(function(){
+		$('#myPage').click(function(){
 			if(!memNoL){
-				alert("로그인 후 이용하실 수 있습니다.");
-				location.href = "login.html";
+				alert('로그인 후 이용하실 수 있습니다.');
+				location.href = 'login.html';
 				
-			} else if(memNoL != "null"){
-				location.href = "mypage.html";
+			} else if(memNoL != 'null'){
+				location.href = 'mypage.html';
 			}
 		});
 		
 		
 		// 판매하기 진입
-		$("#artSell").click(function(){
+		$('#artSell').click(function(){
 			if(memIsArtistL != 'S'){
-				alert("작가회원만 이용하실 수 있습니다.");
+				alert('작가회원만 이용하실 수 있습니다.');
 				
 			} else if(memIsArtistL = 'B'){
-				location.href = "artSell.html";
+				location.href = 'artSell.html';
 			}
 		});
 		
+		
+		// 작가소개 진입 시 세션스토리지 정리, 페이지 매개변수 초기화
+		$('#artistList_menu').click(function(){
+			sessionStorage.removeItem('pageNUM');
+		});
 				
 	});
 </script>
@@ -119,7 +124,7 @@
 				</li>
 				<li class="nav-item ml-2">
 					<a class="nav-link" href="artistList.html">
-						<span class="main_menu">작가소개</span>
+						<span class="main_menu" id="artistList_menu">작가소개</span>
 					</a>
 				</li>
 				<li class="nav-item ml-2 dropdown">
