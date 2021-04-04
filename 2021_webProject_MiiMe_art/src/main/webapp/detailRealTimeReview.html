@@ -8,19 +8,22 @@
 	<title>실시간 리뷰</title>
 
 	<style>
-	
-
-/*		img{
-			margin-left:auto;
-			margin-right: auto;
-			width: 400px;
-			height: 400px;
-		}
-		*/
 	</style>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
+
+		//1. 페이지 구성 (html to DOM)
+		//2. js를 읽어서 순서대로 작동시킨다
+		//3. document.ready 작동
+		//4. window.onLoad 작동
+		//5. DOM을 눈으로 볼 수 있게 바꿔준다 
+
+
+		$(function () { //즉시 실행 함수 (2번 과정), 익명 함수(잠깐 사용하고 바로 사라짐)
+			loadDefaultList();
+			readDefaultReviewMostLike3();
+		});
 
 		$(document).ready(function () {
 			$("#header").load("/header.html");
@@ -29,27 +32,16 @@
 		});
 		// header, footer include
 
-		//1. 페이지 구성 (html to DOM)
-		//2. js를 읽어서 순서대로 작동시킨다
-		//3. document.ready 작동
-		//4. window.onLoad 작동
-		//5. DOM을 눈으로 볼 수 있게 바꿔준다 
 
-		$(function () { //즉시 실행 함수 (2번 과정), 익명 함수(잠깐 사용하고 바로 사라짐)
-
-			loadDefaultList();
-			readDefaultReviewMostLike3();
-
-		});
-
+		//'더보기'버튼 클릭 횟수에 따라 불러오는 데이터의 수를 정해줄 변수 
 		let clickCnt = 1;
 
 		function clickAddAction() {
 			clickCnt += 1;
-			console.log(clickCnt)
 			$("#reviewList").empty(); // 목록이 중첩되지않게 초기화 
 			loadDefaultList();
-		}
+			$('html, body').animate({ scrollTop: ($(document).height()) + clickCnt * 1000 }, 1500); //버튼을 눌렀을 시 누른 지점으로 바로 가게끔 animate
+		}//clickAddAction
 
 		function loadDefaultList() {
 			$.ajax({
@@ -63,12 +55,12 @@
 					//오브젝트는 each 반복 안되니까 일반 for문 사용 
 					if (clickCnt * 9 > data.list.length) {
 						for (var i = 0; i < data.list.length; i++) {
-							
+
 							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
 							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
 							output += '<div class="card-body">';
-							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
+							output += '<p class="card-text" class="mb-0" ><a style="text-decoration: none; color: black;" href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
 							if (data.list[i].artTag1 != null) {
 								output += data.list[i].artTag1
 							} else {
@@ -76,29 +68,30 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
-							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
+								output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;&emsp;</p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
+							output += '<br><br>'
+
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
-							
 
-							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;&emsp;</p>'
 
-						output += '<ul class="nav justify-content-end">'
-						if (data.list[i].artTag1 != null) {
-							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
-						}
-						if (data.list[i].artTag2 != null) {
-							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-								+ data.list[i].artTag2 + '</font></a></li>'
-						}
-						if (data.list[i].artTag3 != null) {
-							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-								+ data.list[i].artTag3 + '</font></a></li>'
-						}
+							output += '<ul class="nav justify-content-end">'
+							if (data.list[i].artTag1 != null && data.list[i].artTag1 !='선택안함') {
+								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
+							}
+							if (data.list[i].artTag2 != null && data.list[i].artTag1 !='선택안함') {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].artTag2 + '</font></a></li>'
+							}
+							if (data.list[i].artTag3 != null && data.list[i].artTag1 !='선택안함') {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].artTag3 + '</font></a></li>'
+							}
 
-						if(data.list[i].artTag1 == null){
-							output +='<br><br>'
-						}
+							if (data.list[i].artTag1 == null) {
+								output += '<br><br>'
+							}
 							output += '</ul>'
 							output += '<br>'
 
@@ -119,11 +112,11 @@
 					} else {
 
 						for (var i = 0; i < clickCnt * 9; i++) {
-								output += '<div class="col">'
+							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
 							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
 							output += '<div class="card-body">';
-							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
+							output += '<p class="card-text" class="mb-0" ><a style="text-decoration: none; color: black;" href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
 							if (data.list[i].artTag1 != null) {
 								output += data.list[i].artTag1
 							} else {
@@ -131,29 +124,30 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
-							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
+								output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;&emsp;</p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
+							output += '<br><br>'
+
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
-							
 
-							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;&emsp;</p>'
 
-						output += '<ul class="nav justify-content-end">'
-						if (data.list[i].artTag1 != null) {
-							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
-						}
-						if (data.list[i].artTag2 != null) {
-							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-								+ data.list[i].artTag2 + '</font></a></li>'
-						}
-						if (data.list[i].artTag3 != null) {
-							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-								+ data.list[i].artTag3 + '</font></a></li>'
-						}
+							output += '<ul class="nav justify-content-end">'
+							if (data.list[i].artTag1 != null && data.list[i].artTag1 !='선택안함') {
+								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
+							}
+							if (data.list[i].artTag2 != null && data.list[i].artTag1 !='선택안함') {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].artTag2 + '</font></a></li>'
+							}
+							if (data.list[i].artTag3 != null && data.list[i].artTag1 !='선택안함') {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].artTag3 + '</font></a></li>'
+							}
 
-						if(data.list[i].artTag1 == null){
-							output +='<br><br>'
-						}
+							if (data.list[i].artTag1 == null) {
+								output += '<br><br>'
+							}
 							output += '</ul>'
 							output += '<br>'
 
@@ -169,7 +163,7 @@
 							output += ' </div>'
 							output += ' </div>'
 						}
-						let buttonAdd= '<div class="d-grid gap-2"> <button onClick="clickAddAction()" class="btn btn-primary" type="button">더보기</button></div>'
+						let buttonAdd = '<div class="d-grid gap-2"> <button onClick="clickAddAction()" class="btn btn-dark" type="button">더보기</button></div>'
 						$('#buttonAdd').append(buttonAdd);
 					}
 					$('#reviewList').append(output);
@@ -192,55 +186,57 @@
 					//오브젝트는 each 반복 안되니까 일반 for문 사용 
 
 					for (var i = 0; i < data.list.length; i++) {
-									output += '<div class="col">'
-							output += '<div class="card shadow-sm">';
-							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
-							output += '<div class="card-body">';
-							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
-							if (data.list[i].artTag1 != null) {
-								output += data.list[i].artTag1
-							} else {
-								output += '선택안함'
-							}
-							output += '" class="link-dark"><font size="4em">'
-								+ data.list[i].artName + '</font></a></p>'
-							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
+						output += '<div class="col">'
+						output += '<div class="card shadow-sm">';
+						output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
+						output += '<div class="card-body">';
+						output += '<p class="card-text" class="mb-0" ><a style="text-decoration: none; color: black;" href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
+						if (data.list[i].artTag1 != null) {
+							output += data.list[i].artTag1
+						} else {
+							output += '선택안함'
+						}
+						output += '" class="link-dark"><font size="4em">'
+							+ data.list[i].artName + '</font></a></p>'
+							output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;&emsp;</p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
-							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
-							
+						output += '<br><br>'
 
-							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;&emsp;</p>'
+						output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
+
+
 
 						output += '<ul class="nav justify-content-end">'
-						if (data.list[i].artTag1 != null) {
+						if (data.list[i].artTag1 != null && data.list[i].artTag1 !='선택안함') {
 							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
 						}
-						if (data.list[i].artTag2 != null) {
+						if (data.list[i].artTag2 != null && data.list[i].artTag1 !='선택안함') {
 							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
 								+ data.list[i].artTag2 + '</font></a></li>'
 						}
-						if (data.list[i].artTag3 != null) {
+						if (data.list[i].artTag3 != null && data.list[i].artTag1 !='선택안함') {
 							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
 								+ data.list[i].artTag3 + '</font></a></li>'
 						}
 
-						if(data.list[i].artTag1 == null){
-							output +='<br><br>'
+						if (data.list[i].artTag1 == null) {
+							output += '<br><br>'
 						}
-							output += '</ul>'
-							output += '<br>'
+						output += '</ul>'
+						output += '<br>'
 
-							output += '<div class="d-flex justify-content-between align-items-center">'
-							output += ' <div class="btn-group">'
-							output += ' <button type="button"  onClick="clickAction(' + data.list[i].reviewNo + ')" class="like" id="'
-								+ data.list[i].reviewNo + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
+						output += '<div class="d-flex justify-content-between align-items-center">'
+						output += ' <div class="btn-group">'
+						output += ' <button type="button"  onClick="clickAction(' + data.list[i].reviewNo + ')" class="like" id="'
+							+ data.list[i].reviewNo + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
 
-							output += ' </div>'
-							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].reviewLike + '</small>'
-							output += ' </div>'
-							output += ' </div>'
-							output += ' </div>'
-							output += ' </div>'
+						output += ' </div>'
+						output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].reviewLike + '</small>'
+						output += ' </div>'
+						output += ' </div>'
+						output += ' </div>'
+						output += ' </div>'
 
 					}
 					$('#reviewListMostLike3').append(output);
@@ -249,9 +245,6 @@
 		}//function
 
 		function clickAction(reviewNo) {
-			console.log("like ready activate")
-			alert("좋아요!");
-
 			//  $('.likeButton')
 			//  <img class="likeButton"/>
 			$('.like').toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
@@ -273,23 +266,18 @@
 					data: data,
 					success: function () {
 						alert("좋아요 +1");
-						// window.location.reload();
-
 					}
 				})
 			};
 
 			function deleteLike(reviewNo) {
 				let data = { reviewNo: reviewNo };
-
 				$.ajax({
 					type: "POST", //POST 타입
 					url: "/deleteLikeReviewProto.do",
 					data: data,
 					success: function () {
 						alert("좋아요 -1");
-						// window.location.reload();
-
 					}
 				})
 			};
@@ -309,7 +297,7 @@
 					<h1 class="fw-light">실시간 후기</h1>
 					<p class="lead text-muted">좋아요 상위 3개의 리뷰와 실시간으로 올라오는 리뷰</p>
 					<p>
-						<a href="artList.html" class="btn btn-primary my-2">작품 목록</a>
+						<a href="artList.html" class="btn btn-dark">작품 목록</a>
 						<a href="artistList.html" class="btn btn-secondary my-2">작가 목록</a>
 					</p>
 				</div>
@@ -318,7 +306,8 @@
 
 		<div class="album py-5 bg-light">
 			<div class="container">
-				<h3 class="pricing-header p-3 pb-md-4 mx-auto text-center" class="display-4 fw-normal">좋아요를 많이 받았어요!</h3><br>
+				<h3 class="pricing-header p-3 pb-md-4 mx-auto text-center" class="display-4 fw-normal">좋아요를 많이 받았어요!
+				</h3><br>
 				<div id="reviewListMostLike3" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 				</div>
 				<br>

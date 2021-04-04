@@ -8,12 +8,6 @@
 	<meta charset="UTF-8">
 	<title>태그별 후기</title>
 	<style>
-/*		img{
-			margin-left:auto;
-			margin-right: auto;
-			width: 400px;
-			height: 400px;
-		} */
 	</style>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script type="text/javascript">
@@ -21,8 +15,7 @@
 		$(document).ready(function () {
 			$("#header").load("/header.html");
 			$("#footer").load("/footer.html");
-						$("#floatingbar").load("/floatingbar1.html");
-
+			$("#floatingbar").load("/floatingbar1.html");
 		});
 		// header, footer include
 
@@ -37,6 +30,7 @@
 			console.log(clickCnt)
 			$("#reviewList" + tagNumber).empty(); // 목록이 중첩되지않게 초기화
 			loadReviewList(keyword, orderField, "#reviewList" + tagNumber);
+			$('html, body').animate({ scrollTop: ($(document).height()) + clickCnt * 1000 }, 1500);//버튼을 눌렀을 시 누른 지점으로 바로 가게끔 animate
 		}
 
 		function clickTagBtn(btn) {
@@ -55,6 +49,7 @@
 				loadReviewList(keyword, "", "#reviewList" + tagNumber)
 			} else {
 				$("#reviewList" + tagNumber).empty();
+				$("#buttonAdd" + tagNumber).empty();
 			}
 		}
 
@@ -68,23 +63,22 @@
 				dataType: "JSON", ////*****************형변환 
 				data: data,
 				success: function (data) {
-					arr = []
-					arr = data.list; // 페이징 처리를 위함
 
 					output = '';
-					output += '<div class="container" style="width:100%" ><div class="d-grid gap-2 d-sm-flex justify-content-sm-center" style="width:100%">'
+					output += '<div class="container"><div class="d-grid gap-2 d-sm-flex justify-content-sm-center" style="width:100%">'
 					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('likeDesc')">좋아요 높은 순서</button>`
 					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceAsc')">가격 낮은 순서</button>`
 					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceDesc')">가격 높은 순서</button>`
 					output += '</div>'
 					output += '</div>'
+
 					if (clickCnt * 9 > data.list.length) {
 						for (var i = 0; i < data.list.length; i++) {
 							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
 							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
 							output += '<div class="card-body">';
-							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
+							output += '<p class="card-text" class="mb-0" ><a style="text-decoration: none; color: black;" href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
 							if (data.list[i].artTag1 != null) {
 								output += data.list[i].artTag1
 							} else {
@@ -92,29 +86,31 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
-							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
+								output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
+								output += '<br><br>'
+
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
-							
 
-							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].payAmount + '&emsp;</p>'
 
-						output += '<ul class="nav justify-content-end">'
-						if (data.list[i].artTag1 != null) {
-							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
-						}
-						if (data.list[i].artTag2 != null) {
-							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-								+ data.list[i].artTag2 + '</font></a></li>'
-						}
-						if (data.list[i].artTag3 != null) {
-							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-								+ data.list[i].artTag3 + '</font></a></li>'
-						}
 
-						if(data.list[i].artTag1 == null){
-							output +='<br><br>'
-						}
+							output += '<ul class="nav justify-content-end">'
+							if (data.list[i].artTag1 != null) {
+								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
+							}
+							if (data.list[i].artTag2 != null) {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].artTag2 + '</font></a></li>'
+							}
+							if (data.list[i].artTag3 != null) {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].artTag3 + '</font></a></li>'
+							}
+
+							if (data.list[i].artTag1 == null) {
+								output += '<br><br>'
+							}
 							output += '</ul>'
 							output += '<br>'
 
@@ -130,15 +126,15 @@
 							output += ' </div>'
 							output += ' </div>'
 						}
-						$('#buttonAdd').empty();
+						$('#buttonAdd'+tagNumber).empty();
 					} else {
-
 						for (var i = 0; i < clickCnt * 9; i++) {
 							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
 							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
 							output += '<div class="card-body">';
-							output += '<p class="card-text" class="mb-0" ><a href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
+							output += '<p class="card-text" class="mb-0" ><a style="text-decoration: none; color: black;" href="artDetail.html?memNo=' + data.list[i].memNo + '&artNo=' + data.list[i].artNo + '&tag='
+					
 							if (data.list[i].artTag1 != null) {
 								output += data.list[i].artTag1
 							} else {
@@ -146,29 +142,31 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
-							output += '<p class="nav justify-content-end" class="card-text"><a href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
+								output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
+							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
+								output += '<br><br>'
+
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
-							
 
-							output += '<p class="nav justify-content-end" class="card-text">' + data.list[i].payAmount + '&emsp;</p>'
 
-						output += '<ul class="nav justify-content-end">'
-						if (data.list[i].artTag1 != null) {
-							+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
-						}
-						if (data.list[i].artTag2 != null) {
-							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-								+ data.list[i].artTag2 + '</font></a></li>'
-						}
-						if (data.list[i].artTag3 != null) {
-							output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
-								+ data.list[i].artTag3 + '</font></a></li>'
-						}
 
-						if(data.list[i].artTag1 == null){
-							output +='<br><br>'
-						}
+							output += '<ul class="nav justify-content-end">'
+							if (data.list[i].artTag1 != null) {
+								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">' + data.list[i].artTag1 + '</font></a></li>'
+							}
+							if (data.list[i].artTag2 != null) {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].artTag2 + '</font></a></li>'
+							}
+							if (data.list[i].artTag3 != null) {
+								output += '<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">'
+									+ data.list[i].artTag3 + '</font></a></li>'
+							}
+
+							if (data.list[i].artTag1 == null) {
+								output += '<br><br>'
+							}
 							output += '</ul>'
 							output += '<br>'
 
@@ -184,8 +182,8 @@
 							output += ' </div>'
 							output += ' </div>'
 						}
-						let buttonAdd = '<div class="d-grid gap-2"> <button onClick="clickAddAction()" class="btn btn-primary" type="button">더보기</button></div>'
-						$('#buttonAdd').append(buttonAdd);
+						var buttonAdd = '<div class="d-grid gap-2"> <button onClick="clickAddAction()" class="btn btn-dark" type="button">더보기</button></div>'
+						$('#buttonAdd'+tagNumber).append(buttonAdd);
 					}
 					$(editList).append(output);
 				}//data	(success)
@@ -205,9 +203,6 @@
 
 
 		function clickAction(reviewNo) {
-			console.log("like ready activate")
-			alert("좋아요!");
-
 			//  $('.likeButton')
 			//  <img class="likeButton"/>
 			$('.like').toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
@@ -230,8 +225,6 @@
 				data: data,
 				success: function () {
 					alert("좋아요 +1");
-					// window.location.reload();
-
 				}
 			})
 		};
@@ -245,8 +238,6 @@
 				data: data,
 				success: function () {
 					alert("좋아요 -1");
-					// window.location.reload();
-
 				}
 			})
 		};
@@ -263,7 +254,7 @@
 					<h1 class="fw-light">#태그로 리뷰 모아보기</h1>
 					<p class="lead text-muted">작가가 pick한 #태그로 리뷰 모아보기</p>
 					<p>
-						<a href="artList.html" class="btn btn-primary my-2">작품 목록</a>
+						<a href="artList.html" class="btn btn-dark">작품 목록</a>
 						<a href="artistList.html" class="btn btn-secondary my-2">작가 목록</a>
 					</p>
 				</div>
@@ -271,73 +262,90 @@
 		</section>
 
 		<div class="accordion" id="accordionExample">
-
-
-			<div class="accordion-item">
-				<h2 class="accordion-header" id="headingOne">
-					<div class="actionButton" id="btnTag1" onClick="clickTagBtn('btnTag1')">
-						<button class="accordion-button" type="button"># 인테리어 / # 선물</button>
+			<div class="container">
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headingOne">
+						<div class="actionButton" id="btnTag1" onClick="clickTagBtn('btnTag1')">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+								data-bs-target="#flush-collapseOne" aria-expanded="false"
+								aria-controls="flush-collapseOne">
+								# 인테리어 / # 선물</button>
+						</div>
+					</h2>
+					<div class="accordion-body">
+						<div id="reviewList1" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+						<br>
+						<div id="buttonAdd1"></div>
 					</div>
-				</h2>
-				<div class="accordion-body">
-					<div id="reviewList1" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
-					<div id="buttonAdd"></div>
 				</div>
-			</div>
 
 
-			<div class="accordion-item">
-				<h2 class="accordion-header" id="headingTwo">
-					<div class="actionButton" id="btnTag2" onClick="clickTagBtn('btnTag2')">
-						<button class="accordion-button" type="button"># 순수미술 / # 일러스트 / # 사진</button>
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headingTwo">
+						<div class="actionButton" id="btnTag2" onClick="clickTagBtn('btnTag2')">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+								data-bs-target="#flush-collapseOne" aria-expanded="false"
+								aria-controls="flush-collapseOne">
+								# 순수미술 / # 일러스트 / # 사진</button>
+						</div>
+					</h2>
+					<div class="accordion-body">
+						<div id="reviewList2" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+						<div id="buttonAdd2"></div>
 					</div>
-				</h2>
-				<div class="accordion-body">
-					<div id="reviewList2" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
-					<div id="buttonAdd"></div>
 				</div>
-			</div>
 
 
-		<div class="accordion-item">
-			<h2 class="accordion-header" id="headingThree">
-				<div class="actionButton" id="btnTag3" onClick="clickTagBtn('btnTag3')">
-					<button class="accordion-button" type="button"># 서양화 / # 동양화 / # 판화 / # 펜화 / # 수채 / # 포스터</button>
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headingThree">
+						<div class="actionButton" id="btnTag3" onClick="clickTagBtn('btnTag3')">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+								data-bs-target="#flush-collapseOne" aria-expanded="false"
+								aria-controls="flush-collapseOne">
+								# 서양화 / # 동양화 / # 판화 / # 펜화 / # 수채 / #
+								포스터</button>
+						</div>
+					</h2>
+					<div class="accordion-body">
+						<div id="reviewList3" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+						<div id="buttonAdd3"></div>
+					</div>
 				</div>
-			</h2>
-			<div class="accordion-body">
-				<div id="reviewList3" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
-				<div id="buttonAdd"></div>
+
+
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headingFour">
+						<div class="actionButton" id="btnTag4" onClick="clickTagBtn('btnTag4')">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+								data-bs-target="#flush-collapseOne" aria-expanded="false"
+								aria-controls="flush-collapseOne">
+								# 몽환적 / # 분위기 / # 힐링 / # 따뜻함</button>
+						</div>
+					</h2>
+					<div class="accordion-body">
+						<div id="reviewList4" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+						<div id="buttonAdd4"></div>
+					</div>
+				</div>
+
+
+				<div class="accordion-item">
+					<h2 class="accordion-header" id="headingFive">
+						<div class="actionButton" id="btnTag5" onClick="clickTagBtn('btnTag5')">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+								data-bs-target="#flush-collapseOne" aria-expanded="false"
+								aria-controls="flush-collapseOne">
+								# 빈티지 / #고전 / #현대</button>
+						</div>
+					</h2>
+					<div class="accordion-body">
+						<div id="reviewList5" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+						<br>
+						<div id="buttonAdd5"></div>
+					</div>
+				</div>
 			</div>
 		</div>
-
-
-		<div class="accordion-item">
-			<h2 class="accordion-header" id="headingFour">
-				<div class="actionButton" id="btnTag4" onClick="clickTagBtn('btnTag4')">
-					<button class="accordion-button" type="button"># 몽환적 / # 분위기 / # 힐링 / # 따뜻함</button>
-				</div>
-			</h2>
-			<div class="accordion-body">
-				<div id="reviewList4" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
-				<div id="buttonAdd"></div>
-			</div>
-		</div>
-
-
-		<div class="accordion-item">
-			<h2 class="accordion-header" id="headingFive">
-				<div class="actionButton" id="btnTag5" onClick="clickTagBtn('btnTag5')">
-					<button class="accordion-button" type="button"># 빈티지 / #고전 / #현대</button>
-				</div>
-			</h2>
-			<div class="accordion-body">
-				<div id="reviewList5" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
-				<div id="buttonAdd"></div>
-			</div>
-		</div>
-	</div>
-
 	</main>
 
 	<footer id="footer"></footer>
