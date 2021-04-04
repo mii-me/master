@@ -29,12 +29,33 @@ public class ArtistInfoController {
 	}
 	
 	
+	// ========================= 최상위 메인페이지 진입 =========================
+	
+	/**
+	 * 미미 메인페이지 진입 시 홈에 보이는 최신순 작품 3개 슬라이드
+	 * @author 정소윤
+	 * @return 최신순 작품 3개 정보
+	 */
+	@RequestMapping("/mainArt.do")
+	public String mainArt() {
+		String r = "";
+		List<ArtistInfoVo> list = dao.mainArt();
+		Gson gson = new Gson();
+		r = gson.toJson(list);
+		
+		return r;
+	}//topArtistInfo
+	
+	// ========================= 최상위 메인페이지 END =========================
+	
+	
+	
 	
 	// ========================= 작가소개 메인페이지 진입 =========================
 	
-	
 	/**
 	 * 작가소개 메인 진입 시 상단에 보이는 인기작가 Top3 슬라이드
+	 * @author 정소윤
 	 * @return 인기작가 Top3 작가 정보
 	 */
 	@RequestMapping("/topArtistInfo.do")
