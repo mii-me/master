@@ -3,6 +3,17 @@
 		let receive = uri.substr(uri.indexOf("?") + 1) //쿼리스트링에서 ?를 제외한 나머지를 담은 변수
 		let receiveSplit = receive.split("&"); //&를 기준으로 자른 값들을 담은 변수 
 		
+		//receive : 쿼리스트링에서 ?를 제외한 나머지를 담은 변수
+		let tempReceive = uri.substr(uri.indexOf("?") + 1) 
+		// artNo=(작품번호)로 나올것으로 예상함
+		console.log(tempReceive);
+		//쿼리스트링에서 =를 기준으로 자른다. 
+		let tempReceiveSplit = tempReceive.split("=");
+		//콘솔에 찍어보면 ["artNo","(작품번호)"]로 나올 것으로 예상
+		console.log(tempReceiveSplit);
+		//위 receiveSplit은 배열로 반환되므로 작품번호 숫자가 담겨있는 1번째 인덱스를 변수에 담는다.
+		let tempArtNo = tempReceiveSplit[1];
+		console.log("작품번호 : " + tempArtNo);
 		
 
 		for(i=0;i<receiveSplit.length;i++){
@@ -25,6 +36,7 @@
 			let selected; //선택된 작품 정보를 담는변수 (현재보고있는 작품)
 			let tagName; //선택된 작품의 태그이름
 
+			let nowBid; //즉시 구매하기로 넘어갈때 selected.aucBuy를 담을 변수.
 
 	//작품 상세보기 함수
 	function loadArtdetail(memNo,artNo) {
@@ -32,6 +44,7 @@
 				
 		selected = eval("("+data+")");
 					
+		nowBid = selected.aucBuy;
 		//console.log("selected : " + selected.artTag1);
 					
 		//이미지 삽입
@@ -134,15 +147,14 @@
 				//artistPic.css("width","70","height","70");
 				$(".artistInfo-box-name-pic").append(artistPic)	
 				$(".artExp-box").append(span1,exp,span2);
+				
+				
 				//즉시 구매하기 클릭 이벤트 함수 [by 현규]
-				
-				
+					
 	            $("#btnBuy").click(function(){
-				let temp = selected.aucBuy;
-				let selectedAucBuy = temp.replace(/,/,"");
-				console.log(selectedAucBuy);	
+					
 				
-	               clickBtnBuy(artNo,selected.aucBuy);
+	               clickBtnBuy(artNo,nowBid);
 	            });
 				}}); //ajax
 		}//loadArtdetail()
@@ -297,8 +309,9 @@
 						return;
 					}
 					
+					alert("작품번호 : " + artNo);			
 					//alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
-					location.href="auction.html?artNo="+artNo;				
+					location.href="auction.html?artNo="+artNo;	
 				}else{ //로그인하지않았다면 로그인페이지로 이동한다.
 					alert("로그인이 필요한 서비스입니다.");
 					location.href="login.html";
@@ -306,7 +319,7 @@
 		}//clickBtnBid
 		
 		//즉시 구매하기 버튼을 클릭했을 때에 담을 함수
-		function clickBtnBuy(artNo) {
+		function clickBtnBuy(artNo,nowBid) {
 				//로그인했다면 현재 보고있는 작품의 작품번호를 갖고 페이지를 이동한다.
 				if(userNo!=null) {
 					
@@ -320,7 +333,7 @@
 					//현재 입찰가를 즉시구매가로 업데이트 후 결제 진행 [by 현규]
 	               $.ajax({
 	               url:"/updateBid.do",
-	               data:{artNo:artNo,aucBid:aucBuy},
+	               data:{artNo:artNo,aucBid:nowBid},
 	               success:function(){
 	                  location.href="payment.html?artNo="+artNo;
 	               }});
