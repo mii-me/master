@@ -58,10 +58,11 @@ public class ArtSellDao {
 		return DBManager.getTotalArtSellCheck(memNo);
 	}
 
-	/*
-	 * public int updateArtistPoint(int resultPoint, int memNo) { return
-	 * DBManager.updateArtistPoint(resultPoint, memNo); }
-	 */
+
+	public int updateArtistPoint(int resultPoint, int memNo) { 
+		return DBManager.updateArtistPoint(resultPoint, memNo); 
+	}
+ 
 
 	
 }

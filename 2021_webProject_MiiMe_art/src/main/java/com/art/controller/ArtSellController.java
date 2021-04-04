@@ -215,15 +215,12 @@ public class ArtSellController {
 	 * @param memNo 회원번호
 	 * @return
 	 */
-	
-	/*
 	@RequestMapping("/changePoint.do")
 	public int updateArtistPoint(int artPoint, int chgPoint, int memNo) {
 		int resultPoint = artPoint - chgPoint;
-		System.out.println("1. 변경할 포인트 : " + resultPoint);
 		int re = dao.updateArtistPoint(resultPoint, memNo);
 		return re;
 	}
-	*/
+	
 	
 }
