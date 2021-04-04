@@ -217,21 +217,19 @@ $(function(){
 		function updateArtInfo(){
 			$("#memNo").val(memNo);
 			$("#artNo").val(artList.artNo);
-			alert("수정버튼클릭");
 			$.ajax({url:"/updateArtInfo.do", 
 				data:updateData, 
 				type:"post",
 				processData:false,
 				contentType:false, 
 				success:function(data){
-					listArtSellCheck(1);
 					$(".detail2").css("visibility", "hidden");
 					$(".detail2").css("display", "none");
-					
 					$(".detail").css("visibility", "hidden");
 					$(".detail").css("display", "none");
 					$(".detailUpdate").css("visibility", "visible");
 					$(".detailUpdate").css("display", "inline");
+					listArtSellCheck(1);
 			}})
 		}
 		
@@ -281,16 +279,23 @@ $(function(){
 </head>
 <body>
  <header id="header"></header>
-<div class = "container p-3 my-3"><!-- 페이지 전체 감싸기 -->
-	 <h1 style="text-align:center;">판매하기</h1>
-	 <h3 style="text-align:center; color: gray;">판매가능한 작품 목록&nbsp;<i class="fas fa-tasks"></i></h3>
-	 <hr width="300px">
-</div>
+ <section class="py-5 text-center container">
+	<div class="row py-lg-5">
+		<div class="col-lg-6 col-md-8 mx-auto">
+			<h1 class="fw-light">판매하기</h1>
+			<p class="lead text-muted">판매가능한 작품 목록&nbsp;<i class="fas fa-tasks"></i></p>
+			 <hr width="200px">
+		</div>
+	</div>
+</section>
 <div class="container">
 	<h5>이 목록의 작품들을 판매하려면 판매시작하기를 진행해야 합니다.</h5>
 	<p style="color: gray">
-		판매를 원하는 작품을 누르고 판매를 시작하세요!<br>
-		작품을 선택하여 수정과 삭제를 진행할 수도 있습니다.
+	판매 시작 전까지 언제든지 수정과 삭제를 할 수 있습니다.<br>
+	다만, 삭제하신다면 해당 작품에 대한 정보는 완전히 삭제되기 때문에 신중하게 선택해주세요.<br>
+	이제, 판매까지 얼마 남지 않았습니다!<br>
+	작품의 실제 사진과 사이즈를 꼼꼼하게 검토해 주세요.<br>
+	작품정보를 검토하셨다면, 이곳에서 판매여부에 대한 선택을 할 수 있습니다.<br>
 	</p>
 	<div id="artSellCheckList" class="row m-0 detailUpdate">
 		<!-- 이곳에 작품 목록이 생성된다 -->
@@ -304,9 +309,9 @@ $(function(){
 <div class="container">
 	<div id="detail" class="row m-0"><!-- 작품목록 중 해당작품선택시 상세보기 --></div>
 	<div class="updateSet">
-		<button id="btnUdateAndDelete" class="detail btn btn-dark">작품 수정하기</button>
-		<button id="btnArtSell" class="detail artSell btn btn-dark">해당 작품 판매시작하기</button>
-		<button id="btnDelete" class="detail artDelete btn btn-dark">해당 작품정보 삭제하기</button>
+		<button id="btnUdateAndDelete" class="detail btn btn-dark" style="margin: 5px">작품 수정하기</button>
+		<button id="btnArtSell" class="detail artSell btn btn-dark" style="margin: 5px">해당 작품 판매시작하기</button>
+		<button id="btnDelete" class="detail artDelete btn btn-dark" style="margin: 5px">해당 작품정보 삭제하기</button>
 	</div>
 	<form class="artForm detail2 was-validated" id="artForm" method="post" enctype="multipart/form-data">
 		<h5>작품 수정사항을 작성해주세요</h5>
@@ -413,7 +418,7 @@ $(function(){
       		<div class="invalid-feedback">정수만 입력해 주세요. 경매시작 가격보다 높아야 합니다.</div>
 		</div>
 	</form>
-	<button id="btnUpdate" class="detail2 btn btn-dark">수정</button>
+	<button id="btnUpdate" class="detail2 btn btn-dark" style="margin: 10px">수정</button>
 </div><!-- CSS : class = container -->
  <footer id="footer"></footer>
 </body>

@@ -9,6 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script type="text/javascript">
 //header, footer include
 $(document).ready(function(){
@@ -113,14 +114,24 @@ $(function() {
 </head>
 <body>
  <header id="header"></header>
- <div class = "container p-3 my-3"><!-- 페이지 전체 감싸기 -->
-	 <h1 style="text-align:center;">판매하기</h1>
-	 <h3 style="text-align:center; color: gray;">작품 등록하기&nbsp;<i class="far fa-edit"></i></h3>
-	 <hr width="300px">
-</div>
-<div class="container p-9 my-5 border" style="width:30%">
+ <section class="py-5 text-center container">
+	<div class="row py-lg-5">
+		<div class="col-lg-6 col-md-8 mx-auto">
+			<h1 class="fw-light">판매하기</h1>
+			<p class="lead text-muted">작품 등록하기&nbsp;<i class="far fa-edit"></i></p>
+			<hr width="200px">
+		</div>
+	</div>
+	<h5>작품 정보를 입력하고 작품을 등록해주세요.</h5>
+		<p style="color: gray">
+		판매를 원하는 작품의 정보를 등록할 수 있습니다<br>
+		정보를 등록하였다면 꼭! 등록된 작품목록에서 판매를 시작하세요<br>
+		작가님들의 작품 활동에 관심을 가지는 서포터들이 기다리고 있습니다.
+	</p>
+</section>
+<div class="container p-8 my-1 border" style="width:30%">
+		<br><h4><i class="far fa-edit"></i>&nbsp;작품 기본정보 입력</h4><br>
 	<form id="artForm" method="post" enctype="multipart/form-data" class="was-validated">
-		<h4>작품 기본정보 입력</h4>
 		<input type="hidden" id="memNo" name="memNo">
 		<div class="form-group">
 			<label for="artName">작품명 :</label>
@@ -224,7 +235,7 @@ $(function() {
 	</form>
 	<button id="btnInsert" class="btn btn-dark">작품정보등록</button>
 	<hr>
-	<button id="btnArtSellCheck" class="btn btn-dark">등록된 작품 관리</button>
+	<button id="btnArtSellCheck" class="btn btn-dark" style="margin-bottom: 10px">등록된 작품 관리</button>
 </div>
 
 

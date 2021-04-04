@@ -64,8 +64,7 @@ $(function(){
 			$(".accountTag").css("visibility", "visible");
 			$(".accountTag").css("display", "inline");
 			
-			//--------------------------여기 수정중----------------------------
-			//추가작업 하기
+			//남혜진 210404 _ 포인트환전 이벤트 완료 
 			$("#btnAccount").click(function(){
 				let chgPoint = $("#chgPoint").val();
 				updateData = {artPoint: artPoint, chgPoint:chgPoint, memNo:memNo}; //환전할 point, 회원번호
@@ -80,8 +79,6 @@ $(function(){
 				}})
 			})
 		})
-		
-		
 		
 		
 		// 2. 수수료 안내
@@ -100,8 +97,6 @@ $(function(){
 			location.href="artSell.html";
 		})
 		
-		//--------------------------여기 수정중----------------------------
-		
 	})
 	
 })
@@ -109,11 +104,15 @@ $(function(){
 </head>
 <body>
  <header id="header"></header>
-<div class = "container p-3 my-3"><!-- 페이지 전체 감싸기 -->
-	 <h1 style="text-align:center;">판매하기</h1>
-	 <h3 style="text-align:center; color: gray;">포인트 조회&nbsp;<i class="fas fa-dollar-sign"></i></h3>
-	 <hr width="300px">
-</div>	 
+<section class="py-5 text-center container">
+	<div class="row py-lg-5">
+		<div class="col-lg-6 col-md-8 mx-auto">
+			<h1 class="fw-light">판매하기</h1>
+			<p class="lead text-muted">포인트 조회&nbsp;<i class="fas fa-dollar-sign"></i></p>
+			 <hr width="200px">
+		</div>
+	</div>
+</section> 
 <div class="container p-3 my-3 border"  style="width:60%">
 	<div id="pointBar">
 		<p style="text-align:center;">
@@ -129,14 +128,14 @@ $(function(){
 			<div class="card-body">
 				<h4 class="card-title" style="text-align: center;">
 				<!-- 아이콘으로 적용해보기 -->
-					1. 포인트 환전하기
+					포인트 환전하기
 				</h4>
 			</div>
 		</div>
 		<div class="card p-1 m-1 bg-light point2" style="width:49%"  id="infoTax">
 			<div class="card-body">
 				<h4 class="card-title" style="text-align: center;">
-					2. 수수료 안내
+					수수료 안내
 				</h4>
 			</div>
 		</div>
@@ -155,9 +154,9 @@ $(function(){
 			</div>
 		</div>
 		<div class="card p-1 m-1 bg-light accountTag"  style="width:49%"  id="accountTag">
-			<form id="accountForm">
-				계좌번호 : <input type="number" name="accountNum" id="accountNum" placeholder="-없이 숫자로만 입력해주세요."><br>
-				환전할 포인트 : <input type="number" name="chgPoint" id="chgPoint" placeholder="포인트 잔액을 확인 후 입력해주세요."><br>
+			<form id="accountForm" class="form-group">
+				계좌번호 : <input type="number" class="form-control"  name="accountNum" id="accountNum" placeholder="-없이 숫자로만 입력해주세요."><br>
+				환전할 포인트 : <input type="number" class="form-control"  name="chgPoint" id="chgPoint" placeholder="포인트 잔액을 확인 후 입력해주세요."><br>
 			</form>
 			<button id="btnAccount" class="btn btn-dark">포인트 환전</button>		
 		</div>
