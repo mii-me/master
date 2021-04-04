@@ -82,12 +82,8 @@ public class ArtSellController {
 	@RequestMapping("/listArtSellCheck.do")
 	public String findSellCheckList(int memNo, int pageNUM) {
 		//PAGE 페이징 처리 나중에 하기
-		System.out.println("1-1 pageNum: " + pageNUM);//test
 		totalRecord = dao.getTotalRecord(memNo);
 		totalPage = (int) Math.ceil(totalRecord / (double) pageSIZE);
-		
-		System.out.println("1-2 totalRecord : " + totalRecord);
-		System.out.println("1-3 totalPage : " + totalPage);
 		
 		// 시작 페이지, 끝 페이지 계산
 		int start = (pageNUM - 1) * pageSIZE + 1;
@@ -115,16 +111,12 @@ public class ArtSellController {
 	 */
 	@RequestMapping("/updateArtInfo.do")
 	public String updateArtInfo(ArtInfoVo a, HttpServletRequest request) {
-		// System.out.println("controller update 호출");//test
 		String oldFname = a.getArtPic();
-		// System.out.println("oldFname: " + oldFname);//test
 		String path = request.getRealPath("art_pic");
 		MultipartFile uploadFile = a.getUploadFile();
 		String artPic = uploadFile.getOriginalFilename();
 		if (artPic != null & !artPic.equals("")) {
-			// System.out.println("사진수정 선택함");//test
 			try {
-				// System.out.println("try문");//test
 				byte[] data = uploadFile.getBytes();
 				FileOutputStream fos = new FileOutputStream(path + "/" + artPic);
 				fos.write(data);
@@ -139,11 +131,9 @@ public class ArtSellController {
 		}
 		int re = dao.updateArtInfo(a);
 		if (re == 1 && artPic != null && !artPic.equals("")) {
-			// System.out.println("oldFname: " + oldFname);//test
 			File file = new File(path + "/" + oldFname);
 			file.delete();
 		}
-		// System.out.println("controller의 re: " + re);
 		return re + "";
 	}
 
@@ -182,7 +172,6 @@ public class ArtSellController {
 	@RequestMapping("/listArtSell.do")
 	public String listArtSell(int memNo) {
 		List<ArtInfoVo> list = dao.findArtSell(memNo);
-		//System.out.println(list);
  		Gson gson = new Gson();
 		return gson.toJson(list);
 	}
@@ -218,5 +207,23 @@ public class ArtSellController {
 		return map;
 	}
 	
+	/**
+	 * 남혜진_포인트 환전
+	 * 
+	 * @param artPoint 포인트 잔액
+	 * @param chgPoint 환전할 포인트
+	 * @param memNo 회원번호
+	 * @return
+	 */
+	
+	/*
+	@RequestMapping("/changePoint.do")
+	public int updateArtistPoint(int artPoint, int chgPoint, int memNo) {
+		int resultPoint = artPoint - chgPoint;
+		System.out.println("1. 변경할 포인트 : " + resultPoint);
+		int re = dao.updateArtistPoint(resultPoint, memNo);
+		return re;
+	}
+	*/
 	
 }

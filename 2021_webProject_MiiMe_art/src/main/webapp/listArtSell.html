@@ -51,33 +51,35 @@ $(function(){
 							// 상세보기
 							$(div).click(function(){
 								$("#detail").empty();
+								
+								let div = $("<div class='card p-1 m-1 detail' style='text-align:center'></div>");
 								idx = $(this).attr("idx");
 								artList = arr[idx];
-								let pic = $("<img" + " src='art_pic/"+ art.artPic +"' width=200px>");
-								let name = $("<h3></h3>").html(artList.artName);
-								let material = $("<p></p>").html(artList.artMaterial);
-								let theme = $("<p></p>").html(artList.artTheme);
-								let size = $("<p></p>").html(artList.artSize1 + "x" + artList.artSize2);
-								let year = $("<p></p>").html(artList.artYear);
-								let tag1 = $("<p></p>").html("#" + artList.artTag1);
-								let tag2 = $("<p></p>").html("#" + artList.artTag2);
-								let tag3 = $("<p></p>").html("#" + artList.artTag3);
-								let start = $("<p></p>").html(artList.aucStart);
-								let buy = $("<p></p>").html(artList.aucBuy);
-								let exp = $("<p></p>").html(artList.artExp);
-								$("#detail").append(pic, name, material, theme, size, year, tag1, tag2, tag3, start, buy, exp);
+								let pic = $("<img class='card_img_top m-1'" + " src='art_pic/"+ art.artPic +"' width=500px>");
+								let name = $("<h3 class='card-title'></h3>").html(artList.artName);
+								let material = $("<p class='card-text' style='color:gray'></p>").html(artList.artMaterial);
+								let theme = $("<p class='card-text'></p>").html(artList.artTheme);
+								let size = $("<p class='card-text'></p>").html(artList.artSize1 + "x" + artList.artSize2 + "cm");
+								let year = $("<p class='card-text'></p>").html(artList.artYear);
+								let tag = $("<p class='card-text' style='color:#6a89cc'></p>").html("<i>#" + artList.artTag1 + " #" + artList.artTag2 + " #" + artList.artTag3 + "</i>");
+								let start = $("<p class='card-text'></p>").html("경매시작가 [<b>" + artList.aucStart + "</b>] 원");
+								let buy = $("<p class='card-text'></p>").html("즉시낙찰가 [<b>" + artList.aucBuy + "</b>] 원");
+								let exp = $("<p class='card-text' style='font-weight:bold'></p>").html("<span style='color:gray'>작품설명<br></span>" + "<i class='fas fa-quote-left'></i>&nbsp;" +artList.artExp + "&nbsp;<i class='fas fa-quote-right'></i>" );
+								$(div).append(pic, name, material, theme, size, year, tag, start, buy, exp);
+								$("#detail").append($(div));
+								
 								// 상세보기 했을 때, 판매취소 버튼 보이게 하기
 								$(".detail").css("visibility", "visible");
 								$(".detail").css("display", "inline");
 							})// 상세보기를 위해 각각div클릭 했을 때 이벤트
 							
 							
-							let pic = $("<img" + " src='art_pic/"+ art.artPic +"' width=100% class='card_img_top m-1'>");
+							let pic = $("<img" + " src='art_pic/"+ art.artPic +"' width=100% height=330px class='card_img_top m-1'>");
 							let name = $("<h3 class='card-title'></h3>").html(art.artName);
-							let material = $("<p class='card-text'></p>").html(art.artMaterial);
+							let material = $("<p class='card-text' style='color:gray'></p>").html(art.artMaterial);
 							let year = $("<p class='card-text'></p>").html(art.artYear);
 							$(div).append(pic, name, material, year);
-							let card = $("<div class='card p-1 m-1' style='width:360px'></div>");
+							let card = $("<div class='card p-1 m-1' style='width:360px; text-align:right'></div>");
 							$(div).appendTo($(card));
 							$("#artSellList").append($(card));
 						})// 판매중 목록 each반복문
@@ -109,16 +111,23 @@ $(function(){
  <header id="header"></header>
 <div class = "container p-3 my-3"><!-- 페이지 전체 감싸기 -->
 	 <h1 style="text-align:center;">판매하기</h1>
-	 <h3 style="text-align:center; color: gray;">판매중인 작품목록</h3>
+	 <h3 style="text-align:center; color: gray;">판매중인 작품목록&nbsp;<i class="fas fa-tasks"></i></h3>
+	 <hr width="300px">
 </div> 
 
 <div class="container">
 	<h5>판매중인 작품을 확인하고 판매를 취소할 수 있습니다</h5>
-	<!-- 판매중인 작품목록 -->
-	<div id="artSellList" class="row m-0"></div>
+		<p style="color: gray">
+		판매중인 작품을 누르면 해당 작품 정보를 상세보기할 수 있습니다.<br>
+		작품을 선택하여 판매취소를 진행할 수도 있습니다.<br>
+		판매가 취소된 작품은 판매가능한 작품 목록으로 돌아갑니다.
+	</p>
+	<div id="artSellList" class="row m-0">
+		<!-- 판매중인 작품목록 -->
+	</div>
 	<hr>
 	<!-- 판매중인 작품목록_상세보기 -->
-	<div id="detail"></div>
+	<div id="detail" class="row m-0"></div>
 	<!-- 판매중인 작품목록_선택_판매취소 버튼 생성된다 -->
 	<button id="btnCancle" class="detail btn btn-dark">판매취소하기</button>
 </div>

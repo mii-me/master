@@ -15,7 +15,6 @@ public class ArtSellDao {
 	}
 
 	public List<ArtInfoVo> findSellCheckList(int memNo, int start, int end){
-		System.out.println("2 작품목록 DAO 작동 start : " + start + "/ end: " + end);
 		return DBManager.findSellCheckList(memNo, start, end);
 	}
 
@@ -56,9 +55,13 @@ public class ArtSellDao {
 	}
 
 	public int getTotalRecord(int memNo) {
-		System.out.println("작품목록 dao작동");
 		return DBManager.getTotalArtSellCheck(memNo);
 	}
+
+	/*
+	 * public int updateArtistPoint(int resultPoint, int memNo) { return
+	 * DBManager.updateArtistPoint(resultPoint, memNo); }
+	 */
 
 	
 }
