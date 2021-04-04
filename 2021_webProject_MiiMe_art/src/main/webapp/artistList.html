@@ -15,18 +15,16 @@
 <script type="text/javascript">
 // header, footer include
 $(document).ready(function(){
-    $("#header").load("/header.html");
-    $("#footer").load("/footer.html");
-    $("#floatingbar").load("/floatingbar1.html");    
+    $('#header').load('/header.html');
+    $('#footer').load('/footer.html');
+    $('#floatingbar').load('/floatingbar1.html');    
 });
 // header, footer include
-
 
 
 	// <작가소개> 메뉴 진입 시 처음 보이는 작가 목록 페이지
 	// 상단: 인기 TOP3 작가 캐러셀
 	// [by 정소윤]
-	
 	
 	$(function(){
 	
@@ -34,9 +32,12 @@ $(document).ready(function(){
 		let idx;
 		let totalPage; // 전체페이지수
 		
-		let keyword="";  // 검색 값
-		let consonant="" // 작가명 가나다 선택 자음
-		let sort=""; // 최신순(기본), 인기순(best) 선택
+		// 뒤로가기 시 세션스토리지에 저장된 Key를 가져와 페이징 유지
+		let pageNUM = sessionStorage.getItem('pageNUM'); 
+		
+		let keyword='';  // 검색 값
+		let consonant='' // 작가명 가나다 선택 자음
+		let sort=''; // 최신순(기본), 인기순(best) 선택
 		
 		
 		// ============================ 인기작가 Top3 함수 시작 ============================
@@ -44,11 +45,11 @@ $(document).ready(function(){
 		// 메인페이지 진입 시 상단에 인기작가 Top3 슬라이더 불러옴. [by 정소윤]
 		function artistTop(){
 		
-		    $("#topArtist").empty();
+		    $('#topArtist').empty();
 				
-		    $.ajax({url:"/topArtistInfo.do", success:function(data){
+		    $.ajax({url:'/topArtistInfo.do', success:function(data){
 		    
-		        arr = eval("("+data+")");
+		        arr = eval('('+data+')');
 		        
 		        $.each(arr, function(index, t){
 		    		
@@ -79,7 +80,7 @@ $(document).ready(function(){
 		            
 		            $(topList).append(topInfo);
 		            
-		            $("#topArtist").append(topList);
+		            $('#topArtist').append(topList);
 		             
 		        });//each
 		    
@@ -95,15 +96,15 @@ $(document).ready(function(){
 		
 		// 메인페이지 진입 시 작가목록 최신순 정렬 불러옴. [by 정소윤]
 		function artistList(pageNUM, keyword, consonant, sort){
-		
-			$("#artistList").empty(); // 목록이 중첩되지않게 초기화
+			
+			$('#artistList').empty(); // 목록이 중첩되지않게 초기화
 			
 			let data = {pageNUM:pageNUM, keyword:keyword, consonant:consonant, sort:sort}
 			
-			$.ajax({url:"/listArtistInfo.do", data:data, success:function(data){
+			$.ajax({url:'/listArtistInfo.do', data:data, success:function(data){
 			
 				arr = [];
-				data = eval("("+data+")");
+				data = eval('('+data+')');
 				
 				arr = data.list; // 페이징처리를 위함
 				totalPage = data.totalPage;
@@ -111,7 +112,7 @@ $(document).ready(function(){
 				
 				// ======================= 페이지번호 출력 시작 =======================
 				
-				$("#page").empty();
+				$('#page').empty();
 				
 				for(i=1; i<=totalPage; i++){
 				
@@ -125,12 +126,17 @@ $(document).ready(function(){
                         pageBtn = $(`<button type="button" class="btn btn-outline-dark"></button>`).text(i);
                     }
 
-					$("#page").append(pageBtn).append(" ");
+					$('#page').append(pageBtn).append(' ');
 					
 					// 페이지 버튼 클릭 이벤트
 					$(pageBtn).click(function(){
 						let pageNUM = $(this).text();
+						
+						// 목록 불러오기
 						artistList(pageNUM, keyword, consonant, sort);
+						
+						// 세션스토리지에 페이지 저장, 뒤로가기 시 호출위함
+						sessionStorage.setItem('pageNUM', pageNUM);
 					});
 					
 				}//for
@@ -143,7 +149,7 @@ $(document).ready(function(){
 				
 				$.each(arr, function(index, a){
 					
-					// 작가목록 div 열기  // img class="rounded"하면 p-1빼기
+					// 작가목록 div 열기
                     let listCard = $(`<div class="card p-1 m-1" style="width:360px;">`);
 					$(listCard).append($(`<img style="width: 100%; height: 360px;"></img>`)
                                     		.attr('src', 'artist_pic/' + a.artistPic));
@@ -160,7 +166,7 @@ $(document).ready(function(){
                     $(listCard).append(listInfo);
                     $(listLink).append(listCard);
 
-					$("#artistList").append(listLink);
+					$('#artistList').append(listLink);
 
 				});//each
 				// ======================= 작가목록 출력 END =======================
@@ -176,27 +182,33 @@ $(document).ready(function(){
 		// =======================  최신순, 인기순 정렬 기능 =======================
 		
 		// 최신순 정렬
-		$("#new").click(function(){
-			sort = "";
+		$('#new').click(function(){
+			sort = '';
+			
+			// 세션스토리지 정리
+			sessionStorage.removeItem('pageNUM');
 			
 			// 작가목록 출력
-			artistList(1, keyword, consonant, "");
+			artistList(1, keyword, consonant, '');
 			
 			// 정렬 버튼 클릭 활성화
-			$(this).attr("class", "btn btn-dark");
-			$("#best").attr("class", "btn btn-outline-dark");
+			$(this).attr('class', 'btn btn-dark');
+			$('#best').attr('class', 'btn btn-outline-dark');
 		});  
 		
 		// 인기순 정렬
-		$("#best").click(function(){
-			sort = "best";
+		$('#best').click(function(){
+			sort = 'best';
+			
+			// 세션스토리지 정리
+			sessionStorage.removeItem('pageNUM');
 			
 			// 작가목록 출력
 			artistList(1, keyword, consonant, sort);
 			
 			// 정렬 버튼 클릭 활성화
-			$(this).attr("class", "btn btn-dark");
-			$("#new").attr("class", "btn btn-outline-dark");
+			$(this).attr('class', 'btn btn-dark');
+			$('#new').attr('class', 'btn btn-outline-dark');
 		});  
 		
 		// =======================  최신순, 인기순 정렬 기능 END =======================
@@ -204,53 +216,60 @@ $(document).ready(function(){
 		
 		
 		// ===== 검색 기능 =====
-		$("#btnSearch").click(function(){
-			keyword = $("#keyword").val();
+		$('#btnSearch').click(function(){
+			keyword = $('#keyword').val();
+			
+			// 세션스토리지 정리
+			sessionStorage.removeItem('pageNUM');
 			
 			// 검색창 비우기
-			$("#keyword").val("");
+			$('#keyword').val('');
 			
 			// 정렬 버튼 기본 최신순으로
-			$("#new").attr("class", "btn btn-dark");
-			$("#best").attr("class", "btn btn-outline-dark");			
+			$('#new').attr('class', 'btn btn-dark');
+			$('#best').attr('class', 'btn btn-outline-dark');			
 			
-			consonant = "";
-			sort = "";
+			consonant = '';
+			sort = '';
 			
 			// 목록 출력
-			artistList(1, keyword, "", "");
+			artistList(1, keyword, '', '');
 		});
 		// ===== 검색 기능 END =====
 		
 		
 		// ===== 가나다 작가명 목록 기능 =====
-		$("#c0").click(function(){
+		$('#c0').click(function(){
+				// 세션스토리지 정리
+				sessionStorage.removeItem('pageNUM');
 		
 				// 정렬 버튼 기본 최신순으로
-				$("#new").attr("class", "btn btn-dark");
-				$("#best").attr("class", "btn btn-outline-dark");
+				$('#new').attr('class', 'btn btn-dark');
+				$('#best').attr('class', 'btn btn-outline-dark');
 				
-				keyword = "";
-				consonant = "";
-				sort = "";
+				keyword = '';
+				consonant = '';
+				sort = '';
 				
 			// 목록 출력
-			artistList(1, "", consonant, "");
+			artistList(1, '', consonant, '');
 		});	
 		
 		for(i=1; i<16; i++){
-			$("#c"+i).click(function(){
+			$('#c'+i).click(function(){
+				// 세션스토리지 정리
+				sessionStorage.removeItem('pageNUM');
 			
 				// 정렬 버튼 기본 최신순으로
-				$("#new").attr("class", "btn btn-dark");
-				$("#best").attr("class", "btn btn-outline-dark");
+				$('#new').attr('class', 'btn btn-dark');
+				$('#best').attr('class', 'btn btn-outline-dark');
 				
-				keyword = "";
+				keyword = '';
 				consonant = $(this).text();
-				sort = "";
+				sort = '';
 				
 				// 목록 출력
-				artistList(1, "", consonant, "");
+				artistList(1, '', consonant, '');
 			});
 		}
 		// ===== 가나다 작가명 목록 기능 END =====
@@ -258,8 +277,15 @@ $(document).ready(function(){
 
 		// 함수 호출
 		artistTop();
-		// 매개변수 기본값: 1페이지, 검색어 null, 작가명 가나다 선택자음 null, 기본 null(최신순) 
-		artistList(1, "", "", "");
+		
+		// 매개변수 기본값: 1페이지, 검색어 null, 작가명 가나다 선택자음 null, 기본 null(최신순)
+		if(!sessionStorage.getItem('pageNUM')){
+			artistList(1, '', '', '');
+			
+		// 세션스토리지에 pageNUM Key 있는 경우 뒤로가기 시 페이징 유지	
+		}else{
+			artistList(pageNUM, '', '', '');
+		}		
         
 	});
 </script>
