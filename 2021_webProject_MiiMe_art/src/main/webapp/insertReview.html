@@ -15,7 +15,6 @@
 			$("#header").load("/header.html");
 			$("#footer").load("/footer.html");
 			$("#floatingbar").load("/floatingbar1.html");
-
 		});
 		// header, footer include
 
@@ -25,11 +24,9 @@
 
 				if (memNo != null) {
 					let getMemNo = memNo; //로그인한 회원번호	
-					let data = {"memNo": getMemNo};
+					let data = { "memNo": getMemNo };
 
 					let artNoVal = window.location.search.split("artNo=");
-				//	alert(artNoVal[1]);
-				//	alert(memNo);
 					$('#memNo').val(memNo);
 					$('#artNo').val(artNoVal[1]);
 				} else {
@@ -40,10 +37,7 @@
 		});
 
 		function clickAction() {
-			alert("리뷰 추가 시도..!");
-			// FormData 객체 생성
 			let data = new FormData(document.getElementById("form")); //form 안에 들어있는 데이터들 모두 가져오기
-			//alert(data.FormData)
 
 			$.ajax({
 				url: "/insertReviewProto.do",
@@ -76,7 +70,7 @@
 				<h1 class="fw-light">리뷰 등록</h1>
 				<p class="lead text-muted">구매하신 상품의 리뷰를 등록해주세요!</p>
 				<p>
-					<a href="artDetail.html" class="btn btn-primary my-2">작품 목록</a>
+					<a href="artDetail.html" class="btn btn-dark">작품 목록</a>
 					<a href="artistDetail.html" class="btn btn-secondary my-2">작가 목록</a>
 				</p>
 			</div>
@@ -84,32 +78,36 @@
 	</section>
 
 
-	<form id="form" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="memNo" id="memNo">
-		<input type="hidden" name="artNo" id="artNo">
-		<!-- 구매목록에서 아트넘버, 맴버넘버가 넘어올거라서 hidden처리 할 예정   -->
+	<div class="container">
+
+		<form id="form" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="memNo" id="memNo">
+			<input type="hidden" name="artNo" id="artNo">
+			<!-- 구매목록에서 아트넘버, 맴버넘버가 넘어올거라서 hidden처리 할 예정   -->
+			<br>
+
+			<div class="mb-3">
+				<label for="formFile" class="form-label">사진 첨부</label>
+				<input type="file" id="uploadFile" name="uploadFile" accept="image/gif, image/jpeg, image/png, image/jpg"> <br>
+			</div>
+
+
+			<div class="form-floating">
+				<textarea style="resize: none; width:100%; height:300px; " class="form-control" placeholder="Leave a comment here" id="reviewText"
+					name="reviewText"></textarea>
+				<label for="floatingTextarea">리뷰를 작성해주세요!</label>
+		</form>
 		<br>
-
-
-
-		<div class="mb-3">
-			<label for="formFile" class="form-label">사진 첨부</label>
-			<input type="file" id="uploadFile" name="uploadFile"> <br>
-		</div>
-
-
-		<div class="form-floating">
-			<textarea class="form-control" placeholder="Leave a comment here" id="reviewText"
-				name="reviewText"></textarea>
-			<label for="floatingTextarea">리뷰를 작성해주세요!</label>
-	</form>
-
-	<button type="button" onClick="clickAction()" class="btn btn-dark" id="btnInsert">등록</button>
+		<br>
+		<br>
+		
+		<button type="button" onClick="clickAction()" class="btn btn-dark" id="btnInsert">등록</button>
+	</div>
 
 
 
 	<footer id="footer"></footer>
-		<div id="floatingbar"></div>
+	<div id="floatingbar"></div>
 
 
 </body>
