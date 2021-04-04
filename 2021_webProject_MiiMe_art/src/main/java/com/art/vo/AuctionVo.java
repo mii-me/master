@@ -15,6 +15,7 @@ public class AuctionVo {
 	private int artNo;
 	private int bidCount;
 	
+	//회원 정보, member_tb
 	private String memName;
 	
 	//작품 정보, art_info_tb
@@ -40,5 +41,8 @@ public class AuctionVo {
 	
 	//작가 정보 artist_info_tb
 	private String artistName;
+	
+	//경매장, auction_tb
+	private String bidTop;
 	
 }

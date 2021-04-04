@@ -17,22 +17,34 @@
 		where mem_no=#{memNo}
 	</update>
 		 	
+	<!-- 작품 -->	 	
 	<select id="findInfo" resultType="paymentVo">
 		select mem_no, art_no, art_pic, art_name, auc_start, auc_bid, auc_buy
 		from art_info_tb
 		where art_no=#{artNo}
 	</select>
-	
-	
+
+	<!-- 결제페이지 회원목록 가져오기 -->	
 	 <select id="getMember" resultType="paymentVo">
   		select * from MEMBER_TB where MEM_NO = #{memNo}
  	 </select>
 	
-	
+	<!-- 판매상태 sold로 변경 -->	
 	 <update id="updateStatus">
 		update art_sell_tb
 		set art_sell='sold'
 		where art_no=#{artNo}
 	 </update>
+	 
+	 
+	 <!-- 낙찰완료된 작품에 대한 결제대기 목록 -->
+	<select id="payWait" resultType="paymentVo">
+		select art_no,art_pic,art_name,auc_bid, (select mem_name from member_tb where mem_no=#{memNo}) mem_name
+		from art_info_tb
+		where art_no= (select art_no from auction_tb where bid_top =
+						(select bid_top from auction_tb where bid_top=
+							(select mem_name from member_tb	where mem_no=#{memNo})))
+	</select>
+	 
 	 
 </mapper>

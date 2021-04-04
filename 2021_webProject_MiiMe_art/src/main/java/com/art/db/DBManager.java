@@ -297,7 +297,7 @@ private static SqlSessionFactory factory;
 	
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< [by 김현규] Start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-	//오늘의 핫딜, art_info_tb에서 작품정보를 인기순(찜횟수),입찰횟수,마감임박순으로 가져온다.	// by.현규
+	//핫딜 조건별 조회1, 찜 횟수가 많은 작품	// by.현규
 	public static List<AuctionVo> listHot_1(){
 		List<AuctionVo> list = null;
 		SqlSession session = factory.openSession();
@@ -306,7 +306,7 @@ private static SqlSessionFactory factory;
 		return list;
 	}//hotArtsInfo
 	
-	//핫딜 조건별 조회2, 가장 입찰 횟수가 높은 작품	// by.현규
+	//핫딜 조건별 조회2, 입찰 횟수가 가장 높은 작품	// by.현규
 	public static List<AuctionVo> listHot_2() {
 		List<AuctionVo> list = null;
 		SqlSession session = factory.openSession();
@@ -324,7 +324,6 @@ private static SqlSessionFactory factory;
 		return list;
 	}
 	
-
 	//결제창 진입시 가져와야하는 정보들	//작품번호, 회원번호를 참조해야한다.
 	//회원명, 휴대전화, 주소, 작품이미지, 작품명, 즉시구매가,낙찰가(입찰가),총액	// by.현규
 	public static List<PaymentVo> findInfo(int artNo) {
@@ -345,7 +344,6 @@ private static SqlSessionFactory factory;
 		return list;
 	}//findAll
 	
-
 	
 	//경매장에서 입찰가 입력하면 art_info_tb에서 aucBid가 update된다. 	// by.현규
 	public static int updateBid(AuctionVo a) {
@@ -358,23 +356,17 @@ private static SqlSessionFactory factory;
 	
 	
 	//입찰 성공할 때 입찰 횟수 증가	// by.현규
-	public static int countBid(int artNo) {
+	public static int countBid(int artNo,int memNo) {
+		HashMap<String, Integer> map = new HashMap<String,Integer>();
+		map.put("artNo", artNo);
+		map.put("memNo", memNo);
 		SqlSession session = factory.openSession();
-		int re = session.update("auction.countBid",artNo);
+		int re = session.update("auction.countBid",map);
 		session.commit();
 		session.close();
 		return re;
 	}//countBid
 	
-	
-	//입찰가 초기화		// by.현규
-	public static int resetBid(AuctionVo a) {
-		SqlSession session = factory.openSession();
-		int re = session.update("auction.resetBid",a);
-		session.commit();
-		session.close();
-		return re;
-	}//updatePrice
 	
 	//결제정보 입력: 결제페이지에서 결제하기 누를 때 payment_tb에 insert   	// by.현규
 	public static int insertPayment(PaymentVo p) {
@@ -385,29 +377,6 @@ private static SqlSessionFactory factory;
 		return re;
 	}//insertPayment
 
-	
-	
-	//작품보기 임시구현	//임시(은혜씨랑 겹치면 이거 지울 것) // by.현규
-	public static List<AuctionVo> listArts() {
-		List<AuctionVo> list =null;
-		SqlSession session = factory.openSession();
-		list = session.selectList("auction.listArts");
-		session.close();
-		return list;
-	}//findAll
-
-
-	
-	
-	
-	//로그인한 회원정보 가져오기 // by.현규
-	public static PaymentVo getMember(int memNo) {
-		SqlSession session = factory.openSession();
-		PaymentVo pv = session.selectOne("payment.getMember",memNo);
-		session.close();
-		return pv;
-	}	
-	
 	
 	//art_sell_tb에서 판매 상태를 바꿔준다.   // by.현규
 	public static int updateStatus(PaymentVo p) {
@@ -427,31 +396,6 @@ private static SqlSessionFactory factory;
 		return av;
 	}
 
-	//찜하기		// by.현규
-	public static int insertWish(int artNo,int memNo) {
-		HashMap<String, Integer> map = new HashMap<String,Integer>();
-		map.put("artNo", artNo);
-		map.put("memNo", memNo);
-		SqlSession session = factory.openSession();
-		int re = session.insert("auction.insertWish",map);
-		session.commit();
-		session.close();
-		return re;
-	}
-	
-	//찜 취소		// by.현규
-	public static int deleteWish(int artNo,int memNo) {
-		HashMap<String, Integer> map = new HashMap<String,Integer>();
-		map.put("artNo", artNo);
-		map.put("memNo", memNo);
-		SqlSession session = factory.openSession();
-		int re = session.insert("auction.deleteWish",map);
-		session.commit();
-		session.close();
-		return re;
-	}
-
-
 	//art_point_tb에 포인트 업데이트		// by.현규
 	public static int updatePoint(PaymentVo p) {
 		SqlSession session = factory.openSession();
@@ -470,6 +414,16 @@ private static SqlSessionFactory factory;
 		session.close();
 		return re;
 	}
+	
+	//낙찰완료된 작품에 대한 결제대기 목록
+	public static List<AuctionVo> payWait(int memNo) {
+		List<AuctionVo> list =null;
+		SqlSession session = factory.openSession();
+		list = session.selectList("payment.payWait",memNo);
+		session.close();
+		return list;
+	}	
+	
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 김현규] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 	
@@ -901,6 +855,24 @@ private static SqlSessionFactory factory;
 			String artistName = session.selectOne("artSell.findArtistName", memNo);
 			session.close();
 			return artistName;
+		}
+		
+		/**
+		 * 남혜진_포인트 환전하기
+		 * @param resultPoint 환전할 포인트(계산된)
+		 * @param memNo 회원번호
+		 * @return
+		 */
+		public static int updateArtistPoint(int resultPoint, int memNo) {
+			System.out.println("3 dbmanager");
+			SqlSession session = factory.openSession();
+			HashMap<String, Integer> map = new HashMap<String, Integer>();
+			map.put("resultPoint", resultPoint);
+			map.put("memNo", memNo);
+			int re = session.update("artSell.updateArtistPoint", map);
+			session.commit();
+			session.close();
+			return re;
 		}
 	
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> [by 남혜진] End >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

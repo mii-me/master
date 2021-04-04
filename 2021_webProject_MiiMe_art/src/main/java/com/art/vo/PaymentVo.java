@@ -23,6 +23,7 @@ public class PaymentVo {
 	//작품정보, art_info_tb
 	private String artName;
 	private String artTheme;
+	private String artMaterial;
 	private String artSize1;
 	private String artSize2;
 	private int artYear;
@@ -45,6 +46,7 @@ public class PaymentVo {
 	private String memTel;
 	private String memAddr;
 	
-	
+	//경매장, auction_tb
+	private String bidTop;
 	
 }

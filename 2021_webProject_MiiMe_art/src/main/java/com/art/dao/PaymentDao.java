@@ -22,11 +22,6 @@ public class PaymentDao {
 	public List<PaymentVo> findInfo(int artNo){
 		return DBManager.findInfo(artNo);
 	}
-
-	//로그인한 회원정보를 가져온다.
-	public PaymentVo getMember(int memNo) {
-		return DBManager.getMember(memNo);
-	}
 	
 	//결제정보
 	public int updateStatus(PaymentVo p) {
@@ -38,5 +33,9 @@ public class PaymentDao {
 		return DBManager.updatePoint(p);
 	}
 	
+	//낙찰완료된 작품에 대한 결제대기 목록
+	public List<AuctionVo> payWait(int memNo) {
+		return DBManager.payWait(memNo);
+	}
 	
 }
