@@ -2,7 +2,8 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="artistInfo"><!-- [by 정소윤] -->
+<mapper namespace="artistInfo">
+<!-- [by 정소윤] -->
 	
   <!-- 작가회원 가입하기 -->
   <insert id="insertArtistInfo">
@@ -13,8 +14,18 @@
 	into ARTIST_POINT_TB values(MEMBER_SEQ.nextval, 0)
 	select * from dual
   </insert>
+
   
+  <!-- 메인페이지 최신작품 Top3 -->
+  <select id="mainArt" resultType="ArtistInfoVo">
+  	 select MEM_NO, ART_NO, ART_PIC, ART_NAME, ART_TAG1
+	   from (select rownum, MEM_NO, ART_NO, ART_PIC, ART_NAME, ART_TAG1
+  	  		   from ART_INFO_TB
+  	 		  order by ART_NO desc)
+	  where rownum &lt;= 3
+  </select>
   
+
    
   <!-- 인기작가 Top3 -->
   <select id="topArtistInfo" resultType="ArtistInfoVo">

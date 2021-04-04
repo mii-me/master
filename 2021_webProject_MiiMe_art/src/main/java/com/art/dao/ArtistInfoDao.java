@@ -62,4 +62,8 @@ public class ArtistInfoDao {
 	}
 
 	
+	public List<ArtistInfoVo> mainArt() {
+		return DBManager.mainArt();
+	}
+	
 }

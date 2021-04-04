@@ -22,7 +22,12 @@ public class JoinController {
 		this.dao = dao;
 	}
 	
-	// 회원가입: 일반회원(B)일 경우 member_tb에 insert
+	
+	/**
+	 * 회원가입: 일반회원(B)일 경우 member_tb에 insert
+	 * @author 정소윤
+	 * @param m 데이터 내용
+	 */
 	@RequestMapping("/insertMember.do")
 	public String insertMember(MemberVo m) {
 		int re = dao.insertMember(m);
@@ -31,7 +36,11 @@ public class JoinController {
 	}//insertMember
 	
 	
-	// 회원가입: 작가회원(S)일 경우 member_tb과 artist_info_tb에 동시에 insert
+	/**
+	 * 회원가입: 작가회원(S)일 경우 member_tb과 artist_info_tb에 동시에 insert
+	 * @author 정소윤
+	 * @param m 데이터 내용
+	 */
 	@RequestMapping("/insertArtistInfo.do")
 	public String insertArtistInfo(ArtistInfoVo a, HttpServletRequest request) {
 		String path = request.getRealPath("artist_pic");
@@ -62,7 +71,12 @@ public class JoinController {
 	
 	
 	
-	// 로그인
+	/**
+	 * 로그인 시 회원정보 테이블과 비교
+	 * @author 정소윤
+	 * @param memId
+	 * @param memPwd
+	 */
 	@RequestMapping("/loginOK.do")
 	public MemberVo selectMember(String memId, String memPwd) {
 		System.out.println("loginOK.do => 1. 로그인 Controller 작동: memId "+memId);

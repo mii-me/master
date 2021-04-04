@@ -33,7 +33,7 @@
 			
 			if(cookieArr[0]=="" || cookieArr[0]==null){
 				//alert("보여줄 그림 없음");
-				let nullMsg = $("<p></p>").html("최근 본 작품 없음");
+				let nullMsg = $("<p></p>").html("최근 본 작품이<br>없습니다.");
 				$("#images").append(nullMsg);
 					
 			}else{
@@ -55,7 +55,7 @@
 						.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																		+av.artNo+"&tag="+av.artTag1)
 						.html($("<img>")
-						.attr("src","./art_pic/"+cookieArr[0]).css("width","100px","height","100px"));
+						.attr("src","./art_pic/"+cookieArr[0]).css("width","90px").css("height","90px"));
 						//images div에 추가해준다.
 						$("#images").append(img);
 						hr = $("<hr>");
@@ -77,7 +77,7 @@
 							.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																			+av.artNo+"&tag="+av.artTag1)
 							.html($("<img>")
-							.attr("src","./art_pic/"+cookieArr[k]).css("width","100px","height","100px"));
+							.attr("src","./art_pic/"+cookieArr[k]).css("width","90px").css("height","90px"));
 							//images div에 추가해준다.
 							$("#images").append(img);
 							hr = $("<hr>");
@@ -98,7 +98,7 @@
 							.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																			+av.artNo+"&tag="+av.artTag1)
 							.html($("<img>")
-							.attr("src","./art_pic/"+cookieArr[j]).css("width","100px","height","100px"));
+							.attr("src","./art_pic/"+cookieArr[j]).css("width","90px").css("height","90px"));
 							//images div에 추가해준다.
 							$("#images").append(img);
 							hr = $("<hr>");

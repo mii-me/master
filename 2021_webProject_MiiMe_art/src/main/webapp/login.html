@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>미미 美;Me - 로그인</title>
-  <script src="https://kit.fontawesome.com/5814a32c0e.js" crossorigin="anonymous"></script>
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   
 <style type="text/css">
@@ -17,6 +16,11 @@
 		font-family: 'Noto Sans KR', sans-serif;
 		padding-top: 81px;
 	}
+	
+	.loginbtn .btn:hover {
+	    background-color: #BAABAC!important;
+	    border-color: #BAABAC!important;
+	}	
 </style>
 
 <script type="text/javascript">
@@ -97,14 +101,14 @@ $(document).ready(function(){
 				<input type="password" name="memPwd" id="memPwd" class="form-control mx-auto" placeholder="비밀번호" style="width: 300px; height: 50px;">		
 			</div>
 		</form>
-		<div class="pt-4 mx-auto" style="width: 300px;">
+		<div class="pt-4 mx-auto loginbtn" style="width: 300px;">
 			<button id="btnLogin" class="btn btn-dark" style="width: 300px; height: 60px; background-color: #A59091; border-color: #A59091;">로그인</button>
 		</div>
 		<hr class="mt-5" style="width: 400px;"/>
 		<div class="pt-2 mx-auto" style="width: 315px;">
 			<span style="text-align: center;">미미에서 미술품 경매의 주인공이 되어 보세요!</span>
 		</div>	
-		<div class="pt-3 mx-auto" style="width: 300px;">
+		<div class="pt-3 mx-auto loginbtn" style="width: 300px;">
 			<button onclick="location.href='join.html'" class="btn btn-dark" style="width: 300px; height: 60px; background-color: #A59091; border-color: #A59091;">회원가입</button>
 		</div>	
 	</div>
