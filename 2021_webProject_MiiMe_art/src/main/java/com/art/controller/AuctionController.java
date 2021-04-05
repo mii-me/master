@@ -30,6 +30,13 @@ public class AuctionController {
 		r= gson.toJson(list);
 		return r;
 	}
+	
+	//조건1 순위 1위 씩 증가 	//04.05 by 현규
+	@RequestMapping("/updateRank1.do")
+	public String updateRank1(AuctionVo a) {
+		int re = dao.updateRank1(a);
+		return re+"";
+	}
 
 	
 	//핫딜 조건별 조회2, 가장 입찰 횟수가 높은 작품
@@ -42,6 +49,13 @@ public class AuctionController {
 		return r;
 	}
 	
+	//조건2 순위 1위 씩 증가 	//04.05 by 현규
+	@RequestMapping("/updateRank2.do")
+	public String updateRank2(AuctionVo a) {
+		int re = dao.updateRank2(a);
+		return re+"";
+	}
+	
 	//핫딜 조건별 조회3, 마감 임박
 	@RequestMapping("/listHot_3.do")
 	public String listHot_3() {
@@ -52,6 +66,13 @@ public class AuctionController {
 		return r;
 	}
 	
+	//조건3 순위 1위 씩 증가 	//04.05 by 현규
+	@RequestMapping("/updateRank3.do")
+	public String updateRank3(AuctionVo a) {
+		int re = dao.updateRank3(a);
+		return re+"";
+	}
+	
 	//경매장에서 작품 불러오기   //03.18 by 현규
 	@RequestMapping("/detailAuction.do")
 	public List<AuctionVo> detailAuction(int artNo) {
@@ -60,6 +81,8 @@ public class AuctionController {
 	}
 	
 
+	
+	
 	//경매장에서 입찰가 업데이트 	//03.21 by 현규
 	@RequestMapping("/updateBid.do")
 	public String updateBid(AuctionVo a) {
