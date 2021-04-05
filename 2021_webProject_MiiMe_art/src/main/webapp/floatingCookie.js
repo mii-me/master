@@ -44,20 +44,25 @@
 				let img;
 				let img_div;
 				
+				
 				if(i == 1){
-					artPic = cookieArr[0];
-					console.log(artPic);
 					
-					data = {artPic : artPic}
 					setTimeout(function() {  
+						
+					artPic = cookieArr[0];
+					data = {artPic : artPic};
+					
 						$.ajax({url:"/findArtElements.do", data:data, success:function(av){
 						img = $("<a></a>")
 						.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																		+av.artNo+"&tag="+av.artTag1)
 						.html($("<img class='img_hover'>")
 						.attr("src","./art_pic/"+cookieArr[0]).css("width","90px").css("height","90px"));
+						
+						img_div = $('<div style="padding-bottom:10px;"></div>').append(img);
+						
 						//images div에 추가해준다.
-						$("#images").append(img);
+						$("#images").append(img_div);
 						}});				
 					}, 200);					
 					
@@ -65,36 +70,45 @@
 				}else if(i == 2){
 					
 					for(let k=i-1; k>=i-2; k--){
-						artPic =  cookieArr[k];
-						console.log(artPic);
 						
-						data = {artPic : artPic}
 						setTimeout(function() {  
+							
+							artPic =  cookieArr[k];
+							data = {artPic : artPic};
+							
 							$.ajax({url:"/findArtElements.do", data:data, success:function(av){
 							img = $("<a></a>")
 							.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																			+av.artNo+"&tag="+av.artTag1)
 							.html($("<img class='img_hover'>")
 							.attr("src","./art_pic/"+cookieArr[k]).css("width","90px").css("height","90px"));
+							
+							img_div = $('<div style="padding-bottom:10px;"></div>').append(img);
+							
 							//images div에 추가해준다.
-							$("#images").append(img);
+							$("#images").append(img_div);
 							}});				
 						}, 200);
 					}					
 					
 				}else{
 					for(let j= i-1; j>= i-3 ; j--){
-						artPic = cookieArr[j];
-						console.log(artPic);
-					
-						data = {artPic : artPic}
+						
 						setTimeout(function() {  
+							
+							artPic = cookieArr[j];
+							data = {artPic : artPic};
+							
 							$.ajax({url:"/findArtElements.do", data:data, success:function(av){
 							img = $("<a></a>")
 							.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																			+av.artNo+"&tag="+av.artTag1)
 							.html($("<img class='img_hover'>")
 							.attr("src","./art_pic/"+cookieArr[j]).css("width","90px").css("height","90px"));
+							
+//							console.log('av.memNo: ' + av.memNo);
+//							console.log('av.artNo: ' + av.artNo);
+//							console.log('av.artTag1: ' + av.artTag1);
 							
 							img_div = $('<div style="padding-bottom:10px;"></div>').append(img);
 							
