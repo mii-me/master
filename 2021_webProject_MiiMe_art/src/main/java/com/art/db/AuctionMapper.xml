@@ -8,7 +8,7 @@
 	<!-- 핫딜에서 작품 불러오기 (작품명, 작가명, 작품사진, 시작가,즉시구매가)-->
 	<!-- 핫딜 조건별 조회1, 찜 횟수(wishList_tb에서 최다 작품번호를 조회 후 목록 출력) 판매중이면서 남은시간이 있는 작품-->
 	<select id="listHot_1" resultType="auctionVo">
-		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
+		select info.mem_no mem_no,(select artist_name from artist_info_tb where mem_no=info.mem_no) artist_name,info.art_no art_no,info.art_name art_name,info.art_material art_material,
 				info.art_theme art_theme,info.art_size1 art_size1,info.art_size2 art_size2, info.art_year art_year,info.art_pic art_pic,
 				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
 				info.auc_start auc_start,nvl2(info.auc_bid,info.auc_bid,info.auc_start) auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
@@ -29,7 +29,7 @@
 	
 	<!-- 핫딜 조건별 조회2, 입찰횟수가 많은 작품정보, 판매중이면서 남은시간이 있는 작품 -->
 	<select id="listHot_2" resultType="auctionVo">
-		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
+		select info.mem_no mem_no,(select artist_name from artist_info_tb where mem_no=info.mem_no) artist_name,info.art_no art_no,info.art_name art_name,info.art_material art_material,
 				info.art_theme art_theme,info.art_size1 art_size1,info.art_size2 art_size2, info.art_year art_year,info.art_pic art_pic,
 				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
 				info.auc_start auc_start,nvl2(info.auc_bid,info.auc_bid,info.auc_start) auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
@@ -49,7 +49,7 @@
 	
 	<!-- 핫딜 조건별 조회3, 마감시간 임박, 판매중이면서 남은시간이 있는 작품-->
 	<select id="listHot_3" resultType="auctionVo">
-		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
+		select info.mem_no mem_no,(select artist_name from artist_info_tb where mem_no=info.mem_no) artist_name,info.art_no art_no,info.art_name art_name,info.art_material art_material,
 				info.art_theme art_theme,info.art_size1 art_size1,info.art_size2 art_size2, info.art_year art_year,info.art_pic art_pic,
 				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
 				info.auc_start auc_start,nvl2(info.auc_bid,info.auc_bid,info.auc_start) auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,

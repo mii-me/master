@@ -23,9 +23,7 @@
 		width:350px;
 		height: 45px;
 		display: inline-block;
-		color: red;
-		font-size: 26px;
-		font-weight: bold;
+		font-size: 24px;
 	}
 	
 	.price{
@@ -94,16 +92,17 @@ $(function(){
 			
 			let art_pic = $(`<div class="card-body px-0 pt-0"></div>`).html($(`<img width="100%" height="250px">`).attr("src","./art_pic/"+hot.artPic));
 			let art_name = $(`<div class="name card-body py-0"></div>`).html(`<b>`+hot.artName+`</b>`).append(` <span class="badge badge-pill badge-danger" style="font-size:8px;">HOT</span>`);
-			let art_year = $(`<div class="year card-body py-0"></div>`).html(hot.artYear);
+			let artist_name = $(`<div class="artistName card-body py-0"></div>`).html(hot.artistName);
 			let art_material = $(`<div class="material card-body py-0"></div>`).html(hot.artMaterial);
-			let art_size = $(`<div class="size card-body pt-0 pb-1"></div>`).html(hot.artSize1+" x "+hot.artSize2+"(cm)");
+			let art_size = $(`<div class="size card-body pt-0 pb-1"></div>`).html(hot.artSize1+" x "+hot.artSize2+"cm , "+hot.artYear);
+			//let art_year = $(`<div class="year card-body py-0"></div>`).html(hot.artYear);
 			let hr = $(`<hr>`);
 			let auc_bid = $(`<div class="card-body py-0 text-right"></div>`).html("현재입찰가&nbsp;&nbsp;&nbsp;"+"<span class='price'>"+aucBid+"</span>"+" 원");
 			let auc_buy = $(`<div class="card-body pt-1 text-right"></div>`).html("즉시구매가&nbsp;&nbsp;&nbsp;"+aucBuy+" 원");
 			let auc_btn = $(`<button class="btn btn-dark" style="width:200px; height:50px;">경매장 이동</button>`);
 			let auc_link = $(`<a></a>`).attr("href","auction.html?artNo="+hot.artNo).append(auc_btn);
 			let auction = $(`<div class="p-3" align="center"></div>`).append(auc_link);
-			$("#div1").append(art_pic,art_name,art_year,art_material,art_size,hr,auc_bid,auc_buy,auction);
+			$("#div1").append(art_pic,art_name,artist_name,art_material,art_size,hr,auc_bid,auc_buy,auction);
 		});
 	}});
 	
@@ -138,16 +137,17 @@ $(function(){
 
 			let art_pic = $(`<div class="card-body px-0 pt-0"></div>`).html($(`<img width="100%" height="250px">`).attr("src","./art_pic/"+hot.artPic));
 			let art_name = $(`<div class="name card-body py-0"></div>`).html(`<b>`+hot.artName+`</b>`).append(` <span class="badge badge-pill badge-danger" style="font-size:8px;">HOT</span>`);
-			let art_year = $(`<div class="year card-body py-0"></div>`).html(hot.artYear);
+			let artist_name = $(`<div class="artistName card-body py-0"></div>`).html(hot.artistName);
 			let art_material = $(`<div class="material card-body py-0"></div>`).html(hot.artMaterial);
-			let art_size = $(`<div class="size card-body pt-0 pb-1"></div>`).html(hot.artSize1+" x "+hot.artSize2+"(cm)");
+			let art_size = $(`<div class="size card-body pt-0 pb-1"></div>`).html(hot.artSize1+" x "+hot.artSize2+"cm , "+hot.artYear);
+			//let art_year = $(`<div class="year card-body py-0"></div>`).html(hot.artYear);
 			let hr = $(`<hr>`);
 			let auc_bid = $(`<div class="card-body py-0 text-right"></div>`).html("현재입찰가&nbsp;&nbsp;&nbsp;"+"<span class='price'>"+aucBid+"</span>"+" 원");
 			let auc_buy = $(`<div class="card-body pt-1 text-right"></div>`).html("즉시구매가&nbsp;&nbsp;&nbsp;"+aucBuy+" 원");
 			let auc_btn = $(`<button class="btn btn-dark" style="width:200px; height:50px;">경매장 이동</button>`);
 			let auc_link = $(`<a></a>`).attr("href","auction.html?artNo="+hot.artNo).append(auc_btn);
 			let auction = $(`<div class="p-3" align="center"></div>`).append(auc_link);
-			$("#div2").append(art_pic,art_name,art_year,art_material,art_size,hr,auc_bid,auc_buy,auction);
+			$("#div2").append(art_pic,art_name,artist_name,art_material,art_size,hr,auc_bid,auc_buy,auction);
 		});
 		}else{	//핫딜에 작품이 있을 경우
 			//여기다 updateRank 실행하게 넣어볼 것
@@ -183,16 +183,17 @@ $(function(){
 			
 			let art_pic = $(`<div class="card-body px-0 pt-0"></div>`).html($(`<img width="100%" height="250px">`).attr("src","./art_pic/"+hot.artPic));
 			let art_name = $(`<div class="name card-body py-0"></div>`).html(`<b>`+hot.artName+`<b>`).append(` <span class="badge badge-pill badge-warning" style="font-size:8px; color:#FFF;">D-DAY</span>`);
-			let art_year = $(`<div class="year card-body py-0"></div>`).html(hot.artYear);
+			let artist_name = $(`<div class="artistName card-body py-0"></div>`).html(hot.artistName);
 			let art_material = $(`<div class="material card-body py-0"></div>`).html(hot.artMaterial);
-			let art_size = $(`<div class="size card-body pt-0 pb-1"></div>`).html(hot.artSize1+" x "+hot.artSize2+"(cm)");
+			let art_size = $(`<div class="size card-body pt-0 pb-1"></div>`).html(hot.artSize1+" x "+hot.artSize2+"cm , "+hot.artYear);
+			//let art_year = $(`<div class="year card-body py-0"></div>`).html(hot.artYear);
 			let hr = $(`<hr>`);
 			let auc_bid = $(`<div class="card-body py-0 text-right"></div>`).html("현재입찰가&nbsp;&nbsp;&nbsp;"+"<span class='price'>"+aucBid+"</span>"+" 원");
 			let auc_buy = $(`<div class="card-body pt-1 text-right"></div>`).html("즉시구매가&nbsp;&nbsp;&nbsp;"+aucBuy+" 원");
 			let auc_btn = $(`<button class="btn btn-dark" style="width:200px; height:50px;">경매장 이동</button>`);
 			let auc_link = $(`<a></a>`).attr("href","auction.html?artNo="+hot.artNo).append(auc_btn);
 			let auction = $(`<div class="p-3" align="center"></div>`).append(auc_link);
-			$("#div3").append(art_pic,art_name,art_year,art_material,art_size,hr,auc_bid,auc_buy,auction);
+			$("#div3").append(art_pic,art_name,artist_name,art_material,art_size,hr,auc_bid,auc_buy,auction);
 		});
 		}else{ //핫딜에 작품이 있을 경우
 			//여기다 updateRank 실행하게 넣어볼 것
@@ -221,7 +222,7 @@ $(function(){
 		<div class="col-sm-4">
 			<div class="text-center">		
 				<div class="ment"><i class="fas fa-heart"></i> 찜 많은 작품</div><br><br>
-				<span class="limit">남은 시간</span><br><span class="timer1"></span>
+				<span class="limit">남은 시간</span><br><span class="timer1 pt-1"></span>
 			</div>
 			<div id="div1" class="card"></div>
 		</div>
@@ -229,7 +230,7 @@ $(function(){
 		<div class="col-sm-4">
 			<div class="text-center">
 				<div class="ment"><i class="fab fa-hotjar"></i> 입찰 많은 작품</div><br><br>
-				<span class="limit">남은 시간</span><br><span class="timer2"></span>
+				<span class="limit">남은 시간</span><br><span class="timer2 pt-1"></span>
 			</div>
 			<div id="div2" class="card"></div>
 		</div>
@@ -237,7 +238,7 @@ $(function(){
 		<div class="col-sm-4">
 			<div class="text-center">
 				<div class="ment"><i class="fas fa-clock"></i> 마감 임박 작품</div><br><br>
-				<span class="limit">남은 시간</span><br><span class="timer3"></span>
+				<span class="limit">남은 시간</span><br><span class="timer3 pt-1"></span>
 			</div>
 			<div id="div3" class="card"></div>
 		</div>
