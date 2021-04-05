@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>결제창</title>
+<title>미미 美;Me - 결제</title>
 <style type="text/css">
 body{
 		font-family: 'Noto Sans KR', sans-serif;
@@ -176,6 +176,18 @@ $(window).on("beforeunload",function(){
 				alert("판매상태 변경 실패");								
 			}
 		}});
+		
+		//여기말고 핫딜에서 작품이 null일 경우 실행하게 바꿔볼 것
+		//조건1 순위 1씩 증가
+		$.ajax({url:"/updateRank1.do",
+		success:function(m){
+			if(m != -1){
+				console.log("순위 증가");
+			}else{
+				console.log("순위 증가");								
+			}
+		}});
+		
 		
 		//최고입찰자 초기화(결제대기에서 안보이게)
 		$.ajax({url:"/resetTop.do",

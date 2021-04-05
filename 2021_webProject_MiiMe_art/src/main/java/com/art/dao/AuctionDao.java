@@ -32,14 +32,29 @@ public class AuctionDao {
 		return DBManager.listHot_1();
 	}
 	
+	//조건1의 순위를 1씩 증가	
+	public int updateRank1(AuctionVo a) {
+		return DBManager.updateRank1(a);
+	}
+	
 	//핫딜 조건별 조회2, 가장 입찰 횟수가 높은 작품
 	public List<AuctionVo> listHot_2() {
 		return DBManager.listHot_2();
 	}
 	
+	//조건2의 순위를 1씩 증가	
+	public int updateRank2(AuctionVo a) {
+		return DBManager.updateRank2(a);
+	}
+	
 	//핫딜 조건별 조회3, 마감임박 작품
 	public List<AuctionVo> listHot_3() {
 		return DBManager.listHot_3();
+	}
+	
+	//조건3의 순위를 1씩 증가	
+	public int updateRank3(AuctionVo a) {
+		return DBManager.updateRank3(a);
 	}
 	
 	

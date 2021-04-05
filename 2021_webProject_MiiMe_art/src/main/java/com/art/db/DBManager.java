@@ -318,6 +318,15 @@ private static SqlSessionFactory factory;
 		return list;
 	}//hotArtsInfo
 	
+	//조건1 순위 1씩 증가
+	public static int updateRank1(AuctionVo a) {
+		SqlSession session = factory.openSession();
+		int re = session.update("auction.updateRank1",a);
+		session.commit();
+		session.close();
+		return re;
+	}//updateRank1
+	
 	//핫딜 조건별 조회2, 입찰 횟수가 가장 높은 작품	// by.현규
 	public static List<AuctionVo> listHot_2() {
 		List<AuctionVo> list = null;
@@ -327,6 +336,15 @@ private static SqlSessionFactory factory;
 		return list;
 	}
 	
+	//조건2 순위 1씩 증가
+	public static int updateRank2(AuctionVo a) {
+		SqlSession session = factory.openSession();
+		int re = session.update("auction.updateRank2",a);
+		session.commit();
+		session.close();
+		return re;
+	}//updateRank2
+	
 	//핫딜 조건별 조회3, 마감 임박 작품	// by.현규
 	public static List<AuctionVo> listHot_3() {
 		List<AuctionVo> list = null;
@@ -335,6 +353,15 @@ private static SqlSessionFactory factory;
 		session.close();
 		return list;
 	}
+	
+	//조건2 순위 1씩 증가
+	public static int updateRank3(AuctionVo a) {
+		SqlSession session = factory.openSession();
+		int re = session.update("auction.updateRank3",a);
+		session.commit();
+		session.close();
+		return re;
+	}//updateRank3
 	
 	//결제창 진입시 가져와야하는 정보들	//작품번호, 회원번호를 참조해야한다.
 	//회원명, 휴대전화, 주소, 작품이미지, 작품명, 즉시구매가,낙찰가(입찰가),총액	// by.현규

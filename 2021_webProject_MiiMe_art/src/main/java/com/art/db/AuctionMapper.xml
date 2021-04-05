@@ -12,24 +12,37 @@
 				info.art_theme art_theme,info.art_size1 art_size1,info.art_size2 art_size2, info.art_year art_year,info.art_pic art_pic,
 				info.art_exp art_exp,info.art_tag1 art_tag1,info.art_tag2 art_tag2,info.art_tag3 art_tag3,
 				info.auc_start auc_start,nvl2(info.auc_bid,info.auc_bid,info.auc_start) auc_bid,info.auc_buy auc_buy,sell.art_sell art_sell,
-				(select round((art_time-sysdate)*24*60*60)
-				from art_sell_tb
-				where art_no=	(select art_no
-								from (select art_no,count(art_no) art_count
-							  		from wish_list_tb group by art_no
-								order by art_count desc)
-								where rownum = 1)) art_time
+				round((sell.art_time-sysdate)*24*60*60) art_time
 		from art_info_tb info
-		join art_sell_tb sell
-		on info.art_no = sell.art_no
+		inner join art_sell_tb sell
+		on info.art_no=sell.art_no
 		where info.art_no = (select art_no
-							from (select art_no,count(art_no) art_count
-								from wish_list_tb group by art_no
+					from (select wish.art_no,count(wish.art_no) art_count, row_number() over(order by count(wish.art_no) desc) rank
+							from wish_list_tb wish
+							inner join art_sell_tb art
+							on wish.art_no=art.art_no
+				    		where art_sell='sale'
+							group by wish.art_no
 							order by art_count desc)
-							where rownum = 1) and sell.art_sell='sale' and sell.art_time &gt; sysdate
+					where rank=1) and sell.art_time &gt; sysdate
 	</select>
-
-
+	
+	<!--조건 1의 순위를 1씩 올려준다. (최상단 작품만 출력하도록)-->
+	<update id="updateRank1">
+		update art_sell_tb
+		set art_no=(select art_no
+		from (select art_no,count(art_no) art_count, row_number() over(order by count(art_no) desc)-1 rank
+				from wish_list_tb group by art_no
+				order by art_count desc)
+				where rank=1)
+		where art_no=(select art_no
+						from (select art_no,count(art_no) art_count, row_number() over(order by count(art_no) desc) rank
+							from wish_list_tb group by art_no
+							order by art_count desc)
+						where rank=1) and art_time &gt; sysdate
+	</update>
+	
+	
 	<!-- 핫딜 조건별 조회2, 입찰횟수가 많은 작품정보, 판매중이면서 남은시간이 있는 작품 -->
 	<select id="listHot_2" resultType="auctionVo">
 		select info.mem_no mem_no,info.art_no art_no,info.art_name art_name,info.art_material art_material,
@@ -73,8 +86,8 @@
 							order by art_time)
 							where rownum =1) and sell.art_sell='sale' and sell.art_time &gt; sysdate
 	</select>
-
-
+	
+	
 	<!-- 경매장 페이지에서 작품 불러오기
 		(작품명, 작가명, 재료, 테마, 사이즈, 년도, 작품사진, 시작가, 입찰가, 즉시구매가, 최고 입찰자)-->
 	<select id="detailAuction" resultType="auctionVo">
