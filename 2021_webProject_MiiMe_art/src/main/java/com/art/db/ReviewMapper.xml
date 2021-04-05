@@ -339,7 +339,7 @@
 	</select>
 	<select id="findRealTimeMost3LikeAll" resultType="reviewVo">
 		select * from ( select
-		r.mem_no,
+		r.mem_no, a.art_no,
 		m.mem_name, r.review_no, r.review_time,
 		r.review_image,
 		r.review_like,
