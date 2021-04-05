@@ -6,7 +6,7 @@
 		integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
 	<meta charset="UTF-8">
-	<title>테마별 후기</title>
+	<title>美;Me - 테마별후기</title>
 	<style>
 
 	</style>
@@ -24,6 +24,7 @@
 		var keyword = ""; // 검색어
 		var orderField = "";
 		var output = '';
+		var sortOutput = '';
 		var themeNumber = "0";
 
 		function clickAddAction() {
@@ -46,13 +47,24 @@
 
 			if ($('#' + btn).attr('class') == 'actionButton on') {
 				$("#reviewList" + themeNumber).empty(); // 목록이 중첩되지않게 초기화
+				$("#btnSort" + themeNumber).empty();
+				$("#buttonAdd" + themeNumber).empty();
 				keyword = btn;
 				loadReviewList(keyword, "", "#reviewList" + themeNumber)
 			} else {
 				$("#reviewList" + themeNumber).empty();
+				$("#btnSort" + themeNumber).empty();
 				$("#buttonAdd" + themeNumber).empty();
 			}
 		}
+
+
+		function clickSortAction(orderField) {
+			$("#btnSort" + themeNumber).empty();
+			$("#buttonAdd" + themeNumber).empty();
+			$("#reviewList" + themeNumber).empty();
+			loadReviewList(keyword, orderField, "#reviewList" + themeNumber);
+		};
 
 		// 모든 상품목록을 Ajax 통신으로 요청하는 함수 시작
 		function loadReviewList(keyword, orderField, editList) {
@@ -67,12 +79,20 @@
 
 
 					output = '';
-					output += '<div class="container" style="width:100%" ><div class="d-grid gap-2 d-sm-flex justify-content-sm-center" style="width:100%">'
-					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('likeDesc')">좋아요 높은 순서</button>`
-					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceAsc')">가격 낮은 순서</button>`
-					output += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceDesc')">가격 높은 순서</button>`
-					output += '</div>'
-					output += '</div>'
+					sortOutput = '';
+
+					$('#btnSort' + themeNumber).empty();
+					sortOutput += '<div class="container">'
+					sortOutput += '<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">'
+					sortOutput += `<button type="button" class="btn btn-dark" onClick="clickSortAction('likeDesc')">좋아요 높은 순서</button>`
+					sortOutput += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceAsc')">가격 낮은 순서</button>`
+					sortOutput += `<button type="button" class="btn btn-dark" onClick="clickSortAction('priceDesc')">가격 높은 순서</button>`
+					sortOutput += '</div>'
+					sortOutput += '<br>'
+					sortOutput += '</div>'
+
+					$('#btnSort' + themeNumber).append(sortOutput);
+
 
 					if (clickCnt * 9 > data.list.length) {
 						for (var i = 0; i < data.list.length; i++) {
@@ -88,10 +108,10 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
-								output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
+							output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
 							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
-								output += '<br><br>'
+							output += '<br><br>'
 
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
 
@@ -118,17 +138,17 @@
 
 							output += '<div class="d-flex justify-content-between align-items-center">'
 							output += ' <div class="btn-group">'
-							output += ' <button type="button"  onClick="clickAction(' + data.list[i].reviewNo + ')" class="like" id="'
-								+ data.list[i].reviewNo + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
-
+							output += ' <button type="button" style="background-color:white; border-radius: 7px;" onClick="clickAction(' + data.list[i].reviewNo + ')" class="like' + data.list[i].reviewNo + '" id="'
+								+ data.list[i].reviewNo + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
 							output += ' </div>'
 							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].reviewLike + '</small>'
 							output += ' </div>'
 							output += ' </div>'
 							output += ' </div>'
 							output += ' </div>'
+							output += ' </div>'
 						}
-						$('#buttonAdd'+themeNumber).empty();
+						$('#buttonAdd' + themeNumber).empty();
 
 					} else {
 						for (var i = 0; i < clickCnt * 9; i++) {
@@ -144,10 +164,10 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
-								output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
+							output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
 							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
-								output += '<br><br>'
+							output += '<br><br>'
 
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
 
@@ -174,18 +194,18 @@
 
 							output += '<div class="d-flex justify-content-between align-items-center">'
 							output += ' <div class="btn-group">'
-							output += ' <button type="button"  onClick="clickAction(' + data.list[i].reviewNo + ')" class="like" id="'
-								+ data.list[i].reviewNo + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
-
+							output += ' <button type="button" style="background-color:white; border-radius: 7px;" onClick="clickAction(' + data.list[i].reviewNo + ')" class="like' + data.list[i].reviewNo + '" id="'
+								+ data.list[i].reviewNo + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
 							output += ' </div>'
 							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].reviewLike + '</small>'
 							output += ' </div>'
 							output += ' </div>'
 							output += ' </div>'
 							output += ' </div>'
+							output += ' </div>'
 						}
 						let buttonAdd = '<div class="d-grid gap-2"> <button onClick="clickAddAction()" class="btn btn-dark" type="button">더보기</button></div>'
-						$('#buttonAdd'+themeNumber).append(buttonAdd);
+						$('#buttonAdd' + themeNumber).append(buttonAdd);
 					}
 					$(editList).append(output);
 				}//data	(success)
@@ -194,21 +214,9 @@
 
 
 
-		function clickSortAction(orderField) {
-			console.log(keyword);
-			console.log(orderField);
-			$("#reviewList" + themeNumber).empty();
-			loadReviewList(keyword, orderField, "#reviewList" + themeNumber);
-		};
-
-
 		function clickAction(reviewNo) {
-			//  $('.likeButton')
-			//  <img class="likeButton"/>
-			$('.like').toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
-
-			if ($('.like').attr('class') == 'like on') {
-				console.log(reviewNo)
+			$('.like' + reviewNo).toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
+			if ($('.like' + reviewNo).attr('class') == 'like' + reviewNo + ' on') {
 				insertLike(reviewNo)
 			} else { //null
 				deleteLike(reviewNo)
@@ -254,8 +262,8 @@
 		<section class="py-5 text-center container">
 			<div class="row py-lg-5">
 				<div class="col-lg-6 col-md-8 mx-auto">
-					<h1 class="fw-light">테마로 리뷰 모아보기</h1>
-					<p class="lead text-muted">작가가 pick한 테마로 리뷰 모아보기</p>
+					<h1 class="fw-light">테마로 후기 모아보기</h1>
+					<p class="lead text-muted">작가가 pick한 테마로 후기 모아보기</p>
 					<p>
 						<a href="artList.html" class="btn btn-dark">작품 목록</a>
 						<a href="artistList.html" class="btn btn-secondary my-2">작가 목록</a>
@@ -277,6 +285,7 @@
 						</div>
 					</h2>
 					<div class="accordion-body">
+						<div id="btnSort1"></div>
 						<div id="reviewList1" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
 						<div id="buttonAdd1"></div>
 					</div>
@@ -292,6 +301,7 @@
 						</div>
 					</h2>
 					<div class="accordion-body">
+						<div id="btnSort2"></div>
 						<div id="reviewList2" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
 						<div id="buttonAdd2"></div>
 					</div>
@@ -308,6 +318,7 @@
 						</div>
 					</h2>
 					<div class="accordion-body">
+						<div id="btnSort3"></div>
 						<div id="reviewList3" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
 						<div id="buttonAdd3"></div>
 					</div>
@@ -324,6 +335,7 @@
 						</div>
 					</h2>
 					<div class="accordion-body">
+						<div id="btnSort4"></div>
 						<div id="reviewList4" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
 						<div id="buttonAdd4"></div>
 					</div>
@@ -340,6 +352,7 @@
 						</div>
 					</h2>
 					<div class="accordion-body">
+						<div id="btnSort5"></div>
 						<div id="reviewList5" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
 						<div id="buttonAdd5"></div>
 					</div>
