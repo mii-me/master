@@ -60,7 +60,8 @@ $(function(){
 		let getMemNo=memNo;	//로그인한 회원번호
 
 
-/*-----------------결제없이 페이지 벗어날 때(판매상태:sale로 변경, 마감시간 5시간 추가) ---------------------*/
+/*-----------------결제없이 페이지 벗어날 때(판매상태:sale로 변경, 마감시간 5시간 추가) 수정 예정-------------------*/
+/*
 let checkOk = true;
 $(window).on("beforeunload",function(){
 	if(checkOk){
@@ -69,11 +70,7 @@ $(window).on("beforeunload",function(){
 		type:"post",
 		data:{artNo:getArtNo},	//작품번호
 		success:function(m){
-			if(m != -1){
-				alert("페이지를 벗어나 결제가 취소되었습니다.");
-			}else{
-				alert("판매상태 변경 실패");								
-			}
+			console.log("판매상태 sale로 변경"); 
 		}});
 		
 		//남은시간 5시간 추가
@@ -81,10 +78,12 @@ $(window).on("beforeunload",function(){
 		url:"/upTimeFive.do",
 		data:{artNo:getArtNo},
 		success:function(data){
-			console.log("남은시간 5시간 추가"); 
+			alert("페이지를 벗어나 결제가 취소되었습니다.");
 		}});
 	}
 });
+*/
+
 
 
 /*---------------------작품 불러오기 start------------------------*/
@@ -125,9 +124,9 @@ $(window).on("beforeunload",function(){
 		$("#arts_list").append(tr);
 		$("#amount").append(payAmount);
 	
-		//결제하기		
-		$("#btnPayOK").click("submit",function(event){
-			$(window).off("beforeunload");
+		/*-----------결제하기---------------------*/		
+		$("#btnPayOK").click(function(event){
+			$(window).off("beforeunload");	//이벤트 종료
 					
 		 	$("#memNo").val(getMemNo); //로그인한 회원번호를 세션에서 가져온다.
 			$(".artNo").val(getArtNo);
@@ -175,18 +174,6 @@ $(window).on("beforeunload",function(){
 				alert("판매상태 변경 실패");								
 			}
 		}});
-		
-		//여기말고 핫딜에서 작품이 null일 경우 실행하게 바꿔볼 것
-		//조건1 순위 1씩 증가
-		$.ajax({url:"/updateRank1.do",
-		success:function(m){
-			if(m != -1){
-				console.log("순위 증가");
-			}else{
-				console.log("순위 증가");								
-			}
-		}});
-		
 		
 		//최고입찰자 초기화(결제대기에서 안보이게)
 		$.ajax({url:"/resetTop.do",
