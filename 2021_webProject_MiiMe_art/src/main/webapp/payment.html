@@ -49,7 +49,6 @@ $(document).ready(function(){
     $("#footer").load("/footer.html");
 });
 
-
 let url = location.href;	//url 요청
 let getReceive = url.substr(url.indexOf("?")+1)
 let getReceiveSplit = getReceive.split("=");
@@ -132,7 +131,7 @@ $(window).on("beforeunload",function(){
 					
 		 	$("#memNo").val(getMemNo); //로그인한 회원번호를 세션에서 가져온다.
 			$(".artNo").val(getArtNo);
-						 
+			
 		let getAmount = Number($("#amount").text().replaceAll(",",""));	//최종 결제금액을 불러온다.
 		$(".payAmount").val(getAmount); 
 		let data = $("#f").serializeArray();	//회원번호,작품번호,결제금액,결제수단의 값을 불러온다.
@@ -152,12 +151,10 @@ $(window).on("beforeunload",function(){
 			}
 		}});
 			
-			
-		//포인트 작가회원에게 들어가도록 수정할 것
-		//artist_point_tb에 구매자가 가지고 있는 포인트+결제 금액으로 update
+		//포인트_tb에서 판매자가 가지고 있는 포인트+결제금액 update
 		$.ajax({url:"/updatePoint.do",
 		type:"post",
-		data:{memNo:pay.memNo,payAmount:pay.payAmount},	//작품번호
+		data:{memNo:pay.memNo,payAmount:getAmount},
 		success:function(m){
 			if(m != -1){
 				console.log("포인트 입력완료");
