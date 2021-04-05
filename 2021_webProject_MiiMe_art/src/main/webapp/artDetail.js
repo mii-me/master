@@ -32,8 +32,8 @@
 				
 		selected = eval("("+data+")");
 					
+		//현재 경매가를 즉시 구매가로 설정
 		nowBid = selected.aucBuy;
-		//console.log("selected : " + selected.artTag1);
 					
 		//이미지 삽입
 		$(".detail-content-pic-link").attr("src","art_pic/"+selected.artPic);
@@ -52,7 +52,8 @@
 		
 		
 		
-		
+		//동적으로 타이틀 변경하기
+		$('html>head>title').text("미미 美;Me - " + selected.artistName + " | " + selected.artName);
 		
 		$(".name").html(selected.artName);
 		$("#artistName").html(selected.artistName);
@@ -66,7 +67,7 @@
 		let aucBuyString = (selected.aucBuy).toString();
 		aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
 		
-		//판매 상황을 반영한다.
+		//판매 상황을 반영한다. (판매 시작 미등록 : null / 판매중 : sale / 판매 완료 : sold)
 		let selectedSell = selected.artSell;
 		console.log("selectedSell : " + selectedSell);
 		if(selectedSell == null) {
@@ -121,7 +122,7 @@
 			//다른 배경을 클릭했을 때 
 			$(".simulation-bg-other").click(function(){
 			//	let bgsrc = $(".simulation-bg").attr("src");
-					//console.log("기존배경src = " + bgsrc);
+			//console.log("기존배경src = " + bgsrc);
 				
 				//현재 클릭 된 방의 src
 				let now = $(this).attr("src"); 
@@ -151,13 +152,11 @@
 				$(".artExp-box").append(span1,exp,span2);
 				
 				
-				//즉시 구매하기 클릭 이벤트 함수 [by 현규]
+					//즉시 구매하기 클릭 이벤트 함수 [by 현규]
+		            $("#btnBuy").click(function(){
 					
-	            $("#btnBuy").click(function(){
-					
-				
-	               clickBtnBuy(artNo,nowBid);
-	            });
+		               clickBtnBuy(artNo,nowBid);
+		            });
 				}}); //ajax
 		}//loadArtdetail()
 		
@@ -337,6 +336,7 @@
 					}
 					
 					//alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
+					
 					//현재 입찰가를 즉시구매가로 업데이트 후 결제 진행 [by 현규]
 	               $.ajax({
 	               url:"/updateBid.do",
@@ -344,7 +344,6 @@
 	               success:function(){
 	                  location.href="payment.html?artNo="+artNo;
 	               }});
-					//location.href="payment.html?artNo="+artNo;		
 							
 				}else{//로그인하지않았다면 로그인페이지로 이동한다.
 					alert("로그인이 필요한 서비스입니다.");

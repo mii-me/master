@@ -23,23 +23,23 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 				
 			 		//페이지번호 출력하기
 					for(i=1;i<=totalPage;i++) {
-						let pageAnchor = $("<a class='pageNO page"+i+"'></a>").html(i);
+						let pageAnchor = $("<span class='pageNO'></span>").html(i);
 						$("#page").append(pageAnchor);
 						
+					};
 						$(".pageNO").click(function(){
+							
 							let pageNO = $(this).text();
 							
 							loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice);
 						});//span.click
-						
-					};
 					
 				
 			 		$.each(arr,function(index,a){ //
 			 			let div = $("<div class='art_list-artbox'></div>"); //전체div
 			 			$(div).attr("idx",index);
 				 	
-			 			
+			 			//#(샵)을 붙여서 조회한 태그에서 #을 제외한 값을 변수에 담는다.
 			 			let artTag = a.artTag1;
 			 			artTag = artTag.substring(1);
 					
@@ -48,8 +48,6 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 							artTag = '';
 						}
 						
-						let isSoldOut = a.artSell; //판매 여부를 판단하기 위한 변수 
-						//console.log("isSoldOut : " + isSoldOut);
 						
 						//앵커태그 걸기 : encodeURI - 한글값을 넘기기 위함(태그:한글)
 						let link = $("<a class='artLink'></a>").attr("href",encodeURI("artDetail.html?memNo="+a.memNo+"&artNo="+a.artNo+"&tag="+artTag))
@@ -58,7 +56,6 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						let div_img = $("<div class='artPicHover'></div>").append(img_pic); //이미지div 
 						
 						let text_name = $("<div></div>").html("<h3 class='listArtName'>" + a.artName + "</h3>"); //작품제목
-						
 						
 						
 						
@@ -74,21 +71,12 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						}
 						
 						let text_tag = $("<div class='listTag'></div>").html(a.artTag1+a.artTag2+a.artTag3); //해시태그
-						//console.log(a.artTag1+a.artTag2+a.artTag3);
 						
 						//가격에 쉼표찍기
 						let aucBidString = (a.aucBid).toString(); //경매가격
 						let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 						let aucBuyString = (a.aucBuy).toString();
 						let aucBuy = aucBuyString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g,",");
-						
-						//현재 경매가와 즉시구매가가 같다면 sold out으로 표기한다.
-						if(aucBid == aucBuy) {
-							aucBid = 'Sold out';
-							aucBuy = 'Sold out';
-						}
-						
-						
 						
 						
 						$(".art_list").append(div);
@@ -97,6 +85,9 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						let text_bid; 
 						let text_buy; 
 						let div_text;
+						
+						let isSoldOut = a.artSell; //판매 여부를 판단하기 위한 변수 
+						//console.log("isSoldOut : " + isSoldOut);
 					
 						let isSoldOutIcon;
 						if(isSoldOut == null) {
