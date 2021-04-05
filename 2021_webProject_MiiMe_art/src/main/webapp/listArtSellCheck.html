@@ -33,7 +33,7 @@ $(function(){
 		let idx;
 		let totalPage; //전체 페이지 수
 		let artList;
-		let memNo = sessionStorage.getItem("memNo");
+		let memNo = Number(sessionStorage.getItem("memNo"));
 		let updateData; //수정data
 		
 		//남혜진 210320 
@@ -46,7 +46,7 @@ $(function(){
 				data:data, 
 				success:function(data){
 				
-				console.log("ajax data: "+data);
+				//console.log("ajax data: "+data);
 				arr = [];
 				data = eval("("+data+")");
 				arr = data.list;
@@ -171,6 +171,7 @@ $(function(){
 		//남혜진 210320 상품 수정 이벤트
 		//상품수정 이벤트 처리
 		$("#btnUpdate").click(function(){
+			console.log("memNo: " + memNo + "/memNoType: " + typeof memNo); //number로 나옴
 			//남혜진 210402 _ 작품수정 유효성검사 추가
 			let flag = false;
 			updateData = new FormData(document.getElementById("artForm"));
@@ -215,8 +216,10 @@ $(function(){
 		
 		//남혜진 210402 _ 작품수정 유효성검사 추가
 		function updateArtInfo(){
-			$("#memNo").val(memNo);
+			console.log("updateArtInfo() memNo: " + memNo + "/ type: " + typeof memNo);
+			$("#memNo").val(Number(memNo));
 			$("#artNo").val(artList.artNo);
+			console.log("updateArtInfo() memNo val: " + $("#memNo").val() + "/ type: " + typeof $("#memNo").val());
 			$.ajax({url:"/updateArtInfo.do", 
 				data:updateData, 
 				type:"post",
