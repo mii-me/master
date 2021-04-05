@@ -107,6 +107,9 @@ $(function(){
 		});
 	}});
 	
+	
+	
+	
 	/*-----핫딜 조건별 조회1 (남은시간 출력)*/
 	let reTime1 = setInterval(function() {	
 		$.ajax({url:"/listHot_1.do",
@@ -114,7 +117,6 @@ $(function(){
 				let arr = eval(data);
 				$.each(arr,function(index,hot){
 				let timer = $(".timer1").html(SecondsTohhmmss(hot.artTime));
-				
 			});
 		}});
 	},1000)	
@@ -124,7 +126,8 @@ $(function(){
 	/*-----핫딜 조건별 조회2, 입찰횟수가 많은 작품정보-----*/
 	$.ajax({url:"/listHot_2.do",
 		success:function(data){
-			let arr = eval(data);	
+			let arr = eval(data);
+		if(arr!=""){	//핫딜에 작품이 있을 경우	
 			$.each(arr,function(index,hot){
 			
 			//가격에 쉼표 [by 최은혜]
@@ -146,6 +149,9 @@ $(function(){
 			let auction = $(`<div class="p-3" align="center"></div>`).append(auc_link);
 			$("#div2").append(art_pic,art_name,art_year,art_material,art_size,hr,auc_bid,auc_buy,auction);
 		});
+		}else{	//핫딜에 작품이 있을 경우
+			//여기다 updateRank 실행하게 넣어볼 것
+		}
 	}});
 	
 	/*-----핫딜 조건별 조회2 (남은시간 출력)-----*/
@@ -164,9 +170,11 @@ $(function(){
 	/*-----핫딜 조건별 조회3, 마감시간 임박-----*/
 	$.ajax({url:"/listHot_3.do",
 		success:function(data){
-			let arr = eval(data);	
-			$.each(arr,function(index,hot){
+			let arr = eval(data);
 			
+		if(arr!=""){	//핫딜에 작품이 있을 경우
+			$.each(arr,function(index,hot){
+					
 			//가격에 쉼표 [by 최은혜]
 			let aucBidString = (hot.aucBid).toString(); 
 			let aucBid = aucBidString.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -186,6 +194,9 @@ $(function(){
 			let auction = $(`<div class="p-3" align="center"></div>`).append(auc_link);
 			$("#div3").append(art_pic,art_name,art_year,art_material,art_size,hr,auc_bid,auc_buy,auction);
 		});
+		}else{ //핫딜에 작품이 있을 경우
+			//여기다 updateRank 실행하게 넣어볼 것
+		}
 	}});
 	
 	/*-----핫딜 조건별 조회3 (남은시간 출력)-----*/
