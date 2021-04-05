@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>미미 美;Me 작품등록</title>
+<title>미미 美;Me - 작품등록</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -32,10 +32,11 @@ $(function() {
 		//남혜진 210318 판매하기_작품정보 등록 
 		//작품정보 등록하기 버튼
 		$("#btnInsert").click(function(){
-			//남혜진 210402 _ 작품수정 유효성검사 추가
+			//남혜진 210402 _ 작품등록 유효성검사 추가
 			let flag = false; // 작품정보 유효성 검사
 			
 			data = new FormData(document.getElementById("artForm"));
+			console.log("콤마찍으라고요?", data);
 			
 			let artName = ($("#artName").val()).trim();
 			let artMaterial = ($("#artMaterial").val()).trim();
@@ -43,7 +44,6 @@ $(function() {
 			let aucBuy = Number($("#aucBuy").val());//경매종료가격
 			let artSize1 = Number($("#artSize1").val());
 			let artSize2 = Number($("#artSize2").val());
-			
 			
 			if(artName == ""){ //1. 작품이름 설정 : Null불가
 				alert("작품제목을 앞,뒤 공백없이 작성해주세요.");
@@ -93,8 +93,6 @@ $(function() {
 					};
 			}})
 		}
-		
-		
 		
 		//등록된 작품 관리하기
 		$("#btnArtSellCheck").click(function(){

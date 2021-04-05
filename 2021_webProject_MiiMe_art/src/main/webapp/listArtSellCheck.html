@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>미미 美;Me 작품판매선택</title>
+<title>미미 美;Me - 등록된작품</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -171,10 +171,16 @@ $(function(){
 		//남혜진 210320 상품 수정 이벤트
 		//상품수정 이벤트 처리
 		$("#btnUpdate").click(function(){
+			
+			// 남혜진 210406 _ memNo null 값 불리는 오류 수정
+			// new FormData 생성 전에 val() : input 태그안에 hidden으로 value 전달
+			$("#memNo").val(memNo); 
+			
 			console.log("memNo: " + memNo + "/memNoType: " + typeof memNo); //number로 나옴
 			//남혜진 210402 _ 작품수정 유효성검사 추가
 			let flag = false;
 			updateData = new FormData(document.getElementById("artForm"));
+			console.log("updateData 생성 후 : " , updateData);
 			
 			let artName = ($("#artName").val()).trim();
 			let artMaterial = ($("#artMaterial").val()).trim();
@@ -209,17 +215,36 @@ $(function(){
 			}
 			
 			if(flag == true){
-				updateArtInfo();
+				//updateArtInfo();
+				$("#artNo").val(artList.artNo);
+				
+				console.log("끼야야야야야야약", updateData);
+				$.ajax({url:"/updateArtInfo.do", 
+					data:updateData, 
+					type:"post",
+					processData:false,
+					contentType:false, 
+					success:function(data){
+						$(".detail2").css("visibility", "hidden");
+						$(".detail2").css("display", "none");
+						$(".detail").css("visibility", "hidden");
+						$(".detail").css("display", "none");
+						$(".detailUpdate").css("visibility", "visible");
+						$(".detailUpdate").css("display", "inline");
+						listArtSellCheck(1);
+				}})
+					
 			}
 			
 		})
 		
 		//남혜진 210402 _ 작품수정 유효성검사 추가
-		function updateArtInfo(){
-			console.log("updateArtInfo() memNo: " + memNo + "/ type: " + typeof memNo);
-			$("#memNo").val(Number(memNo));
+/* 		function updateArtInfo(){
+			//updateData["memNo"] = 3; //210405 test
+			//console.log("updateArtInfo() memNo: " + memNo + "/ type: " + typeof memNo);
 			$("#artNo").val(artList.artNo);
-			console.log("updateArtInfo() memNo val: " + $("#memNo").val() + "/ type: " + typeof $("#memNo").val());
+			
+			console.log("끼야야야야야야약", updateData);
 			$.ajax({url:"/updateArtInfo.do", 
 				data:updateData, 
 				type:"post",
@@ -234,7 +259,8 @@ $(function(){
 					$(".detailUpdate").css("display", "inline");
 					listArtSellCheck(1);
 			}})
-		}
+				
+		} */
 		
 		
 		
