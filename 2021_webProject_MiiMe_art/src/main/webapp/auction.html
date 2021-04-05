@@ -15,7 +15,7 @@ body{
 }
 
 .timer{
-	color: #FF9FA1;
+	color: red;
 	font-size: 35px;
 }
 
@@ -106,9 +106,20 @@ if(getMemNo != null){
 			//남은시간이 없을 경우	
 			if(getTime <= 0){	
 				clearInterval(reTime);
-				console.log("타이머 종료");
-				alert("해당 작품이 낙찰되어 이전페이지로 돌아갑니다.");
-				location.href="artList.html";	//작품 페이지로 이동
+				
+				//판매상태를 sold로 변경
+				$.ajax({url:"/updateSold.do",
+				type:"post",
+				data:{artNo:getArtNo},	//작품번호
+				success:function(m){
+				if(m != -1){
+					alert("해당 작품이 낙찰되어 이전페이지로 돌아갑니다.");
+					location.href="artList.html";	//작품 페이지로 이동
+				}else{
+					alert("판매상태 변경 실패");								
+				}
+				}});
+				
 			}
 		
 		}});		
@@ -206,7 +217,7 @@ if(getMemNo != null){
 				url:"/updateBid.do",		
 				data:{artNo:getArtNo,memNo:getMemNo,aucBid:inputBid},
 				success:function(data){
-					console.log("입찰성공");
+					alert("입찰 성공!");
 				}});
 												
 				//입찰 횟수 증가

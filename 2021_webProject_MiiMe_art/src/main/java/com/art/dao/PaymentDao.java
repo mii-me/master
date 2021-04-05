@@ -23,9 +23,19 @@ public class PaymentDao {
 		return DBManager.findInfo(artNo);
 	}
 	
-	//결제정보
-	public int updateStatus(PaymentVo p) {
-		return DBManager.updateStatus(p);
+	//판매상태 sold로 변경
+	public int updateSold(PaymentVo p) {
+		return DBManager.updateSold(p);
+	}
+	
+	//판매상태 sale로 변경
+	public int updateSale(PaymentVo p) {
+		return DBManager.updateSale(p);
+	}
+	
+	//최고입찰자 초기화
+	public int resetTop(PaymentVo p) {
+		return DBManager.resetTop(p);
 	}
 
 	//결제 완료 후 포인트 업데이트
@@ -41,6 +51,16 @@ public class PaymentDao {
 	//로그인한 회원정보를 가져온다.
 	public PaymentVo getMember(int memNo) {
 	return DBManager.getMember(memNo);
+	}
+
+	//남은시간 5초로 초기화 (테스트용)
+	public int remainFive(AuctionVo a) {
+		return DBManager.remainFive(a);
+	}
+
+	//남은시간 +5시간 추가(결제취소용)
+	public int upTimeFive(AuctionVo a) {
+		return DBManager.upTimeFive(a);
 	}
 	
 }

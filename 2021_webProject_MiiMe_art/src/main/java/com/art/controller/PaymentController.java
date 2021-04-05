@@ -40,13 +40,27 @@ public class PaymentController {
 		return re;
 	}
 	
-	//결제완료시 art_sell_tb에 값 sold로 변경
-	@RequestMapping("/updateStatus.do")
-	public String updateStatus(PaymentVo p) {
-		int re = dao.updateStatus(p);
+	//판매상태를 sale로 바꿔준다.
+	@RequestMapping("/updateSold.do")
+	public String updateSold(PaymentVo p) {
+		int re = dao.updateSold(p);
 		return re+"";
 	}
 
+	//판매상태를 sale로 바꿔준다.
+	@RequestMapping("/updateSale.do")
+	public String updateSale(PaymentVo p) {
+		int re = dao.updateSale(p);
+		return re+"";
+	}
+	
+	//최고입찰자 초기화
+	@RequestMapping("/resetTop.do")
+	public String resetTop(PaymentVo p) {
+		int re = dao.resetTop(p);
+		return re+"";
+	}
+	
 	//로그인한 회원정보 가져오기
 	@RequestMapping(value="/getMember.do")
 	public PaymentVo getMember(int memNo) {
@@ -60,6 +74,13 @@ public class PaymentController {
 	public List<AuctionVo> payWait(int memNo) {
 		List<AuctionVo> re=dao.payWait(memNo);
 		return re;
+	}
+	
+	//남은시간 +5시간 추가(결제취소용)
+	@RequestMapping("/upTimeFive.do")
+	public String upTimeFive(AuctionVo a) {
+		int re = dao.upTimeFive(a);
+		return re+"";
 	}
 	
 	

@@ -30,13 +30,33 @@
  	 </select>
 	
 	<!-- 판매상태 sold로 변경 -->	
-	 <update id="updateStatus">
+	 <update id="updateSold">
 		update art_sell_tb
 		set art_sell='sold'
 		where art_no=#{artNo}
 	 </update>
 	 
+	<!-- 판매상태 sale로 변경 -->	
+	 <update id="updateSale">
+		update art_sell_tb
+		set art_sell='sale'
+		where art_no=#{artNo}
+	 </update>
 	 
+	 <!-- art_sell_tb에서 남은시간 +5시간 추가 (결제취소에 대한 처리)-->
+	<update id="upTimeFive">
+		update art_sell_tb
+		set art_time = sysdate+5/24
+		where art_no=#{artNo}
+	</update>
+	 
+	 <!-- auction_tb에서 최고입찰자 null로 초기화 -->
+	<update id="resetTop">
+		update auction_tb
+		set bid_top=''
+		where art_no=#{artNo}
+	</update>
+	
 	 <!-- 낙찰완료된 작품에 대한 결제대기 목록 -->
 	<select id="payWait" resultType="paymentVo">
 		select art.art_no,art.art_name,art.art_pic,art.auc_bid,(select mem_name from member_tb where mem_no=#{memNo}) mem_name
@@ -45,7 +65,7 @@
 		on art.art_no=auc.art_no
 		inner join art_sell_tb sell
 		on auc.art_no=sell.art_no
-		where bid_top=(select mem_name from member_tb where mem_no=#{memNo}) and sell.art_time &lt; sysdate
+		where bid_top=(select mem_name from member_tb where mem_no=#{memNo}) and sell.art_sell='sold' and sell.art_time &lt; sysdate
 	</select>
 	 
 	 
