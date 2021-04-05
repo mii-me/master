@@ -42,7 +42,7 @@
 				let artPic;
 				let data;
 				let img;
-				let hr;
+				let img_div;
 				
 				if(i == 1){
 					artPic = cookieArr[0];
@@ -94,9 +94,12 @@
 							.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																			+av.artNo+"&tag="+av.artTag1)
 							.html($("<img class='img_hover'>")
-							.attr("src","./art_pic/"+cookieArr[j]).css("width","90px").css("height","90px").css("padding-bottom","10px"));
+							.attr("src","./art_pic/"+cookieArr[j]).css("width","90px").css("height","90px"));
+							
+							img_div = $('<div style="padding-bottom:10px;"></div>').append(img);
+							
 							//images div에 추가해준다.
-							$("#images").append(img);
+							$("#images").append(img_div);
 							}});				
 						}, 200);
 					}//end for

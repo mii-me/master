@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>경매장</title>
+<title>미미 美;Me - 경매장</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -15,8 +15,14 @@ body{
 }
 
 .timer{
+	border:1px solid #fff;
+	background-color: #EEE;
+	width:330px;
+	height: 50px;
+	display: inline-block;
+	font-size: 30px;
 	color: red;
-	font-size: 35px;
+	font-weight: bold;
 }
 
 .price{
@@ -24,9 +30,18 @@ body{
 	font-weight:bold;
 	color:red;
 }
+
+.price_label{
+	border:1px solid #fff;
+	background-color: #EEE;
+	width:175px;
+	height: 45px;
+	display: inline-block;
+	font-size: 26px;
+}
+
 .bidTop{
-	border: 1px solid #333;
-	width: 60px;
+	font-size: 22px;
 }
 
 #auction_bid{
@@ -81,15 +96,17 @@ if(getMemNo != null){
 	
 	//milliseconds를 시:분:초로 바꾸기
 	let SecondsTohhmmss = function(totalSeconds) {
-	  let hours   = Math.floor(totalSeconds / 3600);
-	  let minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
-	  let seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+		let day = Math.floor(totalSeconds/ 86400);
+		
+	  	let hours   = Math.floor((totalSeconds - (day * 86400)) / 3600);
+	  	let minutes = Math.floor((totalSeconds - (day * 86400) - (hours * 3600)) / 60);
+	  	let seconds = totalSeconds - (day * 86400) - (hours * 3600) - (minutes * 60);
 	
 	  //round seconds
-	  seconds = Math.round(seconds * 100) / 100
-	  let result = (hours < 10 ? "0" + hours : hours);
-	      result += ":" + (minutes < 10 ? "0" + minutes : minutes);
-	      result += ":" + (seconds  < 10 ? "0" + seconds : seconds);
+	  	let result = (day ? day : day) + "일 ";
+	  		result += (hours < 10 ? "0" + hours : hours) + "시간 ";
+		    result += (minutes < 10 ? "0" + minutes : minutes) + "분 ";
+		    result += (seconds  < 10 ? "0" + seconds : seconds) + "초";
 	  return result;
 	}//SecondsTohhmmss
 
@@ -156,20 +173,21 @@ if(getMemNo != null){
 		
 		//입찰자가 없을 경우
 		if(bitTop==null){
-			bitTop = `<small>`+"입찰자가 없어요 ㅠ.ㅠ";
+			bitTop = `<small>`+"입찰자가 없습니다.";
 		}
-		
-			let art_pic = $(`<div>`).html($(`<img width="100%" height="500px">`).attr("src","./art_pic/"+auc.artPic));
-			let art_name = $(`<div class="name"></div>`).html(auc.artName);
-			let art_material = $(`<div class="material"></div>`).html(auc.artMaterial);
-			let art_size = $(`<div class="size"></div>`).html(auc.artSize1+" x "+auc.artSize2+"(cm)");
-			let art_year = $(`<div>`).html(auc.artYear);
-			let auc_start = $(`<div>`).html("시작가"+`<br><`+aucStart+`원><br><br>`);
-			let auc_bid = $(`<div>`).html("최고 입찰가"+`<br><`+"<span class='price'>"+aucBid+"</span>"+`원><br>`);
-			let bit_top = $(`<div>`).html("최고 입찰자"+`<br><div class="top">`+bitTop);
-			let auc_buy = $(`<div>`).html("<br>즉시구매가"+`<br><`+aucBuy+`원>`);
 			
-			$("#auction_info").append(art_pic,art_name,art_material,art_size,art_year);
+			let art_pic = $(`<div class="card-body p-1">`).html($(`<img width="100%">`).attr("src","./art_pic/"+auc.artPic));
+			let art_name = $(`<div class="name card-body py-0"></div>`).html(auc.artName);
+			let art_year = $(`<div class="year card-body py-0">`).html(auc.artYear); 
+			let art_material = $(`<div class="material card-body py-0"></div>`).html(auc.artMaterial);
+			let art_size = $(`<div class="size card-body py-0 pb-3"></div>`).html(auc.artSize1+" x "+auc.artSize2+"(cm)");
+			
+			let auc_start = $(`<div></div>`).html(`<div class="py-2">시작가</div>` + `<div class="price_label">`+ aucStart +` 원</div>`);
+			let auc_bid = $(`<div class="pt-4"></div>`).html(`<div class="py-2">최고 입찰가</div>` + `<div class="price_label"><span class='price'>`+ aucBid +`</span> 원</div>`);
+			let bit_top = $(`<div class="pt-4"></div>`).html(`<div class="py-2">최고 입찰자</div>` + `<div class="price_label"><span class='bidTop'>` + bitTop + `</span></div>`);
+			let auc_buy = $(`<div class="pt-4"></div>`).html(`<div class="py-2">즉시구매가</div>` + `<div class="price_label">` + aucBuy + ` 원</div>`);
+			
+			$("#auction_info").append(art_pic,art_name,art_year,art_material,art_size);
 			$("#auction_bid").append(auc_start,auc_bid,bit_top,auc_buy);
 						
 	//즉시구매 누를 시 , 즉시구매가로 결제창 이동
@@ -217,7 +235,7 @@ if(getMemNo != null){
 				url:"/updateBid.do",		
 				data:{artNo:getArtNo,memNo:getMemNo,aucBid:inputBid},
 				success:function(data){
-					alert("입찰 성공!");
+					alert("입찰 성공하였습니다.");
 				}});
 												
 				//입찰 횟수 증가
@@ -260,21 +278,25 @@ if(getMemNo != null){
 <div id="floatingbar"></div>
 <div class="container">
 	<div id="auction_top"></div>
-		<div class="text-center">
-			<span class="limit">남은 시간: </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<div class="text-center py-5">
+			<span class="limit"><i class="far fa-clock"></i> 남은 시간 </span>
 			<span class="timer"></span>
-		</div><br>
-	<div class="row">
-		<div id="auction_info" class="box-left col-sm-7">
 		</div>
-			<div class="box-center col-sm-4">
-				<div id="auction_bid" class="m-2"></div><br>
-				<span style="font-size: 20px;">희망 입찰가</span><br>
-				<input type="text" id="aucBid" name="aucBid" placeholder="정수만 입력"  style="width: 120px; height: 40px;">원<br>
-				<button id="btnBid" class="btn btn-dark">입찰하기</button>
-				<button id="btnBuy" class="btn btn-dark">즉시구매</button><br>
-				<button id="remainFive" class="btn btn-dark btn-sm">남은시간 5초</button><br>
+	<div class="row">
+		<div class="box-left col-sm-8 py-3">
+			<div class="card" id="auction_info" style="width: 100%;"></div>
+		</div>
+		<div class="box-center col-sm-4">
+			<div id="auction_bid" class="m-2"></div><br>
+			<span style="font-size: 20px;">희망 입찰가</span><br>
+			<div style="padding-left: 87px;" class="py-2"><input type="text" id="aucBid" name="aucBid" class="form-control" placeholder="정수만 입력" style="width: 175px; height: 43px;"></div>
+			<div class="p-0">
+				<button id="btnBid" class="btn btn-dark m-1">입찰하기</button>
+				<button id="btnBuy" class="btn btn-dark m-1">즉시구매</button>
 			</div>
+			
+			<div style="padding-left: 95px;"><button id="remainFive" class="btn btn-secondary btn-sm">남은시간 5초</button></div>
+		</div>
 	</div>
 </div>
 <footer id="footer"></footer>
