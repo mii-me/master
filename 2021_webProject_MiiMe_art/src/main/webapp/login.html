@@ -14,7 +14,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap');
 	body{
 		font-family: 'Noto Sans KR', sans-serif;
-		padding-top: 81px;
 	}
 	
 	.loginbtn .btn:hover {
@@ -60,13 +59,14 @@ $(document).ready(function(){
 					sessionStorage.setItem('memIsArtist', m.memIsArtist);
 					
 					
+					// 210405 피드백 후 로그인 시 메인페이지로 이동 처리 [by 정소윤]
 					// 뒤로갈 history가 있는 경우
-					if (document.referrer) {
-					    history.back(); // 이전페이지로
+//					if (document.referrer) {
+//					    history.back(); // 이전페이지로
 					    
-					}else{ // 뒤로갈 history가 없는 경우
+//					}else{ // 뒤로갈 history가 없는 경우
 					location.href='main.html'; 메인페이지로
-					}				
+//					}				
 
 				// 로그인 실패 시	
 				}else{
@@ -89,10 +89,10 @@ $(document).ready(function(){
 </head>
 <body style="background-color: #F6F6F6;">
 <!--  <header id="header"></header>	 -->
-	<div class="container" style="margin-top: 150px;">
+	<div class="container" style="margin-top: 200px;">
 		<form id="login">
-			<div class="pb-4 mx-auto" style="width: 150px;">
-				<a href="main.html"><img src="img/miime_logo.png" style="width:150px;"/></a>
+			<div class="pb-4 mx-auto" style="width: 200px;">
+				<a href="main.html"><img src="img/miime_logo.png" style="width:200px;"/></a>
 			</div>
 			<div>
 				<input type="text" name="memId" id="memId" class="form-control mx-auto" placeholder="아이디" style="width: 300px; height: 50px;" autofocus="autofocus">
