@@ -67,16 +67,23 @@ $(function(){
 			//남혜진 210404 _ 포인트환전 이벤트 완료 
 			$("#btnAccount").click(function(){
 				let chgPoint = $("#chgPoint").val();
-				updateData = {artPoint: artPoint, chgPoint:chgPoint, memNo:memNo}; //환전할 point, 회원번호
-	 			$.ajax({url:"/changePoint.do", data:updateData, success:function(){
-					$("#accountNum").empty();
-					$("#chgPoint").empty();
-					$(".point2").css("visibility", "visible");
-					$(".point2").css("display", "inline");
-					$(".accountTag").css("visibility", "hidden");
-					$(".accountTag").css("display", "none");
-					listPoint();
-				}})
+				
+				//남혜진 210405 _ 포인트 유효성 검사
+				if(artPoint >= chgPoint){
+					updateData = {artPoint: artPoint, chgPoint:chgPoint, memNo:memNo}; //환전할 point, 회원번호
+		 			$.ajax({url:"/changePoint.do", data:updateData, success:function(){
+						$("#accountNum").empty();
+						$("#chgPoint").empty();
+						$(".point2").css("visibility", "visible");
+						$(".point2").css("display", "inline");
+						$(".accountTag").css("visibility", "hidden");
+						$(".accountTag").css("display", "none");
+						listPoint();
+					}})
+				}else{
+					alert("포인트 잔액을 확인해주세요");
+				}
+				
 			})
 		})
 		
