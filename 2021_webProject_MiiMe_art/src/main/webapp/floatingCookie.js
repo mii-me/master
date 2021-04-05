@@ -54,12 +54,10 @@
 						img = $("<a></a>")
 						.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																		+av.artNo+"&tag="+av.artTag1)
-						.html($("<img>")
+						.html($("<img class='img_hover'>")
 						.attr("src","./art_pic/"+cookieArr[0]).css("width","90px").css("height","90px"));
 						//images div에 추가해준다.
 						$("#images").append(img);
-						hr = $("<hr>");
-						$("#images").append(hr);
 						}});				
 					}, 200);					
 					
@@ -76,12 +74,10 @@
 							img = $("<a></a>")
 							.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																			+av.artNo+"&tag="+av.artTag1)
-							.html($("<img>")
+							.html($("<img class='img_hover'>")
 							.attr("src","./art_pic/"+cookieArr[k]).css("width","90px").css("height","90px"));
 							//images div에 추가해준다.
 							$("#images").append(img);
-							hr = $("<hr>");
-							$("#images").append(hr);
 							}});				
 						}, 200);
 					}					
@@ -97,12 +93,10 @@
 							img = $("<a></a>")
 							.attr("href","artDetail.html?memNo="+av.memNo+"&artNo="
 																			+av.artNo+"&tag="+av.artTag1)
-							.html($("<img>")
-							.attr("src","./art_pic/"+cookieArr[j]).css("width","90px").css("height","90px"));
+							.html($("<img class='img_hover'>")
+							.attr("src","./art_pic/"+cookieArr[j]).css("width","90px").css("height","90px").css("padding-bottom","10px"));
 							//images div에 추가해준다.
 							$("#images").append(img);
-							hr = $("<hr>");
-							$("#images").append(hr);
 							}});				
 						}, 200);
 					}//end for
