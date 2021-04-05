@@ -48,10 +48,8 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 							artTag = '';
 						}
 						
-						let isSoldOut = a.artSell;
-						console.log("isSoldOut : " + isSoldOut);
-						
-						
+						let isSoldOut = a.artSell; //판매 여부를 판단하기 위한 변수 
+						//console.log("isSoldOut : " + isSoldOut);
 						
 						//앵커태그 걸기 : encodeURI - 한글값을 넘기기 위함(태그:한글)
 						let link = $("<a class='artLink'></a>").attr("href",encodeURI("artDetail.html?memNo="+a.memNo+"&artNo="+a.artNo+"&tag="+artTag))
@@ -91,12 +89,18 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 						}
 						
 						
+						
+						
+						$(".art_list").append(div);
+						
+					
 						let text_bid; 
 						let text_buy; 
 						let div_text;
 					
 						let isSoldOutIcon;
 						if(isSoldOut == null) {
+							
 							isSoldOutIcon = $("<div class='isSoldout isSoldout-none'></div>").html("<i class='fa fa-hourglass-end' aria-hidden='true'><span class='fa-hourglass-end-text'>&nbsp;판매예정&nbsp;</span></i>");
 							text_bid =  $("<div></div>").html("<b>"+"현재 입찰가 &nbsp;&nbsp;&nbsp;"+"</b>" + "-"); 
 							text_buy = $("<div></div>").html("<b>"+"즉시 구매가 &nbsp;&nbsp;&nbsp;"+"</b>"+ "-"); 
@@ -126,11 +130,9 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 							$(div).append(div_link);
 							$(".fa-hourglass-text").css("color","#EA2E49");
 						}
-						
-						
-						$(".art_list").append(div);
-						$(".listTag").css("font-size","9px");
 					
+						$(".listTag").css("font-size","9px");
+							
 					
 						//가격 input range바 설정(최솟값 0, 최댓값 1000만,한번에 10만씩 증가)
 						$("#searchPriceBar").attr("min","0");
@@ -154,6 +156,7 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			$(".searchThemeli").css("color","");
 			$(this).css("background-color","#2d3648");
 			$(this).css("color","#fff");
+			$(this).css("transition","background 0.15s");
 					
 			//responseTheme 변수에 현재 누른 li의 text를 담는다.
 			responseTheme = $(this).text();
@@ -184,6 +187,7 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			$(".searchSizeli").css("color","");
 			$(this).css("background-color","#2d3648");
 			$(this).css("color","#fff");
+			$(this).css("transition","background 0.15s");
 			
 			//responseSize라는 변수에 현재 클릭된 사이즈 리스트의 text를 담는다.
 			//예) 1~5호 / 6~10호 ...

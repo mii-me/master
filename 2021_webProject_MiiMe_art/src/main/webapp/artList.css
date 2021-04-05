@@ -13,11 +13,11 @@
 	margin:15px;
 	cursor: pointer;
 	}
-	.pageNO:focus{
+	/* .activePage:focus{
 		color:#fff;
 		border:1px solid #f40;
 		background-color:#f40;
-	}
+	} */
 	#container,#page{
 		clear:both;
 	}
@@ -73,6 +73,8 @@
 	}
 	.artPicHover:hover{
 		opacity:0.6;
+		transition: 0.1s;
+   		transition-timing-function: linear;
 	}
 	.artLink{
 		text-decoration: none;
@@ -90,6 +92,7 @@
 	.searchCss{
 		display: flex;
    	 	align-items: center;
+   	 	cursor: pointer;
 	}
 	.searchTitle{
    	 	font-weight: bold;
@@ -123,8 +126,12 @@
 	    letter-spacing: -.5px;
 	    vertical-align: top;
 	    text-decoration: none;
+	    border-radius: 0.25rem;
 	}
-	
+	.btnReset:hover{
+		transition: background 0.5s;
+		background-color:#212529;
+	}
 	
 	
 	input[type='range'] {
