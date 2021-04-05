@@ -264,7 +264,7 @@
 							 where T.MEM_NO = C.MEM_NO
 							   and C.MEM_NO_B = M.MEM_NO
 							   and T.MEM_NO = #{memNo}
-							 order by C.ARTIST_CMT_DATE desc) AA
+							 order by C.ARTIST_CMT_NO desc) AA
 			 		) AAA
 			) AAAA
 	where AAAA.num between #{start} and #{end}
