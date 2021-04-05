@@ -6,7 +6,7 @@
 		integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
 	<meta charset="UTF-8">
-	<title>리뷰 검색</title>
+	<title>美;Me - 후기검색</title>
 
 	<style>
 	</style>
@@ -70,10 +70,10 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
-								output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
+							output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
 							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
-								output += '<br><br>'
+							output += '<br><br>'
 
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
 
@@ -99,9 +99,8 @@
 
 							output += '<div class="d-flex justify-content-between align-items-center">'
 							output += ' <div class="btn-group">'
-							output += ' <button type="button"  onClick="clickAction(' + data.list[i].reviewNo + ')" class="like" id="'
-								+ data.list[i].reviewNo + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
-
+							output += ' <button type="button" style="background-color:white; border-radius: 7px;" onClick="clickAction(' + data.list[i].reviewNo + ')" class="like' + data.list[i].reviewNo + '" id="'
+								+ data.list[i].reviewNo + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
 							output += ' </div>'
 							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].reviewLike + '</small>'
 							output += ' </div>'
@@ -125,7 +124,7 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
-								output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
+							output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
 							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
 							output += '<br><br>'
@@ -153,9 +152,8 @@
 
 							output += '<div class="d-flex justify-content-between align-items-center">'
 							output += ' <div class="btn-group">'
-							output += ' <button type="button"  onClick="clickAction(' + data.list[i].reviewNo + ')" class="like" id="'
-								+ data.list[i].reviewNo + '" class="btn btn-outline-dark"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
-
+							output += ' <button type="button" style="background-color:white; border-radius: 7px;" onClick="clickAction(' + data.list[i].reviewNo + ')" class="like' + data.list[i].reviewNo + '" id="'
+								+ data.list[i].reviewNo + '"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></button>'
 							output += ' </div>'
 							output += ' <small class="text-muted"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg>' + data.list[i].reviewLike + '</small>'
 							output += ' </div>'
@@ -177,6 +175,7 @@
 		// 검색시작
 		function clickSearchAction() {
 			searchField = $("#searchField").val();
+			alert(searchField);
 			keyword = $("#keyword").val();
 			loadReviewList(keyword, searchField, "");
 		};
@@ -198,13 +197,8 @@
 		};
 
 		function clickAction(reviewNo) {
-
-			//  $('.likeButton')
-			//  <img class="likeButton"/>
-			$('.like').toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
-
-			if ($('.like').attr('class') == 'like on') {
-				console.log(reviewNo)
+			$('.like' + reviewNo).toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
+			if ($('.like' + reviewNo).attr('class') == 'like' + reviewNo + ' on') {
 				insertLike(reviewNo)
 			} else { //null
 				deleteLike(reviewNo)
@@ -220,7 +214,6 @@
 					data: data,
 					success: function () {
 						alert("좋아요 +1");
-						// window.location.reload();
 					}
 				})
 			};
@@ -234,8 +227,6 @@
 					data: data,
 					success: function () {
 						alert("좋아요 -1");
-						// window.location.reload();
-
 					}
 				})
 			};
@@ -263,20 +254,21 @@
 			</div>
 		</section>
 
-<div class="container">
-	<div class="input-group mb-3">
-	<select class="form-select" id="floatingSelect" aria-label="Floating label select example" id="searchField">
-		<option value="artName"><a class="dropdown-item">작품명</a></option>
-		<!-- DB에 있는 이름과 똑같이 value를 설정 -->
-		<option value="artistName"><a class="dropdown-item">작가명</a></option>
-	</select>
-		<input type="text" style="width:80%;"  class="form-control" aria-label="Text input with dropdown button" id="keyword" />
-		<button class="btn btn-dark" type="button" onClick="clickSearchAction()" id="btnSearch">검색</button>
-	</div>
-</div>
+		<div class="container">
+			<div class="input-group mb-3">
+				<select class="form-select" aria-label="Floating label select example" id="searchField">
+					<option value="artName"><a class="dropdown-item">작품명</a></option>
+					<!-- DB에 있는 이름과 똑같이 value를 설정 -->
+					<option value="artistName"><a class="dropdown-item">작가명</a></option>
+				</select>
+				<input type="text" style="width:80%;" class="form-control" aria-label="Text input with dropdown button"
+					id="keyword" />
+				<button class="btn btn-dark" type="button" onClick="clickSearchAction()" id="btnSearch">검색</button>
+			</div>
+		</div>
 
-<br>
-<br>
+		<br>
+		<br>
 
 		<div class="container">
 			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
