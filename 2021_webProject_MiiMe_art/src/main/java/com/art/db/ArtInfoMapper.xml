@@ -3,12 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="artinfo">
- <!-- 
- 
- 	<update id="update">
- 		update customer set name=#{name}, email=#{email}, phone=#{phone} where no=#{no}
- 	</update>
- 	-->
  	
  	<select id="maxAucBuy">
  		select max(auc_buy)
@@ -79,15 +73,13 @@
  
  
  	<select id="selectAll" resultType="artinfoVo">
-	 	select num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
-		nvl2(art_tag1,(concat('#',art_tag1)),' ') art_tag1, nvl2(art_tag2,(concat('#',art_tag2)),' ') art_tag2, nvl2(art_tag3,(concat('#',art_tag3)),' ') art_tag3, auc_start,
-		 nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,art_sell
-		 from(
-			select rownum num,mem_no, art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
-			art_tag1, art_tag2, art_tag3, auc_start, nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,art_sell
-			from(
+	 	select a.*
+		 from((
+			select rownum num,b.*
+			from((
 				select ait.mem_no, ait.art_no, art_name, art_material, art_theme, art_size1,art_size2, art_year, art_pic, art_exp,
-				art_tag1, art_tag2, art_tag3, auc_start, nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,art_sell
+				nvl2(art_tag1,(concat('#',art_tag1)),' ') art_tag1, nvl2(art_tag2,(concat('#',art_tag2)),' ') art_tag2, nvl2(art_tag3,(concat('#',art_tag3)),' ') art_tag3, auc_start,
+				 nvl2(auc_bid,auc_bid, auc_start) auc_bid, auc_buy,art_sell
 				from art_info_tb ait,
 					art_sell_tb ast,
 					art_sell_check_tb asct
@@ -119,7 +111,8 @@
 							      
 					</otherwise>
 				</choose>
-			 	order by art_no desc))
+			 		order by art_no desc) b)
+						) a)
 		where num between #{start} and #{end}
  	</select>
   
