@@ -69,7 +69,7 @@
 		
 		//판매 상황을 반영한다. (판매 시작 미등록 : null / 판매중 : sale / 판매 완료 : sold)
 		let selectedSell = selected.artSell;
-		console.log("selectedSell : " + selectedSell);
+		//console.log("selectedSell : " + selectedSell);
 		if(selectedSell == null) {
 			aucBid = '-';
 			aucBuy = '-';
