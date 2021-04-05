@@ -10,6 +10,23 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   
 <style type="text/css">
+	/* 작가사진에 마우스 올릴 경우 효과 */
+	.artist_pick{
+		opacity:1;
+		background-color: #fff;
+	}
+	.artist_pick:hover{
+		opacity:0.6;
+	}
+	
+	/* 가나다 목록 */
+	.consonant_pick{
+		cursor: pointer; 
+		margin-left: 10px;
+	}
+	.consonant_pick:hover{
+		font-weight: bold;
+	}
 </style>
 
 <script type="text/javascript">
@@ -151,7 +168,7 @@ $(document).ready(function(){
 					
 					// 작가목록 div 열기
                     let listCard = $(`<div class="card p-1 m-1" style="width:360px;">`);
-					$(listCard).append($(`<img style="width: 100%; height: 360px;"></img>`)
+					$(listCard).append($(`<img class="artist_pick" style="width: 100%; height: 360px;"></img>`)
                                     		.attr('src', 'artist_pic/' + a.artistPic));
                     
                     // 작가목록 작가정보                
@@ -324,22 +341,22 @@ $(document).ready(function(){
 		
 	    	<!-- 그리드 좌측: 가나다순 -->
 			<div class="col-sm-9" style="margin-top: 5px;">
- 				<span style="cursor: pointer; margin-left: 10px;" id="c0">전체</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c1">ㄱ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c2">ㄴ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c3">ㄷ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c4">ㄹ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c5">ㅁ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c6">ㅂ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c7">ㅅ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c8">ㅇ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c9">ㅈ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c10">ㅊ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c11">ㅋ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c12">ㅌ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c13">ㅍ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c14">ㅎ</span><span style="margin-left: 15px;">|</span>
-				<span style="cursor: pointer; margin-left: 10px;" id="c15">A~Z</span>
+ 				<span class="consonant_pick" id="c0">전체</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c1">ㄱ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c2">ㄴ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c3">ㄷ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c4">ㄹ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c5">ㅁ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c6">ㅂ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c7">ㅅ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c8">ㅇ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c9">ㅈ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c10">ㅊ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c11">ㅋ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c12">ㅌ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c13">ㅍ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c14">ㅎ</span><span style="margin-left: 15px;">|</span>
+				<span class="consonant_pick" id="c15">A~Z</span>
 			</div>
 			
 			<!-- 그리드 우측: 검색 -->

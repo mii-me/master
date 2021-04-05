@@ -25,28 +25,32 @@ $(document).ready(function(){
     $("#footer").load("/footer.html");
 });
 
-// ======================== 최상단 메인페이지 진입 시 최신 작품 3개 ========================
+// ======================== 최상단 메인페이지 진입 시 최신 작품 3개 [by 정소윤] ========================
 
     $.ajax({url:'/mainArt.do', success:function(data){
     
         arr = eval('('+data+')');
         
-        $('#art_pic0').attr('src', 'art_pic/' + arr[0].artPic);
-        $('#art_pic1').attr('src', 'art_pic/' + arr[1].artPic);
-        $('#art_pic2').attr('src', 'art_pic/' + arr[2].artPic);
-        
-        $('#art_name0').text(arr[0].artName);
-        $('#art_name1').text(arr[1].artName);
-        $('#art_name2').text(arr[2].artName);
-        
-        $('#art_go0').attr('onclick', "location.href='artDetail.html?memNo=" + arr[0].memNo + '&artNo=' + arr[0].artNo + '&tag=' + arr[0].artTag1 + "'");
-        $('#art_go1').attr('onclick', "location.href='artDetail.html?memNo=" + arr[1].memNo + '&artNo=' + arr[1].artNo + '&tag=' + arr[1].artTag1 + "'");
-        $('#art_go2').attr('onclick', "location.href='artDetail.html?memNo=" + arr[2].memNo + '&artNo=' + arr[2].artNo + '&tag=' + arr[2].artTag1 + "'");
+       	for(i=0; i<arr.length+1; i++){
+       		$('#art_pic'+i).attr('src', 'art_pic/' + arr[i].artPic);
+       		$('#art_name'+i).text(arr[i].artName);
+       		$('#art_go'+i).attr('onclick', "location.href='artDetail.html?memNo=" + arr[i].memNo + '&artNo=' + arr[i].artNo + '&tag=' + arr[i].artTag1 + "'");
+       	}
     
     }});//ajax
+    
+    // 캐러셀 설정 지정
+    $('.carousel').carousel({
+    	// 마우스를 올려도 슬라이드 동작(기본값 hover)
+    	pause: false,
+    	
+    	// 시간 설정(기본값 5000ms)
+    	interval: 3000
+    });
 
 </script>
 </head>
+ <!-- 최상단 메인페이지 by 정소윤 -->
 
 <body style="padding-top: 0px;"> <!-- header의 padding-top보다 우선적용(캐러셀 크기를 위함) -->
  <header id="header"></header>
@@ -61,19 +65,19 @@ $(document).ready(function(){
 	  <div id="mainArt" class="carousel-inner" style="background-color: #212529!important;">
 		<div class="carousel-item active">
 			<img class="main_art" id="art_pic0">
-			<div class="carousel-caption text-right">
+			<div class="carousel-caption text-right" style="width:80%;">
 			  <h1 style="margin-bottom: 50px;" id="art_name0"></h1>
 			  <div style="margin-bottom: 100px;">
-				  <button class="btn btn-dark" id="art_go0">작품 보러가기</button>
+				  <button class="btn btn-secondary" id="art_go0">작품 보러가기</button>
 			  </div>
 			</div>   
 		  </div>
 		  <div class="carousel-item" style="background-color: #212529!important;">
 			<img class="main_art" align="right" id="art_pic1">
-			<div class="carousel-caption text-left">
+			<div class="carousel-caption text-left" style="width:80%;">
 			  <h1 style="margin-bottom: 50px;" id="art_name1"></h1>
 			  <div style="margin-bottom: 100px;">
-				  <button class="btn btn-dark" id="art_go1">작품 보러가기</button>
+				  <button class="btn btn-secondary" id="art_go1">작품 보러가기</button>
 			  </div>
 			</div>   
 		  </div>
@@ -82,7 +86,7 @@ $(document).ready(function(){
 			<div class="carousel-caption text-right">
 			  <h1 style="margin-bottom: 50px;" id="art_name2"></h1>
 			  <div style="margin-bottom: 100px;">
-				  <button class="btn btn-dark" id="art_go2">작품 보러가기</button>
+				  <button class="btn btn-secondary" id="art_go2">작품 보러가기</button>
 			  </div>
 			</div>   
 		  </div>
