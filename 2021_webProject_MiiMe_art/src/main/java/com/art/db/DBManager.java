@@ -958,6 +958,11 @@ private static SqlSessionFactory factory;
 	
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< [by 신지영] Start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
+		/**
+		 * 전체 레코드의 수를 반환하는 메소드
+		 * @param keyword: 검색 키워드
+		 * @param searchField: 검색 키워드의 해당 컬럼 
+		 */
 		public static int getTotalRecord(String keyword, String searchField) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("keyword", keyword);
@@ -968,6 +973,13 @@ private static SqlSessionFactory factory;
 			return count;
 		}
 
+		/**
+		 * 모든 레코드를 List로 반환하는 메소드
+		 * @param keyword: 검색 키워드
+		 * @param searchField: 검색 키워드의 해당 컬럼 
+		 * @param orderField: 정렬 기준 
+		 * @return 검색된 모든 자료의 list 
+		 */
 		public static List<ReviewVo> findAll(String keyword, String searchField, String orderField) {
 
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -981,8 +993,14 @@ private static SqlSessionFactory factory;
 			return list;
 		}
 
+		/**
+		 * 이용후기>후기검색 메뉴에서 검색된 후기들을 list로 반환하는 메소드 
+		 * @param keyword: 검색 키워드 
+		 * @param searchField: 검색 키워드의 해당 컬럼
+		 * @param orderField: 정렬 기준 
+		 * @return: 검색 키워드를 기준으로 검색된 모든 자료의 list 
+		 */
 		public static List<ReviewVo> findSearchAll( String keyword, String searchField,String orderField) {
-
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("keyword", keyword);
 			map.put("searchField", searchField);
@@ -994,6 +1012,12 @@ private static SqlSessionFactory factory;
 			return list;
 		}
 
+		/**
+		 * 이용후기>테마별후기 메뉴에서 테마에 따라 구분되는 후기들을 List로 반환하는 메소드
+		 * @param keyword: 검색 키워드 (테마의 키워드에 해당)
+		 * @param orderField: 정렬 기준(테마)
+		 * @return: 검색 키워드를 기준으로 검색된 모든 자료의 list 
+		 */
 		public static List<ReviewVo> findThemeAll( String keyword, String orderField) {
 
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -1006,6 +1030,12 @@ private static SqlSessionFactory factory;
 			return list;
 		}
 
+		/**
+		 * 이용후기>태그별후기 메뉴에서 태그에 따라 구분되는 후기들을 List로 반환하는 메소드 
+		 * @param keyword: 검색 키워드(태그의 키워드에 해당)
+		 * @param orderField: 정렬 기준(태그)
+		 * @return: 검색 키워드를 기준으로 검색된 모든 자료의 list 
+		 */
 		public static List<ReviewVo> findTagAll(String keyword, String orderField) {
 
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -1018,6 +1048,10 @@ private static SqlSessionFactory factory;
 			return list;
 		}
 
+		/**
+		 * 이용후기>실시간후기 메뉴에 띄울 후기들을 list로 반환하는 메소드 
+		 * @return: 실행 되기 전까지 작성되었던 모든 후기 list 
+		 */
 		public static List<ReviewVo> findRealTimeAll() {
 
 			SqlSession session = factory.openSession();
@@ -1027,6 +1061,10 @@ private static SqlSessionFactory factory;
 			return list;
 		}
 
+		/**
+		 * 이용후기>실시간후기 메뉴 중 좋아요 상위 3개의 후기를 list로 반환하는 메소드
+		 * @return: 실행 되기 전까지 작성되었던 모든 후기들 중 좋아요 상위 3개 list 
+		 */
 		public static List<ReviewVo> findRealTimeMost3LikeAll() {
 
 			SqlSession session = factory.openSession();
@@ -1035,6 +1073,10 @@ private static SqlSessionFactory factory;
 			return list;
 		}
 
+		/**
+		 * 이용후기작성을 위한 메소드 
+		 * @param r: 작성자가 작성한 정보를 ReviewVo 형태로 담는다 
+		 */
 		public static int insert(ReviewVo r) {
 			SqlSession session = factory.openSession();
 			int re = session.insert("review.insert", r);
@@ -1043,6 +1085,10 @@ private static SqlSessionFactory factory;
 			return re;
 		}
 
+		/**
+		 * 사용자가 후기에 좋아요를 눌렀을 시 DB에 좋아요+1를 해주는 메소드 
+		 * @param reviewNo: 리뷰넘버(pk)를 패러미터로 받아 디비에 접근하여 해당 튜플의 좋아요수를 올려준다 
+		 */
 		public static int insertLikeReview(int reviewNo) {
 			SqlSession session = factory.openSession();
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -1052,7 +1098,11 @@ private static SqlSessionFactory factory;
 			session.close();
 			return re;
 		}
-
+		
+		/**
+		 * 사용자가 후기에 좋아요를 또 한 번 눌렀을 시 DB에 좋아요-1를 해주는 메소드 
+		 * @param reviewNo: 리뷰넘버(pk)를 패러미터로 받아 디비에 접근하여 해당 튜플의 좋아요수를 내려준다 
+		 */
 		public static int deleteLikeReview(int reviewNo) {
 			SqlSession session = factory.openSession();
 			HashMap<String, Object> map = new HashMap<String, Object>();
