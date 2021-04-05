@@ -49,7 +49,6 @@ $(document).ready(function(){
     $("#footer").load("/footer.html");
 });
 
-
 let url = location.href;	//url 요청
 let getReceive = url.substr(url.indexOf("?")+1)
 let getReceiveSplit = getReceive.split("=");
@@ -64,7 +63,7 @@ $(function(){
 /*-----------------결제없이 페이지 벗어날 때(판매상태:sale로 변경, 마감시간 5시간 추가) ---------------------*/
 let checkOk = true;
 $(window).on("beforeunload",function(){
-	//if(checkOk){
+	if(checkOk){
 		//작품 판매상태를 sale로 변경해준다.
 		$.ajax({url:"/updateSale.do",
 		type:"post",
@@ -84,7 +83,7 @@ $(window).on("beforeunload",function(){
 		success:function(data){
 			console.log("남은시간 5시간 추가"); 
 		}});
-	//}
+	}
 });
 
 
@@ -110,8 +109,8 @@ $(window).on("beforeunload",function(){
 				let img = $("<td></td>").html($(`<img width="300px" height="200px">`).attr("src","./art_pic/"+pay.artPic));
 				let art_no = $("<td></td>").html(pay.artNo);
 				let art_name = $("<td></td>").html(pay.artName);
-				let auc_buy = $("<td></td>").html(aucBid);
-				let auc_bid = $("<td></td>").html(aucBuy);
+				let auc_buy = $("<td></td>").html(aucBuy);
+				let auc_bid = $("<td></td>").html(aucBid);
 					
 		//입찰 금액은 시작가보다 높아야한다.
 		//입찰가가 즉시구매가보다 높으면 즉시구매가로 결제 진행
@@ -132,7 +131,7 @@ $(window).on("beforeunload",function(){
 					
 		 	$("#memNo").val(getMemNo); //로그인한 회원번호를 세션에서 가져온다.
 			$(".artNo").val(getArtNo);
-						 
+			
 		let getAmount = Number($("#amount").text().replaceAll(",",""));	//최종 결제금액을 불러온다.
 		$(".payAmount").val(getAmount); 
 		let data = $("#f").serializeArray();	//회원번호,작품번호,결제금액,결제수단의 값을 불러온다.
@@ -151,11 +150,11 @@ $(window).on("beforeunload",function(){
 				alert("결제 실패");								
 			}
 		}});
-							
-		//artist_point_tb에 구매자가 가지고 있는 포인트+결제 금액으로 update
+			
+		//포인트_tb에서 판매자가 가지고 있는 포인트+결제금액 update
 		$.ajax({url:"/updatePoint.do",
 		type:"post",
-		data:data,	//작품번호
+		data:{memNo:pay.memNo,payAmount:getAmount},
 		success:function(m){
 			if(m != -1){
 				console.log("포인트 입력완료");
