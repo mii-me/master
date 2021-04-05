@@ -72,6 +72,7 @@
 		if(selectedSell == null) {
 			aucBid = '-';
 			aucBuy = '-';
+			$(".sellStatusArea").addClass("badge badge-pill badge-secondary");
 			$(".sellStatusArea").html("※ 판매예정인 작품입니다.");
 		}
 		if(selectedSell == 'sold') {
@@ -186,7 +187,7 @@
 			//배경이미지단 이미지 이동 버튼
 			function clickBtnBg(){
 				//위치가 0이라면 왼쪽버튼을 누를 수 없다
-				if(positionBg== 0) {
+				if(positionBg>= 0) {
 					$(".btnLeft-left").attr("disabled", true);
 				}else if(positionBg< 0){//위치가 0보다 작다면(오른쪽 버튼을 누름으로 이동한 상태) 다시 왼쪽버튼을 누를 수 있다.
 					$(".btnLeft-left").removeAttr("disabled");
@@ -194,7 +195,7 @@
 				
 				//위치가 bgArr의 length에서 4를 뺀 수(한번에 4개를 보여주므로) * (-110)의 크기와 같다면 
 				//오른쪽 버튼을 누를 수 없다. (더 보여줄 이미지가 없으므로)
-				if(positionBg== (-110*(bgArr.length-4))) {
+				if(positionBg >= (-110*(bgArr.length-4))) {
 					$(".btnRight-right").attr("disabled", true);
 				}else if(positionBg > (-110*(bgArr.length-4))){ //위치가 그 수보다 크다면 다시 오른쪽 버튼을 누를 수 있다. 
 					$(".btnRight-right").removeAttr("disabled");
@@ -204,7 +205,7 @@
 			//태그단 이미지 이동 버튼
 			function clickBtnTag(){
 				//위치가 0이라면 왼쪽버튼을 누를 수 없다
-				if(positionHash == 0) {
+				if(positionHash>=0) {
 					$(".artHashTag-img-btnLeft-left").attr("disabled", true);
 				}else if(positionHash < 0){ //위치가 0보다 작다면(오른쪽 버튼을 누름으로 이동한 상태) 다시 왼쪽버튼을 누를 수 있다.
 					$(".artHashTag-img-btnLeft-left").removeAttr("disabled");
