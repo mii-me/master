@@ -197,7 +197,7 @@ if(getMemNo != null){
 		url:"/updateBid.do",
 		data:{artNo:getArtNo,memNo:getMemNo,aucBid:auc.aucBuy},
 		success:function(data){
-			location.href="payment.html?artNo="+auc.artNo;	
+			location.href="payment.html?artNo="+auc.artNo;
 		}});
 	});
 						
@@ -225,7 +225,7 @@ if(getMemNo != null){
 			data:{artNo:getArtNo,memNo:getMemNo,aucBid:auc.aucBuy},
 			success:function(data){
 		  		alert("입찰금액이 즉시구매가 이상이므로 결제페이지로 안내합니다.");
-		 		location.href="payment.html?artNo="+auc.artNo;	
+		 		location.href="payment.html?artNo="+auc.artNo;
 		}});
 		  
 		  		
@@ -253,16 +253,16 @@ if(getMemNo != null){
 					location.reload(); 
 				}});
 			}else{
-				$("#auction_top").empty();
-			$("#auction_top").append($(`<div class="alert alert-danger alert-dismissible fade show">
-									<button type="button" class="close" data-dismiss="alert">&times;</button>입찰가는 시작가·최고입찰가보다 높아야하며 즉시구매가보다 낮아야 합니다.</div>`));
+				$(".alert-bottom").empty();
+				$(".alert-bottom").append($(`<div class="alert alert-danger alert-dismissible fade show">
+									<button type="button" class="close" data-dismiss="alert">&times;</button>최고입찰가보다 높게 입력하세요</div>`).css("width","310px"));
 				$("#aucBid").val("");	//입찰가 입력칸 초기화
 				$("#aucBid").focus();	//입찰가 입력칸에 커서두기
 			}//end else
 		}else{
-			$("#auction_top").empty();
-			$("#auction_top").append($(`<div class="alert alert-danger alert-dismissible fade show">
-									<button type="button" class="close" data-dismiss="alert">&times;</button>입찰가를 입력하세요!</div>`));
+			$(".alert-bottom").empty();
+			$(".alert-bottom").append($(`<div class="alert alert-danger alert-dismissible fade show">
+									<button type="button" class="close" data-dismiss="alert">&times;</button>입찰가를 입력하세요</div>`).css("width","310px"));
 		}//end else
 		}
 		});
@@ -298,6 +298,7 @@ if(getMemNo != null){
 		<div class="box-center col-sm-4">
 			<div id="auction_bid" class="m-2"></div><br>
 			<span style="font-size: 20px;">희망 입찰가</span><br>
+			<div class="alert-bottom"></div>
 			<div style="padding-left: 87px;" class="py-2"><input type="text" id="aucBid" name="aucBid" class="form-control" placeholder="정수만 입력" style="width: 175px; height: 43px;"></div>
 			<div class="p-0">
 				<button id="btnBid" class="btn btn-dark m-1">입찰하기</button>
