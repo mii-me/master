@@ -31,55 +31,9 @@ $(function(){
 			loadArtHash(tag);
 			btnClick();
 			
-			//위시리스트 insert,delete
-			$("#divBtnWishList").click(function(){
-				
-				//찜하기를 클릭했을 때 userNo가 null이 아니라면 아래를 실행한다
-				if(userNo != null) {
-					//Sold Out, 판매예정이 아닐 때만 찜하기 버튼 실행 가능
-					if(aucBid != 'Sold Out' && aucBid != '-'){
-							//세션스토리지에 작품관련 세션 생성
-							sessionStorage.setItem("wishList"+artNo, wishList);
-							wishListVal = sessionStorage.getItem("wishList"+artNo); //value값
-							//console.log(wishList + " : value의 값");
-							
-							//만약 한번도 클릭되지 않았으면 처음 클릭했을 때 상태를 true로 둔다.
-							//찜하기 처음 클릭했을 때 : 찜하기
-							if(wishListVal == null){
-								wishList = true; //찜 한 상태
-								$(".wishHeartIcon").css("color","red"); //아이콘에 빨간색을 채운다.
-							}
-							
-							//얻어온 wishList의 value가 true라면 insert를 실행하고
-							//wishList를 false로 바꾼다. 
-							if(wishListVal == 'true') {
-								//console.log("wishList : " + wishList);
-								$(".wishHeartIcon").css("color","red"); //찜했을 경우 빨간색을 채운다.
-								wishlistInsert(userNo,artNo);
-								wishList = false;	
-								//console.log("insert 실행 후 wishList : " + wishList);	
-							}else{
-								$(".wishHeartIcon").css("color","white"); //찜 취소시 색을 비운다.
-								wishlistDelete(userNo,artNo);
-								wishList = true;
-								//console.log("delete 실행 후 wishList : " + wishList);
-							}
-					}else { // Sold Out, 판매예정인 작품일 경우 
-						if(aucBid == 'Sold Out') {
-							alert("판매 완료된 작품으로, 해당 기능을 사용할 수 없습니다.");
-							return;
-						}else if(aucBid == '-'){ 
-							alert("판매 예정인 작품입니다.");
-							return;
-						}
-					}
-					
-				}else{ //userNo가 null이라면 로그인 페이지로 이동한다.
-					alert("로그인 후 이용할 수 있습니다.");
-					location.href="login.html";
-				}
-				
-			});//click
+			
+			
+			
 			
 ////////////////////////////////////////////////////////////////////////////////////////////
 			//by현익 / 쿠키를 갱신하기 위한 함수 / 210401
