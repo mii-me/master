@@ -9,15 +9,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style type="text/css">
-
 .table{
 	background-color: #FAFAFF;
 }
 #wait_list{
 	font-size: 27px;
 }
-
-
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
@@ -63,7 +60,7 @@ if(getMemNo != null){
 	let art_pic = $(`<td>`).html($(`<img width="260px" height="210px">`).attr("src","./art_pic/"+pay.artPic));
 	let art_name = $(`<td>`).html(pay.artName);
 	let auc_bid = $(`<td>`).html(aucBid+`원`);
-	let mem_name = $(`<h3>`).html(`<b>`+pay.memName+`</b>`+" 님의 낙찰 내역입니다.");
+	let mem_name = $(`<h5>`).html(`<b>`+pay.memName+`</b>`+" 님의 낙찰 내역입니다.");
 	
 	$(tr).append(art_no,art_pic,art_name,auc_bid);
 	$(".top").empty();
@@ -93,10 +90,10 @@ location.href="login.html";
 <body>
 <header id="header"></header>
 <div class="container">
-	<div class="top m-5" style="text-align: center;">
-	</div>
+	<h2 class="payWait mt-1 ml-1" style="padding-left: 50px; padding-top: 50px"><i class="fas fa-credit-card"></i> 결제 대기</h2>
+	<div class="top mt-5 ml-5"></div>
 	<table class="table table-hover m-5">
-		<thead>	
+		<thead>
 			<tr>
 				<th class="th">작품번호</th>
 				<th class="th">작품</th>

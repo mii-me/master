@@ -96,8 +96,9 @@ $(function(){
 			let artist_name = $(`<div class="artistName card-body py-0"></div>`).html(hot.artistName);
 			let art_material = $(`<div class="material card-body py-0"></div>`).html(hot.artMaterial);
 			let art_size = $(`<div class="size card-body pt-0 pb-1"></div>`).html(hot.artSize1+" x "+hot.artSize2+"cm , "+hot.artYear);
-			//let art_year = $(`<div class="year card-body py-0"></div>`).html(hot.artYear);
+			
 			let hr = $(`<hr>`);
+			
 			let auc_bid = $(`<div class="card-body py-0 text-right"></div>`).html("현재입찰가&nbsp;&nbsp;&nbsp;"+"<span class='price'>"+aucBid+"</span>"+" 원");
 			let auc_buy = $(`<div class="card-body pt-1 text-right"></div>`).html("즉시구매가&nbsp;&nbsp;&nbsp;"+aucBuy+" 원");
 			let auc_btn = $(`<button class="btn btn-dark" style="width:200px; height:50px;">경매장 이동</button>`);

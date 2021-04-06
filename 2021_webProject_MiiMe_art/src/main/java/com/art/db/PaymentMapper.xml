@@ -19,7 +19,7 @@
 		 	
 	<!-- 작품 -->	 	
 	<select id="findInfo" resultType="paymentVo">
-		select mem_no, art_no, art_pic, art_name, auc_start, auc_bid, auc_buy
+		select *
 		from art_info_tb
 		where art_no=#{artNo}
 	</select>
