@@ -51,8 +51,10 @@ $(function(){
 							// 상세보기
 							$(div).click(function(){
 								$("#detail").empty();
-								
+								//2번 연속 취소 눌렀을 때 상세보기 다시 보이게 하기 
+								//$(this).css("card-body");
 								let div = $("<div class='card p-1 m-1 detail' style='text-align:center'></div>");
+								
 								idx = $(this).attr("idx");
 								artList = arr[idx];
 								let pic = $("<img class='card_img_top m-1'" + " src='art_pic/"+ art.artPic +"' width=500px>");
@@ -68,6 +70,9 @@ $(function(){
 								$(div).append(pic, name, material, theme, size, year, tag, start, buy, exp);
 								$("#detail").append($(div));
 								
+								//상세보기 div 보이기
+								//$("#detail").css("visibility", "visible");
+								//$("#detail").css("display", "inline");
 								// 상세보기 했을 때, 판매취소 버튼 보이게 하기
 								$(".detail").css("visibility", "visible");
 								$(".detail").css("display", "inline");
@@ -94,8 +99,11 @@ $(function(){
 			if(confirm("'"+artList.artName + "' 작품에 대한 판매를 취소하시겠습니까?")){
 				$.ajax({url:"/cancleArtSell.do", data:data, success:function(){
 					//수정되기 전의 상태를 보여주는 상세보기 접기
-					$("#detail").css("visibility", "hidden");
-					$("#detail").css("display", "none");
+					$(".detail").css("visibility", "hidden");
+					$(".detail").css("display", "none");
+					$(".detailUpdate").css("visibility", "visible");
+					$(".detailUpdate").css("display", "inline");
+					alert("판매가 중지됩니다. 같은 작품을 다시 판매하려면 판매가능 목록에서 판매를 개시하세요.")
 					listArtSell();
 				}})
 			}
@@ -130,9 +138,11 @@ $(function(){
 		<!-- 판매중인 작품목록 -->
 	</div>
 	<hr>
+	<div class="row m-0">
 	<!-- 판매중인 작품목록_상세보기 -->
-	<div id="detail" class="row m-0"></div>
-	<!-- 판매중인 작품목록_선택_판매취소 버튼 생성된다 -->
+		<div id="detail" class="detail"></div>
+		<!-- 판매중인 작품목록_선택_판매취소 버튼 생성된다 -->
+		</div>
 	<button id="btnCancle" class="detail btn btn-dark">판매취소하기</button>
 </div>
  <footer id="footer"></footer>
