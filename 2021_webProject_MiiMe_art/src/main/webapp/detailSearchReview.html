@@ -2,17 +2,21 @@
 <html>
 
 <head>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+	crossorigin="anonymous">
 
-	<meta charset="UTF-8">
-	<title>美;Me - 후기검색</title>
+<meta charset="UTF-8">
+<title>美;Me - 후기검색</title>
 
-	<style>
-	</style>
+<style>
+</style>
 
-	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script type="text/javascript">
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
 
 		$(function () {
 			loadReviewList("", "", "");
@@ -27,15 +31,19 @@
 
 
 
-		let clickCnt = 1;
-		var searchField = "";
-		var keyword = "";
-		var orderField = "";
+		let clickCnt = 1; //더보기 버튼 용 변수  
+		var searchField = ""; //검색어 조건 
+		var keyword = ""; //검색어 
+		var orderField = ""; //정렬 조건 
 
+
+
+
+		//더보기를 눌렀을 때 동작할 함수 
 		function clickAddAction() {
-			clickCnt += 1;
-			$("#reviewList").empty(); // 목록이 중첩되지않게 초기화
-			loadReviewList(1, keyword, searchField, orderField);
+			clickCnt += 1; //클릭카운트 변수를 ++ 
+			$("#reviewList").empty(); //후기를 불러오는 목록이 중첩되지않게 초기화 
+			loadReviewList(1, keyword, searchField, orderField);//후기 불러오기 
 			$('html, body').animate({ scrollTop: ($(document).height()) + clickCnt * 1000 }, 1500);//버튼을 눌렀을 시 누른 지점으로 바로 가게끔 animate
 		}
 
@@ -51,17 +59,21 @@
 				dataType: "JSON", ////*****************형변환 
 				data: data, success: function (data) {
 
-					arr = []
-					arr = data.list; // 페이징 처리를 위함
-
-					let output = '';
+					let output = '';//div의 id 태그에 붙여줄 문자열을 쌓아놓을 변수 
+					
 					//오브젝트는 each 반복 안되니까 일반 for문 사용 
+					
 					if (clickCnt * 9 > data.list.length) {
+						
+						//클릭 카운트 * 3x3배열 이 모든 데이터의 크기보다 크다면 더보기 버튼이 없어져야 한다 
 						for (var i = 0; i < data.list.length; i++) {
+						
 							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
 							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
 							output += '<div class="card-body">';
+							
+							//작품명을 눌렀을 시 그 작품의 상세보기 페이지로 가기 위해 쿼리스트링을 만들어준다							
 							output += '<p class="card-text" class="mb-0" ><a style="text-decoration: none; color: black;" href="artDetail.html?memNo=' + data.list[i].atMemNo + '&artNo=' + data.list[i].artNo + '&tag='
 							if (data.list[i].artTag1 != null) {
 								output += data.list[i].artTag1
@@ -70,14 +82,19 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
+								
+							//가격은 천단위로 구분점을 찍기위해 .toLocalString() 함수 사용 								
 							output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
+					
+							//작가명을 눌렀을 시 그 작가의 상세보기 페이지로 가기 위해 쿼리스트링을 만들어준다 					
 							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
 							output += '<br><br>'
 
+							//리뷰 내용 받아오기 
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
 
-
+							//그 작품의 태그 (총 3개) 받아오기
 							output += '<ul class="nav justify-content-end">'
 							if (data.list[i].artTag1 != null) {
 								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">#' + data.list[i].artTag1 + '</font></a></li>'
@@ -91,12 +108,14 @@
 									+ data.list[i].artTag3 + '</font></a></li>'
 							}
 
+							//만약 태그가 등록되어있지 않다면 내용 없이 바로 <>태그를 닫아버린다 
 							if (data.list[i].artTag1 == null) {
 								output += '<br><br>'
 							}
 							output += '</ul>'
 							output += '<br>'
 
+							//좋아요 버튼. 누르면 clickAction이 발생, 패러미터로 해당 리뷰의 고유번호인 리뷰번호가 함께 움직인다 
 							output += '<div class="d-flex justify-content-between align-items-center">'
 							output += ' <div class="btn-group">'
 							output += ' <button type="button" style="background-color:white; border-radius: 7px;" onClick="clickAction(' + data.list[i].reviewNo + ')" class="like' + data.list[i].reviewNo + '" id="'
@@ -111,6 +130,8 @@
 						$('#buttonAdd').empty();
 
 					} else {
+					
+						//클릭카운트 * 9 가 전체 데이터보다 적다면 그만큼의 리뷰만 불러오면 됨 					
 						for (var i = 0; i < clickCnt * 9; i++) {
 							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
@@ -172,42 +193,48 @@
 		};//func. loadReviewList
 
 
-		// 검색시작
+		// 검색버튼을 눌렀을 시 발생될 함수 
 		function clickSearchAction() {
-			searchField = $("#searchField").val();
-			alert(searchField);
-			keyword = $("#keyword").val();
-			loadReviewList(keyword, searchField, "");
+			searchField = $("#searchField").val(); //서치필드 id에서 검색조건값을 받아온다 
+			// alert(searchField);
+			keyword = $("#keyword").val(); //키워드 id에서 검색어를 받아온다 
+			loadReviewList(keyword, searchField, ""); //받아온 두 값을 패러미터로 다시 리뷰를 로드한다 
 		};
-		//검색 종료 
 
-		function clickSortAction(orderField) {
-			console.log(searchField);
-			console.log(keyword);
-			console.log(orderField);
+
+		// 정렬버튼 (~순서로 정렬하는 3개의 버튼)을 눌렀을 시 발생될 함수 
+		function clickSortAction(orderField) { //패러미터로 정렬조건을 받는다 
+			// console.log(searchField);
+			// console.log(keyword);
+			// console.log(orderField);
+			
+			//현재 검색어가 없다면 
 			if (keyword == null) {
-				loadReviewList("", "", orderField);
-				$('#buttonAdd').empty();
+				loadReviewList("", "", orderField); //키워드와 검색조건 없는채로 정렬만 해준다 
+				$('#buttonAdd').empty();//더보기 버트는 리뷰창 리셋을 위해 없앤다 
 
+			//현재 검색어가 있다면 
 			} else {
+				//검색어,검색조건,정렬조건을 모두 패러미터로 담아서 리뷰를 로드한다 
 				loadReviewList(keyword, searchField, orderField);
-				$('#buttonAdd').empty();
-
+				$('#buttonAdd').empty();//더보기 버트는 리뷰창 리셋을 위해 없앤다 
 			}
 		};
 
-		function clickAction(reviewNo) {
+		//좋아요 버튼을 눌렀을때 동작할 함수 		
+		function clickAction(reviewNo) { //패러미터로 고유번호인 리뷰번호를 받는다 
 			$('.like' + reviewNo).toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
+			//토글이 켜져있다면 			
 			if ($('.like' + reviewNo).attr('class') == 'like' + reviewNo + ' on') {
-				insertLike(reviewNo)
+				insertLike(reviewNo) //insertLike함수 호출 
 			} else { //null
-				deleteLike(reviewNo)
+				deleteLike(reviewNo) //deleteLike함수 호출 
 			}
 
-
+			//좋아요 +1 
 			function insertLike(reviewNo) {
 				let data = { reviewNo: reviewNo };
-				console.log(data)
+				// console.log(data)
 				$.ajax({
 					type: "POST", //POST 타입
 					url: "/insertLikeReviewProto.do",
@@ -218,9 +245,9 @@
 				})
 			};
 
+			//좋아요 -1 
 			function deleteLike(reviewNo) {
 				let data = { reviewNo: reviewNo };
-
 				$.ajax({
 					type: "POST", //POST 타입
 					url: "/deleteLikeReviewProto.do",
@@ -247,8 +274,8 @@
 					<h1 class="fw-light">후기 검색</h1>
 					<p class="lead text-muted">작가명, 작품명으로 후기를 검색해보세요</p>
 					<p>
-						<a href="artList.html" class="btn btn-dark">작품 목록</a>
-						<a href="artistList.html" class="btn btn-secondary my-2">작가 목록</a>
+						<a href="artList.html" class="btn btn-dark">작품 목록</a> <a
+							href="artistList.html" class="btn btn-secondary my-2">작가 목록</a>
 					</p>
 				</div>
 			</div>
@@ -256,37 +283,43 @@
 
 		<div class="container">
 			<div class="input-group mb-3">
-				<select class="form-select" aria-label="Floating label select example" id="searchField">
+				<select class="form-select"
+					aria-label="Floating label select example" id="searchField">
 					<option value="artName"><a class="dropdown-item">작품명</a></option>
 					<!-- DB에 있는 이름과 똑같이 value를 설정 -->
 					<option value="artistName"><a class="dropdown-item">작가명</a></option>
-				</select>
-				<input type="text" style="width:80%;" class="form-control" aria-label="Text input with dropdown button"
-					id="keyword" />
-				<button class="btn btn-dark" type="button" onClick="clickSearchAction()" id="btnSearch">검색</button>
+				</select> <input type="text" style="width: 80%;" class="form-control"
+					aria-label="Text input with dropdown button" id="keyword" />
+				<button class="btn btn-dark" type="button"
+					onClick="clickSearchAction()" id="btnSearch">검색</button>
 			</div>
 		</div>
 
-		<br>
-		<br>
+		<br> <br>
 
 		<div class="container">
 			<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-				<button type="button" class="btn btn-dark" onClick="clickSortAction('likeDesc')">좋아요 높은 순서</button>
-				<button type="button" class="btn btn-dark" onClick="clickSortAction('priceAsc')">가격 낮은 순서</button>
-				<button type="button" class="btn btn-dark" onClick="clickSortAction('priceDesc')">가격 높은 순서</button>
+				<button type="button" class="btn btn-dark"
+					onClick="clickSortAction('likeDesc')">좋아요 높은 순서</button>
+				<button type="button" class="btn btn-dark"
+					onClick="clickSortAction('priceAsc')">가격 낮은 순서</button>
+				<button type="button" class="btn btn-dark"
+					onClick="clickSortAction('priceDesc')">가격 높은 순서</button>
 			</div>
 		</div>
 
 
 		<div class="album py-5 bg-light">
 			<div class="container">
-				<h3 class="pricing-header p-3 pb-md-4 mx-auto text-center" class="display-4 fw-normal">후기 검색</h3><br>
-				<div id="reviewListMostLike3" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-				</div>
+				<h3 class="pricing-header p-3 pb-md-4 mx-auto text-center"
+					class="display-4 fw-normal">후기 검색</h3>
 				<br>
-				<div id="reviewList" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-				</div><br>
+				<div id="reviewListMostLike3"
+					class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+				<br>
+				<div id="reviewList"
+					class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"></div>
+				<br>
 				<div id="buttonAdd"></div>
 			</div>
 		</div>
