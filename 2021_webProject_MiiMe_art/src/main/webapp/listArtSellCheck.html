@@ -49,7 +49,6 @@ $(function(){
 				data:data, 
 				success:function(data){
 				
-				//console.log("ajax data: "+data);
 				arr = [];
 				data = eval("("+data+")");
 				arr = data.list;
@@ -179,11 +178,9 @@ $(function(){
 			// new FormData 생성 전에 val() : input 태그안에 hidden으로 value 전달
 			$("#memNo").val(memNo); 
 			
-			console.log("memNo: " + memNo + "/memNoType: " + typeof memNo); //number로 나옴
 			//남혜진 210402 _ 작품수정 유효성검사 추가
 			let flag = false;
 			updateData = new FormData(document.getElementById("artForm"));
-			console.log("updateData 생성 후 : " , updateData);
 			
 			let artName = ($("#artName").val()).trim();
 			let artMaterial = ($("#artMaterial").val()).trim();
@@ -221,7 +218,6 @@ $(function(){
 				//updateArtInfo();
 				$("#artNo").val(artList.artNo);
 				
-				console.log("끼야야야야야야약", updateData);
 				$.ajax({url:"/updateArtInfo.do", 
 					data:updateData, 
 					type:"post",
@@ -240,33 +236,6 @@ $(function(){
 			}
 			
 		})
-		
-		//남혜진 210402 _ 작품수정 유효성검사 추가
-/* 		function updateArtInfo(){
-			//updateData["memNo"] = 3; //210405 test
-			//console.log("updateArtInfo() memNo: " + memNo + "/ type: " + typeof memNo);
-			$("#artNo").val(artList.artNo);
-			
-			console.log("끼야야야야야야약", updateData);
-			$.ajax({url:"/updateArtInfo.do", 
-				data:updateData, 
-				type:"post",
-				processData:false,
-				contentType:false, 
-				success:function(data){
-					$(".detail2").css("visibility", "hidden");
-					$(".detail2").css("display", "none");
-					$(".detail").css("visibility", "hidden");
-					$(".detail").css("display", "none");
-					$(".detailUpdate").css("visibility", "visible");
-					$(".detailUpdate").css("display", "inline");
-					listArtSellCheck(1);
-			}})
-				
-		} */
-		
-		
-		
 		
 		//남혜진 210320
 		//해당작품 판매 시작하기

@@ -55,7 +55,7 @@ private static SqlSessionFactory factory;
 	
 	// 작가목록 개수
 	public static int getTotalArtist(String keyword, String consonant, String sort) {
-		System.out.println("3 .작가목록 개수 Manager 작동: keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
+		//System.out.println("3 .작가목록 개수 Manager 작동: keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
 		
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("keyword", keyword);
@@ -116,8 +116,8 @@ private static SqlSessionFactory factory;
 	 * @return 작가목록(최신순 정렬)
 	 */
 	public static List<ArtistInfoVo> listArtistInfo(int start, int end, String keyword, String consonant, String sort){
-		System.out.println("5. 작가목록 조회 Manager 작동: start "+start+"/end "+end+"/keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
-		System.out.println("==============================");
+		//System.out.println("5. 작가목록 조회 Manager 작동: start "+start+"/end "+end+"/keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
+		//System.out.println("==============================");
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("start", start);
@@ -146,7 +146,7 @@ private static SqlSessionFactory factory;
 	 * @return 해당 작가의 정보
 	 */
 	public static ArtistInfoVo selectArtistInfo(int memNo) {
-		System.out.println("3. 작가프로필 조회 Manager 작동: memNo "+memNo);
+		//System.out.println("3. 작가프로필 조회 Manager 작동: memNo "+memNo);
 		
 		SqlSession session = factory.openSession();
 		ArtistInfoVo a = session.selectOne("artistInfo.selectArtistInfo", memNo);
@@ -225,7 +225,7 @@ private static SqlSessionFactory factory;
 	 * @return 삭제할 번호 쿼리문에 전달
 	 */
 	public static int deleteArtistComment(int artistCmtNo) {
-		System.out.println("3. 작가기대평 삭제 Manager 작동: "+artistCmtNo);
+		//System.out.println("3. 작가기대평 삭제 Manager 작동: "+artistCmtNo);
 		
 		SqlSession session = factory.openSession();
 		int re = session.delete("artistInfo.deleteArtistComment", artistCmtNo);
@@ -554,7 +554,7 @@ private static SqlSessionFactory factory;
 		list = session.selectList("artinfo.selectAll",map); //mapper.xml
 		session.close();
 		/* System.out.println("Manager : "+list); */
-		System.out.println("Manager의 listArt작동함");
+		//System.out.println("Manager의 listArt작동함");
 		
 		return list;
 	}
@@ -611,8 +611,8 @@ private static SqlSessionFactory factory;
 	//by현익 / 기본 배송정보 출력  / 210319
 	public static DeliveryVo defaultDelivery(int memNo) {
 		SqlSession session = factory.openSession(); //세션얻어오기
-		System.out.println(" DBManager-defaultDelivery 작동");
-		System.out.println(" DeliveryMapper -> SQL문 실행");
+		//System.out.println(" DBManager-defaultDelivery 작동");
+		//System.out.println(" DeliveryMapper -> SQL문 실행");
 		DeliveryVo dv = session.selectOne("delivery.default", memNo);
 		session.close();
 		return dv;
@@ -621,8 +621,8 @@ private static SqlSessionFactory factory;
 	public static List<DeliveryVo> listDelivery(int memNo){
 		SqlSession session = factory.openSession(); //세션얻어오기
 		List<DeliveryVo> list = session.selectList("delivery.findAll", memNo);
-		System.out.println(" DBManager-listDelivery 작동");
-		System.out.println(" DeliveryMapper -> SQL문 실행");
+		//System.out.println(" DBManager-listDelivery 작동");
+		//System.out.println(" DeliveryMapper -> SQL문 실행");
 		session.close();
 		return list;
 	}
@@ -630,8 +630,8 @@ private static SqlSessionFactory factory;
 	public static int insertDelivery(DeliveryVo dv) {
 		SqlSession session = factory.openSession(); //세션얻어오기
 		int re = session.insert("delivery.insert", dv);
-		System.out.println("4. DBManager-insert 작동");
-		System.out.println("5. DeliveryMapper -> SQL문 실행");
+		//System.out.println("4. DBManager-insert 작동");
+		//System.out.println("5. DeliveryMapper -> SQL문 실행");
 		session.commit();
 		return re;
 	}
@@ -639,8 +639,8 @@ private static SqlSessionFactory factory;
 	public static int deleteDelivery(int no) {
 		SqlSession session = factory.openSession(); //세션얻어오기
 		int re = session.delete("delivery.delete", no);
-		System.out.println("4. DBManager-delete 작동");
-		System.out.println("5. DeliveryMapper -> SQL문 실행");
+		//System.out.println("4. DBManager-delete 작동");
+		//System.out.println("5. DeliveryMapper -> SQL문 실행");
 		session.commit();
 		return re;
 	}//delete
@@ -651,8 +651,8 @@ private static SqlSessionFactory factory;
 		map.put("memNo", memNo);
 		map.put("delNo", delNo);
 		int re = session.update("delivery.update", map);
-		System.out.println("4. DBManager-update 작동");
-		System.out.println("5. DeliveryMapper -> SQL문 실행");
+		//System.out.println("4. DBManager-update 작동");
+		//System.out.println("5. DeliveryMapper -> SQL문 실행");
 		session.commit();
 		return re;
 	}//delete
@@ -663,8 +663,8 @@ private static SqlSessionFactory factory;
 		public static List<ClientComplainVo> listComplain(int memNo){
 			SqlSession session = factory.openSession(); //세션얻어오기
 			List<ClientComplainVo> list = session.selectList("complain.findAll", memNo);
-			System.out.println("4. DBManager-listComplain 작동");
-			System.out.println("5. ComplainMapper -> SQL문 실행");
+			//System.out.println("4. DBManager-listComplain 작동");
+			//System.out.println("5. ComplainMapper -> SQL문 실행");
 			session.close();
 			return list;
 		}
@@ -672,8 +672,8 @@ private static SqlSessionFactory factory;
 		public static int insertComplain(ClientComplainVo cv) {
 			SqlSession session = factory.openSession(); //세션얻어오기
 			int re = session.insert("complain.insert", cv);
-			System.out.println("4. DBManager-insert 작동");
-			System.out.println("5. ComplainMapper -> SQL문 실행");
+			//System.out.println("4. DBManager-insert 작동");
+			//System.out.println("5. ComplainMapper -> SQL문 실행");
 			session.commit();
 			return re;
 		}
@@ -681,8 +681,8 @@ private static SqlSessionFactory factory;
 		public static int deleteComplain(int comNo) {
 			SqlSession session = factory.openSession(); //세션얻어오기
 			int re = session.delete("complain.delete", comNo);
-			System.out.println("6. DBManager-delete 작동");
-			System.out.println("7. DeliveryMapper -> SQL문 실행");
+			//System.out.println("6. DBManager-delete 작동");
+			//System.out.println("7. DeliveryMapper -> SQL문 실행");
 			session.commit();
 			return re;
 		}
@@ -690,7 +690,7 @@ private static SqlSessionFactory factory;
 		public static ClientComplainVo findOneComplain(int comNo) {
 			SqlSession session = factory.openSession();
 			ClientComplainVo vo = session.selectOne("complain.findOne", comNo);
-			System.out.println("3. manager의 findOneComplain 동작함");
+			//System.out.println("3. manager의 findOneComplain 동작함");
 			session.close();
 			return vo;
 		}
@@ -701,8 +701,8 @@ private static SqlSessionFactory factory;
 		public static List<ChangeInfoVo> detailMemberInfo(int memNo) {
 			SqlSession session = factory.openSession(); //세션얻어오기
 			List<ChangeInfoVo> list = session.selectList("changeInfo.findAll", memNo);
-			System.out.println("4. DBManager-detailMemberInfo 작동");
-			System.out.println("5. ChangeInfoMapper -> SQL문 실행");
+			//System.out.println("4. DBManager-detailMemberInfo 작동");
+			//System.out.println("5. ChangeInfoMapper -> SQL문 실행");
 			session.close();
 			return list;
 		}
@@ -710,8 +710,8 @@ private static SqlSessionFactory factory;
 		public static int updateMemberInfo(ChangeInfoVo cv) {
 			SqlSession session = factory.openSession(); //세션얻어오기
 			int re = session.update("changeInfo.updateMember", cv);
-			System.out.println("4. DBManager-updateMember 작동");
-			System.out.println("5. ChangeInfoMapper -> SQL문 실행");
+			//System.out.println("4. DBManager-updateMember 작동");
+			//System.out.println("5. ChangeInfoMapper -> SQL문 실행");
 			session.commit();
 			return re;
 		}
@@ -719,8 +719,8 @@ private static SqlSessionFactory factory;
 		public static int updateArtistInfo(ChangeInfoVo cv) {
 			SqlSession session = factory.openSession(); //세션얻어오기
 			int re = session.update("changeInfo.updateArtist", cv);
-			System.out.println("4. DBManager-updateArtist 작동");
-			System.out.println("5. ChangeInfoMapper -> SQL문 실행");
+			//System.out.println("4. DBManager-updateArtist 작동");
+			//System.out.println("5. ChangeInfoMapper -> SQL문 실행");
 			session.commit();
 			return re;
 		}
@@ -731,8 +731,8 @@ private static SqlSessionFactory factory;
 		public static List<PurchaseListVo> listPurchase(int memNo) {
 			SqlSession session = factory.openSession(); //세션얻어오기
 			List<PurchaseListVo> list = session.selectList("purchase.findAll", memNo);
-			System.out.println("4. DBManager-listPurchase 작동");
-			System.out.println("5. PurchaseListMapper -> SQL문 실행");
+			//System.out.println("4. DBManager-listPurchase 작동");
+			//System.out.println("5. PurchaseListMapper -> SQL문 실행");
 			session.close();
 			return list;
 		}
@@ -743,8 +743,8 @@ private static SqlSessionFactory factory;
 		public static List<WishListVo> listWish(int memNo) {
 			SqlSession session = factory.openSession(); //세션얻어오기
 			List<WishListVo> list = session.selectList("wish.findAll", memNo);
-			System.out.println("4. DBManager-listWish 작동");
-			System.out.println("5. WishListMapper -> SQL문 실행");
+			//System.out.println("4. DBManager-listWish 작동");
+			//System.out.println("5. WishListMapper -> SQL문 실행");
 			session.close();
 			return list;
 		}
@@ -753,8 +753,8 @@ private static SqlSessionFactory factory;
 		public static ArtInfoVo findArtElements(String artPic) {
 			SqlSession session = factory.openSession(); //세션얻어오기
 			ArtInfoVo vo = session.selectOne("wish.findOne", artPic);
-			System.out.println("4. DBManager-findArtElements 작동");
-			System.out.println("5. WishListMapper -> SQL문 실행");
+			//System.out.println("4. DBManager-findArtElements 작동");
+			//System.out.println("5. WishListMapper -> SQL문 실행");
 			session.close();
 			return vo;
 		}
@@ -793,7 +793,6 @@ private static SqlSessionFactory factory;
 		 * @return 회원번호에 맞는 회원의 판매대기중인 작품의 정보
 		 */
 		public static List<ArtInfoVo> findSellCheckList(int memNo, int start, int end) {
-			System.out.println("3. ");
 			SqlSession session = factory.openSession();
 			List<ArtInfoVo> list = null;
 			HashMap<String, Integer> map = new HashMap<String, Integer>();
@@ -899,7 +898,6 @@ private static SqlSessionFactory factory;
 			HashMap<String, Integer> map = new HashMap<String, Integer>();
 			map.put("artNo", artNo);
 			map.put("memNo", memNo);
-			System.out.println("DBManager insertArtSellCheck의 memNo: " + memNo);
 			int re = session.insert("artSell.insertArtSellCheck", map);
 			session.commit();
 			session.close();
@@ -914,8 +912,6 @@ private static SqlSessionFactory factory;
 		public static int findArtistPoint(int memNo) {
 			SqlSession session = factory.openSession();
 			int point = session.selectOne("artSell.findArtistPoint", memNo);
-			//int point = p.getPayPoint();
-			//System.out.println("5 dbM point: " + point);
 			session.close();
 			return point;
 		}
@@ -939,7 +935,6 @@ private static SqlSessionFactory factory;
 		 * @return
 		 */
 		public static int updateArtistPoint(int resultPoint, int memNo) {
-			System.out.println("3 dbmanager");
 			SqlSession session = factory.openSession();
 			HashMap<String, Integer> map = new HashMap<String, Integer>();
 			map.put("resultPoint", resultPoint);
@@ -1116,7 +1111,7 @@ private static SqlSessionFactory factory;
 		}
 
 		public static int getTotalArtSellCheck(int memNo) {
-			System.out.println("작품목록 DBManager 작동");
+			//System.out.println("작품목록 DBManager 작동");
 			SqlSession session = factory.openSession();
 			int count = session.selectOne("artSell.totalRecord", memNo);
 			session.close();

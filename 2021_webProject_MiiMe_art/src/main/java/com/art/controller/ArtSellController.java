@@ -53,7 +53,6 @@ public class ArtSellController {
 	@RequestMapping("/insertArtInfo.do")
 	public int insertArtInfo(ArtInfoVo vo, HttpServletRequest request) {
 		String path = request.getRealPath("art_pic");
-		// System.out.println("path" + path);//test
 		MultipartFile uploadFile = vo.getUploadFile();
 		String artPic = uploadFile.getOriginalFilename();
 		if (artPic != null && !artPic.equals("")) {
