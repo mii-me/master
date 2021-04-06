@@ -61,7 +61,7 @@ font-size: 30px;
 .box-right{width: 50%;}
 
 .name{font-size:30px;}
-.material,.size{font-size:17px;}
+.material,.size,.artistName{font-size:17px;}
 
 #btnBid,#btnBuy{margin: 10px;}
 #remainFive,#btnResetBid{margin-top: 10px}
@@ -178,16 +178,16 @@ if(getMemNo != null){
 			
 			let art_pic = $(`<div class="card-body p-1">`).html($(`<img width="100%">`).attr("src","./art_pic/"+auc.artPic));
 			let art_name = $(`<div class="name card-body py-0"></div>`).html(auc.artName);
-			let art_year = $(`<div class="year card-body py-0">`).html(auc.artYear); 
+			let artist_name = $(`<div class="artistName card-body py-0"></div>`).html(auc.artistName);
 			let art_material = $(`<div class="material card-body py-0"></div>`).html(auc.artMaterial);
-			let art_size = $(`<div class="size card-body py-0 pb-3"></div>`).html(auc.artSize1+" x "+auc.artSize2+"(cm)");
+			let art_size = $(`<div class="size card-body py-0 pb-3"></div>`).html(auc.artSize1+" x "+auc.artSize2+"cm , "+auc.artYear);
 			
 			let auc_start = $(`<div></div>`).html(`<div class="py-2">시작가</div>` + `<div class="price_label">`+ aucStart +` 원</div>`);
 			let auc_bid = $(`<div class="pt-4"></div>`).html(`<div class="py-2">최고 입찰가</div>` + `<div class="price_label"><span class='price'>`+ aucBid +`</span> 원</div>`);
 			let bit_top = $(`<div class="pt-4"></div>`).html(`<div class="py-2">최고 입찰자</div>` + `<div class="price_label"><span class='bidTop'>` + bitTop + `</span></div>`);
 			let auc_buy = $(`<div class="pt-4"></div>`).html(`<div class="py-2">즉시구매가</div>` + `<div class="price_label">` + aucBuy + ` 원</div>`);
 			
-			$("#auction_info").append(art_pic,art_name,art_year,art_material,art_size);
+			$("#auction_info").append(art_pic,art_name,artist_name,art_material,art_size);
 			$("#auction_bid").append(auc_start,auc_bid,bit_top,auc_buy);
 						
 	//즉시구매 누를 시 , 즉시구매가로 결제창 이동

@@ -68,9 +68,11 @@
 	<!-- 경매장 페이지에서 작품 불러오기
 		(작품명, 작가명, 재료, 테마, 사이즈, 년도, 작품사진, 시작가, 입찰가, 즉시구매가, 최고 입찰자)-->
 	<select id="detailAuction" resultType="auctionVo">
-		select art_no,art_pic,art_name,art_material,art_theme,art_size1,art_size2,art_year,auc_start,auc_bid,
-		(select bid_top from auction_tb where art_no=#{artNo}) bid_top,auc_buy
-		from art_info_tb
+		select art_no,art_pic,art_name, artist_name,art_material,art_theme,art_size1,art_size2,art_year,auc_start,auc_bid,
+				(select bid_top from auction_tb where art_no=#{artNo}) bid_top,auc_buy
+		from art_info_tb art
+		inner join artist_info_tb arti
+		on art.mem_no= arti.mem_no
 		where art_no=#{artNo}
 	</select>
 	
