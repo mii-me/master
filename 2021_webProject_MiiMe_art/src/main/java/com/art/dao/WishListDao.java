@@ -15,14 +15,14 @@ import com.art.vo.WishListVo;
 public class WishListDao {
 	
 	public List<WishListVo> findAll(int memNo){
-		System.out.println("2. WishListDao-findAll 작동");
-		System.out.println("3. DBManager로 이동");
+		//System.out.println("2. WishListDao-findAll 작동");
+		//System.out.println("3. DBManager로 이동");
 		return DBManager.listWish(memNo);
 	}
 
 	public ArtInfoVo findOne(String artPic) {
-		System.out.println("2. WishListDao-findOne 작동");
-		System.out.println("3. DBManager로 이동");
+		//System.out.println("2. WishListDao-findOne 작동");
+		//System.out.println("3. DBManager로 이동");
 		return DBManager.findArtElements(artPic);
 	}
 

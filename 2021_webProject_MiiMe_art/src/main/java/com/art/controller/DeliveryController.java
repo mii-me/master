@@ -22,8 +22,8 @@ public class DeliveryController {
 
 	@RequestMapping("/defaultDelivery.do")
 	public DeliveryVo defaultDelivery(int memNo) {
-		System.out.println("_________________________________");
-		System.out.println("1. Controller-defaultDelivery 실행");
+		//System.out.println("_________________________________");
+		//System.out.println("1. Controller-defaultDelivery 실행");
 		DeliveryVo dv = dao.findDefault(memNo);
 		return dv;
 	}
@@ -31,7 +31,7 @@ public class DeliveryController {
 	
 	@RequestMapping("/listDelivery.do")
 	public String listDelivery(int memNo) {
-		System.out.println("2. Controller-listDelivery 실행");
+		//System.out.println("2. Controller-listDelivery 실행");
 		String r = "";
 		List<DeliveryVo> list = dao.findAll(memNo);
 		Gson gson = new Gson();
@@ -41,8 +41,8 @@ public class DeliveryController {
 
 	@RequestMapping("/insertDelivery.do")
 	public String insertDelivery(DeliveryVo dv) {
-		System.out.println("_________________________________");
-		System.out.println("1. Controller-insertDelivery 실행");
+		//System.out.println("_________________________________");
+		//System.out.println("1. Controller-insertDelivery 실행");
 		String r = "ok";
 		int re = dao.insert(dv);
 		if (re !=1) {
@@ -53,8 +53,8 @@ public class DeliveryController {
 	
 	@RequestMapping("/deleteDelivery.do")
 	public String deleteDelivery(int no) {
-		System.out.println("_________________________________");
-		System.out.println("1. Controller-deleteDelivery 실행");
+		//System.out.println("_________________________________");
+		//System.out.println("1. Controller-deleteDelivery 실행");
 		String r = "ok";
 		int re = dao.deleteDelivery(no);
 		if (re !=1) {
@@ -64,8 +64,8 @@ public class DeliveryController {
 	}
 	@RequestMapping("/changeDefaultDelivery.do")
 	public String changeDefaultDelivery(int memNo, int delNo) {
-		System.out.println("_________________________________");
-		System.out.println("1. Controller-changeDefaultDelivery 실행");
+		//System.out.println("_________________________________");
+		//System.out.println("1. Controller-changeDefaultDelivery 실행");
 		String r = "ok";
 		int re = dao.changeDefaultDelivery(memNo, delNo);
 		if (re !=1) {

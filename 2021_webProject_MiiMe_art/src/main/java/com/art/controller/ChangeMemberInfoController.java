@@ -30,8 +30,8 @@ public class ChangeMemberInfoController {
 	
 	@RequestMapping("/detailMemberInfo.do")
 	public String detailMemberInfo(int memNo) {
-		System.out.println("_________________________________________");
-		System.out.println("1. Controller-detailMemberInfo 실행");
+		//System.out.println("_________________________________________");
+		//System.out.println("1. Controller-detailMemberInfo 실행");
 		String r = "";
 		List<ChangeInfoVo> list = dao.findAll(memNo);
 		Gson gson = new Gson();
@@ -41,8 +41,8 @@ public class ChangeMemberInfoController {
 	
 	@RequestMapping("/updateMemberInfo.do")
 	public String updateMemberInfo(ChangeInfoVo cv) {
-		System.out.println("_________________________________________");
-		System.out.println("1. Controller-updateMemberInfo 실행");
+		//System.out.println("_________________________________________");
+		//System.out.println("1. Controller-updateMemberInfo 실행");
 		String r = "ok";
 		int re = dao.updateMemberInfo(cv);
 		if (re !=1) {
@@ -54,11 +54,11 @@ public class ChangeMemberInfoController {
 	@RequestMapping("/updateArtistInfo.do")
 	public String updateArtistInfo(ChangeInfoVo cv,
 											HttpServletRequest request) {
-		System.out.println("_________________________________________");
-		System.out.println("1. Controller-updateArtistInfo 실행");
+		//System.out.println("_________________________________________");
+		//System.out.println("1. Controller-updateArtistInfo 실행");
 		String oldFname= cv.getArtistPic();
 		String path = request.getRealPath("artist_pic");
-		System.out.println("path : "+path);
+		//System.out.println("path : "+path);
 		MultipartFile uploadFile = cv.getUploadFile();
 		String fname = uploadFile.getOriginalFilename();
 		if (fname != null && !fname.equals("")) {

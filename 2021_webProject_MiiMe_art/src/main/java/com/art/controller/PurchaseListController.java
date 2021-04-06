@@ -22,7 +22,7 @@ public class PurchaseListController {
 	
 	@RequestMapping("/purchaseList.do")
 	public String purchaseList(int memNo) {
-		System.out.println("1. Controller-purchaseList 실행");
+		//System.out.println("1. Controller-purchaseList 실행");
 		String r = "";
 		List<PurchaseListVo> list = dao.findAll(memNo);
 		Gson gson = new Gson();
