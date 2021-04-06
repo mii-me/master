@@ -30,8 +30,8 @@ public class ClientComplainController {
 	
 	@RequestMapping("/listComplain.do")
 	public String listComplain(int memNo) {
-		System.out.println("_____________________________________________");
-		System.out.println("1. Controller-listComplain 실행");
+		//System.out.println("_____________________________________________");
+		//System.out.println("1. Controller-listComplain 실행");
 		String r = "";
 		List<ClientComplainVo> list = dao.findAll(memNo);
 		Gson gson = new Gson();
@@ -42,10 +42,10 @@ public class ClientComplainController {
 	@RequestMapping("/insertComplain.do")
 	public String insertComplain(ClientComplainVo cv,
 											HttpServletRequest request) {
-		System.out.println("_____________________________________________");
-		System.out.println("1. Controller-insertComplain 실행");
+		//System.out.println("_____________________________________________");
+		//System.out.println("1. Controller-insertComplain 실행");
 		String path = request.getRealPath("complain");
-		System.out.println("path : "+path);
+		//System.out.println("path : "+path);
 		MultipartFile uploadFile = cv.getUploadFile();
 		String fname = uploadFile.getOriginalFilename();
 		if (fname != null && !fname.equals("")) {//파일도 업로드 했는지?
@@ -72,16 +72,16 @@ public class ClientComplainController {
 	@RequestMapping("/deleteComplain.do")
 	public String deleteComplain(int comNo,
 											HttpServletRequest request) {
-		System.out.println("_____________________________________________");
-		System.out.println("1. Controller-deleteComplain 실행");
+		//System.out.println("_____________________________________________");
+		//System.out.println("1. Controller-deleteComplain 실행");
 		String r = "no";
 		ClientComplainVo cv = dao.findOne(comNo);
 		String oldFname = cv.getComImg();
-		System.out.println("oldFname"+oldFname);
+		//System.out.println("oldFname"+oldFname);
 		int re = dao.deleteComplain(comNo);
 		if (re ==1) {
 			String path = request.getRealPath("complain");
-			System.out.println("path"+path);
+			//System.out.println("path"+path);
 			File file = new File(path+"/"+oldFname);
 			file.delete();
 			r="ok";

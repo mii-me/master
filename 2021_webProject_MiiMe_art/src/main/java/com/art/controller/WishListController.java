@@ -24,8 +24,8 @@ public class WishListController {
 	
 	@RequestMapping("/wishList.do")
 	public String wishList(int memNo) {
-		System.out.println("_______________________________");
-		System.out.println("1. Controller-wishList 실행");
+		//System.out.println("_______________________________");
+		//System.out.println("1. Controller-wishList 실행");
 		String r = "";
 		List<WishListVo> list = dao.findAll(memNo);
 		Gson gson = new Gson();
@@ -35,8 +35,8 @@ public class WishListController {
 	//by 현익 / artPic으로 url에 필요한 artistNo, artNo, tag1을 구한다/ 210402 
 	@RequestMapping("/findArtElements.do")
 	public ArtInfoVo findArtElements(String artPic) {
-		System.out.println("_______________________________");
-		System.out.println("1. Controller-findArtElements 실행");
+		//System.out.println("_______________________________");
+		//System.out.println("1. Controller-findArtElements 실행");
 		String r = "";
 		ArtInfoVo av = dao.findOne(artPic);
 		return av;
