@@ -12,7 +12,7 @@ import com.art.vo.ArtistInfoVo;
 public class ArtistInfoDao {
 	
 	public int getTotalArtist(String keyword, String consonant, String sort) {
-		System.out.println("2 .작가목록 개수 DAO 작동: keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
+//		System.out.println("2 .작가목록 개수 DAO 작동: keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
 		return DBManager.getTotalArtist(keyword, consonant, sort);
 	}
 	
@@ -28,12 +28,12 @@ public class ArtistInfoDao {
 	
 	
 	public List<ArtistInfoVo> listArtistInfo(int start, int end, String keyword, String consonant, String sort){
-		System.out.println("4. 작가목록 조회 DAO 작동: start "+start+"/end "+end+"/keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
+//		System.out.println("4. 작가목록 조회 DAO 작동: start "+start+"/end "+end+"/keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
 		return DBManager.listArtistInfo(start, end, keyword, consonant, sort);
 	}
 
 	public ArtistInfoVo selectArtistInfo(int memNo) {
-		System.out.println("2. 작가프로필 조회 DAO 작동: memNo "+memNo);
+//		System.out.println("2. 작가프로필 조회 DAO 작동: memNo "+memNo);
 		return DBManager.selectArtistInfo(memNo);
 	}
 
@@ -57,7 +57,7 @@ public class ArtistInfoDao {
 	}
 
 	public int deleteArtistComment(int artistCmtNo) {
-		System.out.println("2. 작가기대평 삭제 DAO 작동: artistCmtNo "+artistCmtNo);
+//		System.out.println("2. 작가기대평 삭제 DAO 작동: artistCmtNo "+artistCmtNo);
 		return DBManager.deleteArtistComment(artistCmtNo);
 	}
 

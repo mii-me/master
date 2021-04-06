@@ -79,7 +79,7 @@ public class ArtistInfoController {
 	 */
 	@RequestMapping("/listArtistInfo.do")
 	public String listArtistInfo(int pageNUM, String keyword, String consonant, String sort) {
-		System.out.println("1. 작가목록 조회 Controller 작동: pageNUM "+pageNUM+"/keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
+//		System.out.println("1. 작가목록 조회 Controller 작동: pageNUM "+pageNUM+"/keyword "+keyword+"/consonant "+consonant+"/sort "+sort);
 		
 		// 페이징 처리
 		totalRecord = dao.getTotalArtist(keyword, consonant, sort);
@@ -116,7 +116,7 @@ public class ArtistInfoController {
 	 */
 	@RequestMapping("/detailArtistInfo.do")
 	public String selectArtistInfo(int memNo) {
-		System.out.println("1. 작가프로필 조회 Controller 작동: memNo "+memNo);
+//		System.out.println("1. 작가프로필 조회 Controller 작동: memNo "+memNo);
 		
 		String r = "";
 		ArtistInfoVo a = dao.selectArtistInfo(memNo);
@@ -209,7 +209,7 @@ public class ArtistInfoController {
 	 */
 	@RequestMapping("/deleteArtistComment.do")
 	public String deleteArtistComment(int artistCmtNo) {
-		System.out.println("1. 작가기대평 삭제 Controller 작동: artistCmtNo "+artistCmtNo);
+//		System.out.println("1. 작가기대평 삭제 Controller 작동: artistCmtNo "+artistCmtNo);
 		
 		int re = dao.deleteArtistComment(artistCmtNo);
 		return re+"";

@@ -18,7 +18,7 @@ public class JoinDao {
 	}
 
 	public MemberVo selectMember(String memId) {
-		System.out.println("2. 로그인 DAO 작동: memId "+memId);
+//		System.out.println("2. 로그인 DAO 작동: memId "+memId);
 		return DBManager.selectMember(memId);
 	}
 	
