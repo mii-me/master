@@ -39,6 +39,22 @@
 
 ---
 
+## 개발 환경 및 도구
+* Windows 10
+* eXERD
+* Apache Tomcat
+* Oracle DB
+* Java
+* Spring & MyBatis
+* Java Script
+* AJAX
+* jQuery
+* Bootstrap
+* HTML, CSS
+* Lombok
+
+---
+
 ## 업무분장 및 기능(이름 가나다순)
 
 #### 김현규(리더)
