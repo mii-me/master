@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <title>배송정보관리</title>
 <style type="text/css">
 	.high_light{
@@ -202,6 +201,7 @@ $(document).ready(function(){
 		});//getScript
 	});
 </script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
  <header id="header"></header>
@@ -265,7 +265,7 @@ $(document).ready(function(){
 			</div>
 			<div class="mb-3">
 				<label class="form-label">배송 요청사항</label>
-				<textarea rows="3" cols="20" id="delMsg" name="delMsg" class="form-control"></textarea>
+				<textarea rows="3" cols="20" id="delMsg" name="delMsg" class="form-control" style="resize: none"></textarea>
 				<span id="delivery_msg"></span><br>
 			</div>
 		</form>
