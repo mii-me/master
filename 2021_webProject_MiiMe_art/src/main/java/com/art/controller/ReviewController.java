@@ -35,7 +35,7 @@ public class ReviewController {
 	@RequestMapping("/insertReviewProto.do")
 	public String insertReviewProto(ReviewVo r, HttpServletRequest request) {
 		String path = request.getRealPath("img");
-		System.out.println("path:" + path);
+//		System.out.println("path:" + path);
 		MultipartFile uploadFile = r.getUploadFile();
 
 		String fname = uploadFile.getOriginalFilename();
@@ -47,7 +47,7 @@ public class ReviewController {
 				fos.write(data);
 				fos.close();
 			} catch (Exception e) {
-				System.out.println("예외발생:" + e.getMessage());
+//				System.out.println("예외발생:" + e.getMessage());
 			}
 		}
 
@@ -74,8 +74,8 @@ public class ReviewController {
 		r.setList(list);
 
 		Gson gson = new Gson();
-		System.out.println(list);
-		System.out.println(gson.toJson(r));
+//		System.out.println(list);
+//		System.out.println(gson.toJson(r));
 		return gson.toJson(r);
 	}
 
@@ -95,8 +95,8 @@ public class ReviewController {
 		r.setList(list);
 
 		Gson gson = new Gson();
-		System.out.println(list);
-		System.out.println(gson.toJson(r));
+//		System.out.println(list);
+//		System.out.println(gson.toJson(r));
 		return gson.toJson(r);
 	}
 
@@ -176,7 +176,7 @@ public class ReviewController {
 	 */
 	@RequestMapping("/insertLikeReviewProto.do")
 	public int detailTagReviewProto(int reviewNo) { //패러미터로 그 후기가 가지는 고유 번호를 받는다 
-		System.out.println("reviewNo:" + reviewNo);
+//		System.out.println("reviewNo:" + reviewNo);
 		int re = dao.insertLikeReview(reviewNo); 
 		return re;
 	}
@@ -188,7 +188,7 @@ public class ReviewController {
 	 */
 	@RequestMapping("/deleteLikeReviewProto.do")
 	public int deleteLikeReviewProto(int reviewNo) { //패러미터로 그 후기가 가지는 고유 번호를 받는다 
-		System.out.println("reviewNo:" + reviewNo);
+//		System.out.println("reviewNo:" + reviewNo);
 		int re = dao.deleteLikeReview(reviewNo); 
 		return re;
 	}
