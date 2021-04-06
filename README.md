@@ -60,7 +60,7 @@
   - 태그별 후기
  
 #### 정소윤
-- 메인페이지
+- [메인페이지](https://user-images.githubusercontent.com/80728433/113708262-f9746c80-971b-11eb-8eb8-2a9c6ba82515.png)
 - 공통 상속페이지
 - 회원가입
 - 로그인, 로그아웃
@@ -77,4 +77,28 @@
     - 작품 작가정보
     - 관련태그 작품목록
 
+---
 
+## 페이지 보기
+
+<img src="https://user-images.githubusercontent.com/80728433/113713680-9508db80-9722-11eb-97cf-25041eb8ff00.gif"></img><br/>
+회원가입, 로그인, 메인페이지 [by 정소윤]
+<br/><br/><br/>
+<img src="https://user-images.githubusercontent.com/80728433/113713689-96d29f00-9722-11eb-9456-5c98a1f19e52.gif"></img><br/>
+작품보기 [by 최은혜]
+<br/><br/><br/>
+<img src="https://user-images.githubusercontent.com/80728433/113713701-9a662600-9722-11eb-8a2e-1a1b89b86119.gif"></img><br/>
+오늘의 핫딜, 경매장 [by 김현규]
+<br/><br/><br/>
+<img src="https://user-images.githubusercontent.com/80728433/113713706-9b975300-9722-11eb-896b-4c65ff2b8c39.gif"></img><br/>
+작가소개 [by 정소윤]
+<br/><br/><br/>
+<img src="https://user-images.githubusercontent.com/80728433/113713728-a05c0700-9722-11eb-9f7e-bc804bc46961.gif"></img><br/>
+이용후기 [by 신지영]
+<br/><br/><br/>
+<img src="https://user-images.githubusercontent.com/80728433/113713752-a651e800-9722-11eb-8cf6-1ccdb3b11a55.gif"></img><br/>
+마이페이지 [by 서현익]
+<br/><br/><br/>
+<img src="https://user-images.githubusercontent.com/80728433/113713758-a7831500-9722-11eb-9d38-1ac9f734f728.gif"></img><br/>
+판매하기 [by 남혜진]
+<br/><br/><br/>
