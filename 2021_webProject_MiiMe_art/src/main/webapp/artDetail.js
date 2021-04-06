@@ -261,7 +261,7 @@
 				
 				//위치가 bgArr의 length에서 4를 뺀 수(한번에 4개를 보여주므로) * (-110)의 크기와 같다면 
 				//오른쪽 버튼을 누를 수 없다. (더 보여줄 이미지가 없으므로)
-				if(positionBg >= (-110*(bgArr.length-4))) {
+				if(positionBg == (-110*(bgArr.length-4))) {
 					$(".btnRight-right").attr("disabled", true);
 				}else if(positionBg > (-110*(bgArr.length-4))){ //위치가 그 수보다 크다면 다시 오른쪽 버튼을 누를 수 있다. 
 					$(".btnRight-right").removeAttr("disabled");
@@ -403,7 +403,7 @@
 					}
 					
 					//alert("로그인한 회원으로, 경매에 참여할 수 있습니다.");
-					
+					 
 					//현재 입찰가를 즉시구매가로 업데이트 후 결제 진행 [by 현규]
 	               $.ajax({
 	               url:"/updateBid.do",

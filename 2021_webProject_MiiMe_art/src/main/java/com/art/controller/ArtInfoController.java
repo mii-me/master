@@ -81,7 +81,7 @@ public class ArtInfoController {
 		Gson gson = new Gson();
 		r = gson.toJson(a);
 		
-		System.out.println("Controller의 detailArt 작동함");
+		//System.out.println("Controller의 detailArt 작동함");
 		return r;
 	}
 	
@@ -89,13 +89,13 @@ public class ArtInfoController {
 	
 	@RequestMapping("/detailArtHash.do")
 	public String detailArtHash(String tag) {
-		System.out.println("detailArtHash tag : " + tag);
+		//System.out.println("detailArtHash tag : " + tag);
 		//String r = ""; 
 		List<ArtInfoVo> list = dao.detailArtHash(tag);
 		Gson gson = new Gson();
 		
 		
-		System.out.println("Controller의 detailArtHash 작동함");
+		//System.out.println("Controller의 detailArtHash 작동함");
 		return gson.toJson(list);
 	}
 	
