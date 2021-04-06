@@ -5,6 +5,7 @@ let sizeRange1; //조건검색에서 받아온 사이즈1 (art_size1)
 let sizeRange2; //조건검색에서 받아온 사이즈2 (art_size2)
 let responsePrice; //조건검색에서 받아온 가격
 
+let currentPage = 1;
 
 //작품보기 페이지 함수(페이징,조건검색테마,조건검색사이즈1,조건검색사이즈2,조건검색가격)
 function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
@@ -24,15 +25,27 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 			 		//페이지번호 출력하기
 					for(i=1;i<=totalPage;i++) {
 						let pageAnchor = $("<span class='pageNO'></span>").html(i);
-						$("#page").append(pageAnchor);
 						
+						//현재 페이지 번호를 강조한다.
+						if(currentPage == i) {
+							$(pageAnchor).css("background-color","#dfdfdf");
+							$(pageAnchor).css("color","black");
+							$(pageAnchor).css("transition","0.15s");
+						}
+						
+						$("#page").append(pageAnchor);
+							
 					};
-						$(".pageNO").click(function(){
-							
-							let pageNO = $(this).text();
-							
-							loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice);
-						});//span.click
+					
+					//페이지 이동
+					$(".pageNO").click(function(){
+						let pageNO = $(this).text();
+						
+						currentPage = pageNO;
+									
+						loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice);
+					});//span.click
+					
 					
 				
 			 		$.each(arr,function(index,a){ //
@@ -133,10 +146,13 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 					
 			 		}); //each
 
+					
 			 	}}); //ajax
 		
 		
 		}//loadArtList
+		
+			
 		
 		
 		//테마 리스트를 클릭했을 때 
