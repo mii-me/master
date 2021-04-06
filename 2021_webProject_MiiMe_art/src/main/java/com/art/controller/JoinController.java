@@ -44,7 +44,7 @@ public class JoinController {
 	@RequestMapping("/insertArtistInfo.do")
 	public String insertArtistInfo(ArtistInfoVo a, HttpServletRequest request) {
 		String path = request.getRealPath("artist_pic");
-		System.out.println("path: "+path); // 경로 출력
+//		System.out.println("path: "+path); // 경로 출력
 		
 		MultipartFile uploadImg = a.getUploadImg();
 		String artistPic = uploadImg.getOriginalFilename();
@@ -57,14 +57,14 @@ public class JoinController {
 				fos.close();
 				
 			}catch(Exception e) {
-				System.out.println("예외발생: "+e.getMessage());
+//				System.out.println("예외발생: "+e.getMessage());
 			}
 		}//if
 		
 		a.setArtistPic(artistPic);
 		int re = dao.insertArtistInfo(a);
 		
-		System.out.println(a);
+//		System.out.println(a);
 		
 		return re+"";
 	}//insertArtistInfo
@@ -79,7 +79,7 @@ public class JoinController {
 	 */
 	@RequestMapping("/loginOK.do")
 	public MemberVo selectMember(String memId, String memPwd) {
-		System.out.println("loginOK.do => 1. 로그인 Controller 작동: memId "+memId);
+//		System.out.println("loginOK.do => 1. 로그인 Controller 작동: memId "+memId);
 		
 		// id를 이용해 테이블 검색
 		MemberVo m = dao.selectMember(memId); //#{memId}
