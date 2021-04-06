@@ -10,13 +10,12 @@
 		}
 		
 		
-		
-		$("#goList").attr("href","artList.html"); //목록으로 돌아가기
+		//$("#goList").attr("href","artList.html"); //목록으로 돌아가기
 			let userNo = sessionStorage.getItem("memNo");
 			let memNo = receiveArr[0];	//선택된 작품의 작가 멤버번호
 			let artNo = receiveArr[1]; //선택된 작품의 작품번호
 			let tag = receiveArr[2]; //선택된 작품의 artTag1태그 
-			let wishList = true; // 찜하기 : true(찜한상태) , false(찜하지 않은 상태)
+			let wishList = false; // 찜하기 : true(찜한상태) , false(찜하지 않은 상태)
 		
 			let aucBid;
 			let aucBuy;
@@ -28,6 +27,7 @@
 
 	//작품 상세보기 함수
 	function loadArtdetail(memNo,artNo) {
+		
 		$.ajax({url:"detailArt.do?memNo="+memNo+"&artNo="+artNo,success:function(data){
 				
 		selected = eval("("+data+")");
@@ -158,9 +158,76 @@
 		               clickBtnBuy(artNo,nowBid);
 		            });
 				}}); //ajax
+				
+
+			//이미 찜 되어 있는지 아닌지를 판별하기 위해 sessionStorage의 value를 가져옴
+			// 하트가 비어있는 것이 default이므로 null이나 false일 경우의 css는 설정하지 않는다.
+			//얻어온 val이 true(찜목록에 insert 되어있는 상태)라면 하트를 빨간색으로 채운다. 				
+			let wishListVal = sessionStorage.getItem("wishList"+artNo);
+			
+			if(wishListVal== 'true') {
+				$(".wishHeartIcon").css("color","red"); 
+			//console.log("현재 wishList1 : " + wishList);
+			}
+				
+				
+				
 		}//loadArtdetail()
 		
 		
+			//위시리스트 insert,delete
+			$("#divBtnWishList").click(function(){
+				
+				let wishListVal = sessionStorage.getItem("wishList"+artNo);
+				
+				//찜하기를 클릭했을 때 userNo가 null이 아니라면 아래를 실행한다
+				if(userNo != null) {
+					//Sold Out, 판매예정이 아닐 때만 찜하기 버튼 실행 가능
+					if(aucBid != 'Sold Out' && aucBid != '-'){
+							
+							//wishListVal = sessionStorage.getItem("wishList"+artNo); //value값
+							//console.log(wishList + " : value의 값");
+							
+							//만약 한번도 클릭되지 않았으면 처음 클릭했을 때 상태를 true로 둔다.
+							//찜하기 처음 클릭했을 때 : 찜하기
+							if(wishListVal == null){
+								$(".wishHeartIcon").css("color","red"); //아이콘에 빨간색을 채운다.
+								wishlistInsert(userNo,artNo);
+								wishList = true; //찜 한 상태
+							}else{ //wishListVal이 sessionStorage에 이미 생성되어 있는 상태라면 아래를 실행한다.
+								//얻어온 wishList의 value가 true라면 delete를 실행하고(true는 찜 되어있는 상태이므로) wishList를 false로 바꾼다. 
+								if(wishListVal == 'true') {//이전에 true였고 지금은 false로 만들어야함 (찜하기에서 뺀다)
+									$(".wishHeartIcon").css("color","white"); //찜 취소시 색을 비운다.
+									wishlistDelete(userNo,artNo);
+									wishList = false;	
+								}else{ // 이전에 false였으면(찜목록에 없는 상태) insert를 실행하고, 현재 wishList는 true로 만들어야함 (찜하기에 담아야함)
+									$(".wishHeartIcon").css("color","red"); //찜했을 경우 빨간색을 채운다.
+									wishlistInsert(userNo,artNo);
+									wishList = true;
+								}
+							}
+							//세션스토리지에 작품관련 세션 생성 : 위 상태(insert&delete,하트의 색 등)를 setItem하기위해 맨 밑에 둠
+							sessionStorage.setItem("wishList"+artNo, wishList);
+							
+					}else { // Sold Out, 판매예정인 작품일 경우 
+						if(aucBid == 'Sold Out') {
+							alert("판매 완료된 작품으로, 해당 기능을 사용할 수 없습니다.");
+							return;
+						}else if(aucBid == '-'){ 
+							alert("판매 예정인 작품입니다.");
+							return;
+						}
+					}
+					
+				}else{ //userNo가 null이라면 로그인 페이지로 이동한다.
+					alert("로그인 후 이용할 수 있습니다.");
+					location.href="login.html";
+				}
+				
+			});//click
+			
+			
+			
 ////////////////////////////////////////////////////////////////////////////////////////////////		
 //by 현익 / 작품눌러서 상세로 이동할때 쿠키에 저장 / 210401
 		//쿠키를 저장하는 함수

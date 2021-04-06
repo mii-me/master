@@ -513,9 +513,10 @@ private static SqlSessionFactory factory;
 		HashMap<String, Integer> map = new HashMap<String,Integer>();
 		map.put("userNo", userNo);
 		map.put("artNo", artNo);
-		
+		//System.out.println("추가하는 맵 : " + map);
 		SqlSession session = factory.openSession();
 		int re = session.insert("artinfo.insertWishList",map);
+		//System.out.println("re : " + re);
 		session.commit();
 		session.close();
 		
@@ -530,6 +531,7 @@ private static SqlSessionFactory factory;
 		
 		SqlSession session = factory.openSession(true); //자동 커밋하기
 		int re = session.insert("artinfo.deleteWishList",map);
+		//System.out.println("삭제됨 : " + re);
 		session.close();
 		
 		return re;
