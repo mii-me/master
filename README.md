@@ -1,3 +1,5 @@
+<div style="text-align: right"><sub>written by 정소윤</sub></div>
+
 美;Me[mii-me]
 =============
 >Spring Web Project - Art Auction Platform
