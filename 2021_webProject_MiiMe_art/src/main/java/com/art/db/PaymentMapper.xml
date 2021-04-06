@@ -5,12 +5,14 @@
 
 <mapper namespace="payment">
 
+	<!-- 결제정보 -->	 
 	<insert id="insertPayment">
 		insert into payment_tb values (
 			payment_seq.nextval,#{memNo},
 			#{artNo},#{payAmount},#{payValue},sysdate)
 	</insert>
 	
+	<!-- 결제금액을 포인트로 바꿔준다. -->	 
 	<update id="updatePoint">
 		update artist_point_tb
 		set pay_point = pay_point+#{payAmount}
