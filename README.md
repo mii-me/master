@@ -1,5 +1,3 @@
-<div style="text-align: right"><sub>written by 정소윤</sub></div>
-
 美;Me[mii-me]
 =============
 >Spring Web Project - Art Auction Platform
@@ -138,3 +136,5 @@
 <img src="https://user-images.githubusercontent.com/80728433/113713758-a7831500-9722-11eb-9d38-1ac9f734f728.gif"></img><br/>
 🔼 판매하기 [by 남혜진]
 <br/><br/><br/>
+
+<sub>written by 정소윤</sub>
