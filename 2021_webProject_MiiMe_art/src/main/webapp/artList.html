@@ -23,21 +23,9 @@ $(document).ready(function(){
 $(function(){
 	
 	$.getScript("artList.js", function(){
-		console.log("$.getscript : artList.js 실행됨");
+		//console.log("$.getscript : artList.js 실행됨");
 		
 		let userNo = sessionStorage.getItem("memNo");	
-//		if(userNo == null){
-//			$(".login-span").text("로그인");
-//			$(".login-a").attr("href","login.html");
-//		}else{
-//			$(".login-span").text("로그아웃");
-//			$(".login-span").click(function(){
-//				sessionStorage.clear();
-//				location.href="artList.html";
-//			})
-//		}
-		
-		
 		
 		loadArtList(1,"",0,100,1000000000);
 	});
