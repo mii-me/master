@@ -20,23 +20,33 @@
 		});
 		// header, footer include
 
-		let clickCnt = 1;
+		let clickCnt = 1; //더보기 버튼 용 변수  
 		var keyword = ""; // 검색어
-		var orderField = "";
-		var output = '';
-		var sortOutput = '';
-		var themeNumber = "0";
+		var orderField = ""; //정렬 조건 
+		var output = ''; //div의 id 태그에 붙여줄 문자열을 쌓아놓을 변수 
+		var sortOutput = ''; //div의 id 태그에 정렬조건 버튼을 붙여줄 문자열을 쌓아놓을 변수 
+		var themeNumber = "0"; //5개의 테마 분류에 따라 움직일 변수 
 
+
+
+		//더보기를 눌렀을 때 동작할 함수 
 		function clickAddAction() {
-			clickCnt += 1;
-			console.log(clickCnt)
-			$("#reviewList" + themeNumber).empty(); // 목록이 중첩되지않게 초기화
+			clickCnt += 1;//클릭카운트 변수를 ++ 
+			// console.log(clickCnt)
+			$("#reviewList" + themeNumber).empty(); //후기를 불러오는 목록이 중첩되지않게 초기화
+			
+			//후기 불러오기, 키워드,정렬조건,테마 분류에 따라 할당받은 번호를 패러미터로 넘긴다 			
 			loadReviewList(keyword, orderField, "#reviewList" + themeNumber);
-			$('html, body').animate({ scrollTop: ($(document).height()) + clickCnt * 1000 }, 1500);//버튼을 눌렀을 시 누른 지점으로 바로 가게끔 animate
+			$('html, body').animate({ scrollTop: ($(document).height()) + clickCnt * 1000 }, 1500);
+			//버튼을 눌렀을 시 누른 지점으로 바로 가게끔 animate
 		}
 
+
+		//아코디언 버튼을 눌렀을 시 해당 테마의 고유번호를 결정해줄 함수 
 		function clickThemeBtn(btn) {
 			$('#' + btn).toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
+		
+			//switch+case문으로 버튼 태그에 따른 넘버를 부여해준다 		
 			switch (btn) {
 				case '인물': { themeNumber = '1'; break; }
 				case '정물': { themeNumber = '2'; break; }
@@ -45,6 +55,7 @@
 				case '추상': { themeNumber = '5'; break; }
 			}
 
+			//해당 넘버의 id가 눌렸다면 그 테마를 가진 리뷰를 로드해주기 
 			if ($('#' + btn).attr('class') == 'actionButton on') {
 				$("#reviewList" + themeNumber).empty(); // 목록이 중첩되지않게 초기화
 				$("#btnSort" + themeNumber).empty();
@@ -58,7 +69,7 @@
 			}
 		}
 
-
+		// 정렬버튼 (~순서로 정렬하는 3개의 버튼)을 눌렀을 시 발생될 함수 
 		function clickSortAction(orderField) {
 			$("#btnSort" + themeNumber).empty();
 			$("#buttonAdd" + themeNumber).empty();
@@ -78,8 +89,8 @@
 				success: function (data) {
 
 
-					output = '';
-					sortOutput = '';
+					output = ''; //div의 id 태그에 붙여줄 문자열을 쌓아놓을 변수를 초기화 
+					sortOutput = '';//div의 id 태그에 붙여줄 정렬버튼 문자열을 쌓아놓을 변수를 초기화 
 
 					$('#btnSort' + themeNumber).empty();
 					sortOutput += '<div class="container">'
@@ -95,11 +106,17 @@
 
 
 					if (clickCnt * 9 > data.list.length) {
+					
+						//클릭 카운트 * 3x3배열 이 모든 데이터의 크기보다 크다면 더보기 버튼이 없어져야 한다 					
 						for (var i = 0; i < data.list.length; i++) {
+						
 							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
+							
 							output += '<svg class="bd-placeholder-img card-img-top" width="100px" height="100px" role="img"><img src="img/' + data.list[i].reviewImage + '"/></svg>'
 							output += '<div class="card-body">';
+							
+							//작품명을 눌렀을 시 그 작품의 상세보기 페이지로 가기 위해 쿼리스트링을 만들어준다														
 							output += '<p class="card-text" class="mb-0" ><a style="text-decoration: none; color: black;" href="artDetail.html?memNo=' + data.list[i].atMemNo + '&artNo=' + data.list[i].artNo + '&tag='
 							if (data.list[i].artTag1 != null) {
 								output += data.list[i].artTag1
@@ -108,15 +125,20 @@
 							}
 							output += '" class="link-dark"><font size="4em">'
 								+ data.list[i].artName + '</font></a></p>'
+								
+							//가격은 천단위로 구분점을 찍기위해 .toLocalString() 함수 사용 								
 							output += '<p class="nav justify-content" class="card-text">' + data.list[i].payAmount.toLocaleString(); + '&emsp;</p>'
+							
+							//작가명을 눌렀을 시 그 작가의 상세보기 페이지로 가기 위해 쿼리스트링을 만들어준다 					
 							output += '<p class="nav justify-content-end" class="card-text"><a style="text-decoration: none; color: black;" href="artistDetail.html?memNo=' + data.list[i].atMemNo + '">'
 								+ data.list[i].artistName + '</a>&emsp;</p>'
 							output += '<br><br>'
 
+							//리뷰 내용 받아오기 
 							output += '<p class="card-text">' + data.list[i].reviewText + '</p>'
 
 
-
+							//그 작품의 태그 (총 3개) 받아오기
 							output += '<ul class="nav justify-content-end">'
 							if (data.list[i].artTag1 != null) {
 								+'<li class="nav-item"><a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"><font size="2em">#' + data.list[i].artTag1 + '</font></a></li>'
@@ -130,12 +152,15 @@
 									+ data.list[i].artTag3 + '</font></a></li>'
 							}
 
+							//만약 태그가 등록되어있지 않다면 내용 없이 바로 <>태그를 닫아버린다 	
 							if (data.list[i].artTag1 == null) {
 								output += '<br><br>'
 							}
 							output += '</ul>'
 							output += '<br>'
 
+
+							//좋아요 버튼. 누르면 clickAction이 발생, 패러미터로 해당 리뷰의 고유번호인 리뷰번호가 함께 움직인다 
 							output += '<div class="d-flex justify-content-between align-items-center">'
 							output += ' <div class="btn-group">'
 							output += ' <button type="button" style="background-color:white; border-radius: 7px;" onClick="clickAction(' + data.list[i].reviewNo + ')" class="like' + data.list[i].reviewNo + '" id="'
@@ -151,6 +176,7 @@
 						$('#buttonAdd' + themeNumber).empty();
 
 					} else {
+						//클릭카운트 * 9 가 전체 데이터 수보다 적다면 데이터를 9 배수만 불러와야 함 					
 						for (var i = 0; i < clickCnt * 9; i++) {
 							output += '<div class="col">'
 							output += '<div class="card shadow-sm">';
@@ -214,12 +240,15 @@
 
 
 
-		function clickAction(reviewNo) {
+		//좋아요 버튼을 눌렀을때 동작할 함수 		
+		function clickAction(reviewNo) { //패러미터로 고유번호인 리뷰번호를 받는다 
 			$('.like' + reviewNo).toggleClass('on'); //누르면 on이 생기고 또 다시 누르면 on이 없어짐
+			
+			//토글이 켜져있다면 			
 			if ($('.like' + reviewNo).attr('class') == 'like' + reviewNo + ' on') {
-				insertLike(reviewNo)
+				insertLike(reviewNo)//insertLike함수 호출 
 			} else { //null
-				deleteLike(reviewNo)
+				deleteLike(reviewNo)//deleteLike함수 호출 
 			}
 		}
 
