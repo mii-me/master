@@ -13,7 +13,12 @@
 	visibility: hidden;
 	display: none;	
 }
-
+#refresh{
+	cursor: pointer;
+}
+.pointer {
+	cursor: pointer;
+}
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
@@ -63,6 +68,7 @@ $(function(){
 			$(".point2").css("display", "none");
 			$(".accountTag").css("visibility", "visible");
 			$(".accountTag").css("display", "inline");
+			$(this).removeClass("pointer");
 			
 			//남혜진 210404 _ 포인트환전 이벤트 완료 
 			$("#btnAccount").click(function(){
@@ -130,8 +136,8 @@ $(function(){
 </div>
 <div class="container" style="width:1000px">
 		<hr>
-	<div class="row m-0">
-		<div class="card p-1 m-1 bg-light point1" style="width:49%" id="pointChg">
+	<div class="row m-0 divMenu">
+		<div class="card p-1 m-1 bg-light point1 pointer" style="width:49%" id="pointChg">
 			<div class="card-body">
 				<h4 class="card-title" style="text-align: center;">
 				<!-- 아이콘으로 적용해보기 -->
@@ -139,21 +145,21 @@ $(function(){
 				</h4>
 			</div>
 		</div>
-		<div class="card p-1 m-1 bg-light point2" style="width:49%"  id="infoTax">
+		<div class="card p-1 m-1 bg-light point2 pointer" style="width:49%"  id="infoTax">
 			<div class="card-body">
 				<h4 class="card-title" style="text-align: center;">
 					수수료 안내
 				</h4>
 			</div>
 		</div>
-		<div class="card p-1 m-1 bg-light point2" style="width:49%" id="listArtSell">
+		<div class="card p-1 m-1 bg-light point2 pointer" style="width:49%" id="listArtSell">
 			<div class="card-body">
 				<h4 class="card-title" style="text-align: center;">
 					<i class="fas fa-share"></i>&nbsp;판매 등록 / 취소 
 				</h4>
 			</div>
 		</div>
-		<div class="card p-1 m-1 bg-light point2" style="width:49%" id="artSellMain">
+		<div class="card p-1 m-1 bg-light point2 pointer" style="width:49%" id="artSellMain">
 			<div class="card-body">
 				<h4 class="card-title" style="text-align: center;">
 					<i class="fas fa-share"></i>&nbsp;판매하기 메인
