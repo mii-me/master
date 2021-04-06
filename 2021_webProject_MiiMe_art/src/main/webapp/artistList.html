@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>미미 美;Me - 작가소개</title>
+  <!-- [ by 정소윤 ] -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -39,9 +40,9 @@ $(document).ready(function(){
 // header, footer include
 
 
-	// <작가소개> 메뉴 진입 시 처음 보이는 작가 목록 페이지
-	// 상단: 인기 TOP3 작가 캐러셀
-	// [by 정소윤]
+// <작가소개> 메뉴 진입 시 처음 보이는 작가 목록 페이지
+// 상단: 인기 TOP3 작가 캐러셀
+// [by 정소윤]
 	
 	$(function(){
 	
@@ -86,14 +87,14 @@ $(document).ready(function(){
 		            
 		            // 작가명에 인기작가 상세페이지 링크걸기
 		            let topLink = $(`<a style="text-decoration: none; color: white;" class="link2"></a>`).attr('href', '/artistDetail.html?memNo='+t.memNo);
-		            let topName = $(`<h1 style="margin-bottom: 30px;"></h1>`).text(t.artistName);
+		            let topName = $(`<h1 style="margin-bottom: 30px; font-weight: bold;"></h1>`).text(t.artistName);
 		            $(topLink).append(topName);
 		            
 		            // 인기작가 정보
 		            let topInfo = $(`<div class="carousel-caption text-left">`);
 		            $(topInfo).append($(`<h4 style="margin-bottom: 150px;"></h4>`).html(`<i class="fas fa-medal"></i>`+" 실시간 인기작가 Top "+(index+1) ));
 		            $(topInfo).append(topLink);
-		            $(topInfo).append($(`<p style="margin-bottom: 100px;"></p>`).text(t.artistIntro));
+		            $(topInfo).append($(`<h5 style="margin-bottom: 80px;"></h5>`).text(t.artistIntro));
 		            
 		            $(topList).append(topInfo);
 		            
@@ -125,6 +126,12 @@ $(document).ready(function(){
 				
 				arr = data.list; // 페이징처리를 위함
 				totalPage = data.totalPage;
+				
+				
+				// 검색, 조회 결과가 없을 경우 화면처리
+				if(totalPage == '0'){
+					$('#artistList').html(`<div style="position: absolute; left: 50%; transform: translate(-50%,-50%)"><br><br><br>해당 작가가 존재하지 않습니다.</div><br><br>`);
+				}
 				
 				
 				// ======================= 페이지번호 출력 시작 =======================
@@ -173,8 +180,8 @@ $(document).ready(function(){
                     
                     // 작가목록 작가정보                
                     let listInfo = $(`<div class="card-body">`);
-                    $(listInfo).append($(`<h4 class="card-title"></h4>`).html(`<i class="fas fa-user"></i> `+a.artistName));
-                    $(listInfo).append($(`<p class="card-text"></p>`).text(a.artistIntro));
+                    $(listInfo).append($(`<h4 class="card-title" style="font-weight: bold;"></h4>`).html(`<i class="fas fa-user"></i> `+a.artistName));
+                    $(listInfo).append($(`<p class="card-text" style="font-weight: bold;"></p>`).text(a.artistIntro));
                     
                     // listInfo에 작가별 상세페이지 링크걸기
                     let listLink = $(`<a style="text-decoration: none; color: black;"></a>`).attr('href', '/artistDetail.html?memNo='+a.memNo);
@@ -249,9 +256,18 @@ $(document).ready(function(){
 			consonant = '';
 			sort = '';
 			
-			// 목록 출력
+			// 작가목록 출력
 			artistList(1, keyword, '', '');
+			
 		});
+		
+		// 검색창에서 Enter키 입력 시 검색버튼 클릭 이벤트 발생
+		$('#keyword').keydown(function(key){
+			if(key.keyCode == 13){	// 엔터키코드:13
+				$('#btnSearch').click();
+			}
+		});
+		
 		// ===== 검색 기능 END =====
 		
 		
@@ -268,8 +284,9 @@ $(document).ready(function(){
 				consonant = '';
 				sort = '';
 				
-			// 목록 출력
-			artistList(1, '', consonant, '');
+				// 작가목록 출력
+				artistList(1, '', consonant, '');
+
 		});	
 		
 		for(i=1; i<16; i++){

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>미미 美;Me - 로그인</title>
-  
+<!-- [ by 정소윤 ] -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -47,10 +47,6 @@ $(document).ready(function(){
 			
 			$.ajax({url:'/loginOK.do', data:data, success:function(m){
 			
-				console.log(m.memId);
-				console.log(m.memName);
-
-				
 				// 로그인 성공 시
 				if(m.memId == id && m.memPwd == pwd){
 					
