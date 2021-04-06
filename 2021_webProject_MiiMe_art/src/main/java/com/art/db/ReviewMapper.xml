@@ -7,7 +7,7 @@
 	<!--xml?: 선언문의 역할, sql문을 선언해놓고, 이름을 정해놓는 것(그 이름이 id), resultType은 반환하는 자료형 -->
 
 	<select id="totalRecord" resultType="java.lang.Integer">
-		<!-- int형으로 반환이 되도록 Integer로 설정해줬지만, java가 알아듣지 못하기 때문에 java에게 알려주는 것 -->
+		<!-- int형으로 반환이 되도록 Integer로 설정해줘야한다, 반환형은 java가 알아듣지 못하기 때문에 java에게 알려주는 것 -->
 		select count(*)
 		from review_tb r
 		inner join art_info_tb a on
@@ -237,8 +237,7 @@
 		inner join
 		artist_info_tb at on
 		at.mem_no=a.mem_no
-		<!-- where a.art_tag1 like ＇%인테리어%' or a.art_tag2 like '% 인테리어 %' or a.art_tag3 
-			like '% 인테리어 %’ -->
+
 
 		<if test="keyword != ''">
 			<choose>
