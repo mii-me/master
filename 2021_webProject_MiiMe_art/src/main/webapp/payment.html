@@ -43,7 +43,7 @@ $(function(){
 /*-----------------결제없이 페이지 벗어날 때(판매상태:sale로 변경, 마감시간 5시간 추가) 수정 예정-------------------*/
 let checkOk = true;
 $(window).on("beforeunload",function(){
-	if(!checkOk){		//디자인하고 ! 없애면 된다
+	if(checkOk){		//디자인하고 ! 없애면 된다
 		//작품 판매상태를 sale로 변경해준다.
 		$.ajax({url:"/updateSale.do",
 		type:"post",
@@ -211,7 +211,7 @@ function getMemberInfo(){
 		<h4 class="mt-4 mb-4">결제 수단</h4>
 		<div class="mt-3">
 			<form id="f">
-				<input type="hidden" id="memNo" name="memNo ">
+				<input type="hidden" id="memNo" name="memNo">
 				<input type="hidden" class="artNo" name="artNo">
 				<input type="hidden" class="payAmount" name="payAmount">
 				<input type="radio" class="payValue m-2" name="payValue" value="신용카드" checked="checked">신용카드
