@@ -291,3 +291,12 @@
     .hashTitle{
     	margin-left:120px;
     }
+    .artHashTag-img-div-link{
+   		opacity:1;
+		background-color: #fff;
+    }
+    .artHashTag-img-div-link:hover{
+   		opacity:0.6;
+		transition: 0.1s;
+   		transition-timing-function: linear;
+    }

@@ -85,32 +85,15 @@
 					art_sell_check_tb asct
 				where ait.art_no = asct.art_no(+)
 					and ait.art_no = ast.art_no(+)
-			 	<choose>
-				     <when test="responseTheme != '' and sizeRange1 != '0' and sizeRange2 != '101' and responsePrice != '1000000000'">
-				     and art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
-				    </when>
-					<when test="responseTheme != '' and sizeRange1 != '0' and sizeRange2 != '101'">
-				      and art_theme = #{responseTheme} and art_size1 between #{sizeRange1} and #{sizeRange2}
-				    </when>
-					<when test="responseTheme != '' and responsePrice != '1000000000'">
-				      and art_theme = #{responseTheme} and auc_buy &lt;= #{responsePrice}
-				    </when>
-					<when test="sizeRange1 != '0' and sizeRange2 != '101' and responsePrice != '1000000000'">
-				      and art_size1 between #{sizeRange1} and #{sizeRange2} and auc_buy &lt;= #{responsePrice}
-				    </when>
-					<when test="responseTheme != ''">
-				      and art_theme = #{responseTheme}
-				    </when>
-				   <when test="sizeRange1 != '0' and sizeRange2 != '101'">
-				      and art_size1 between #{sizeRange1} and #{sizeRange2}
-					</when>
-				   <when test="responsePrice != '1000000000'">
-				      and auc_buy &lt;= #{responsePrice}
-					</when>
-					<otherwise>
-							      
-					</otherwise>
-				</choose>
+			 	<if test="responseTheme != ''">
+                   and art_theme = #{responseTheme}
+                </if>
+               <if test="sizeRange1 != '0' and sizeRange2 != '101'">
+                    and art_size1 between #{sizeRange1} and #{sizeRange2}
+                </if>
+               <if test="responsePrice != '1000000000'">
+                  and auc_buy &lt;= #{responsePrice}
+               </if>
 			 		order by art_no desc) b)
 						) a)
 		where num between #{start} and #{end}

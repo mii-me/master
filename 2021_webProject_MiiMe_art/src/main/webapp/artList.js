@@ -122,7 +122,7 @@ function loadArtList(pageNO,responseTheme,sizeRange1,sizeRange2,responsePrice) {
 							$(".fa-hourglass-text").css("color","#EA2E49");
 						}
 					
-						$(".listTag").css("font-size","9px");
+						$(".listTag").css("font-size","13px");
 							
 					
 						//가격 input range바 설정(최솟값 0, 최댓값 1000만,한번에 10만씩 증가)
