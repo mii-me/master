@@ -40,18 +40,13 @@
 ---
 
 ## 개발 환경 및 도구
-* Windows 10
-* eXERD
-* Apache Tomcat
-* Oracle DB
-* Java
-* Spring & MyBatis
-* Java Script
-* AJAX
-* jQuery
-* Bootstrap
-* HTML, CSS
-* Lombok
+* OS | Windows 10
+* Server | Apache Tomcat
+* Database | Oracle DB
+* Language | Java, Java Script, HTML & CSS
+* Framework | Spring, MyBatis, Bootstrap
+* Library | jQuery, AJAX, Lombok
+* Tool | GitHub
 
 ---
 
